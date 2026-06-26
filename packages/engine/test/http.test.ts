@@ -96,6 +96,23 @@ describe("fetchWithRetry", () => {
     expect(JSON.parse(res.body)).toEqual({ hello: "wörld", n: 1 });
   });
 
+  it("decodes UTF-16BE by its BOM even when the charset label is ambiguous", async () => {
+    // AWS Health is UTF-16BE (BOM fe ff) but labels itself charset=utf-16 (defaults LE).
+    const json = JSON.stringify({ ok: true, s: "café" });
+    const le = Buffer.from(json, "utf16le");
+    le.swap16(); // -> big-endian bytes
+    const beBytes = Buffer.concat([Buffer.from([0xfe, 0xff]), le]);
+    const fetchImpl = (async () =>
+      new Response(beBytes, {
+        status: 200,
+        headers: { "content-type": "application/json;charset=utf-16" },
+      })) as typeof fetch;
+
+    const res = await fetchWithRetry("https://x", { fetchImpl, sleep: noSleep });
+
+    expect(JSON.parse(res.body)).toEqual({ ok: true, s: "café" });
+  });
+
   it("throws after exhausting retries", async () => {
     let calls = 0;
     const fetchImpl = (async () => {

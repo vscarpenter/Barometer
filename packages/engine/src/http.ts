@@ -31,8 +31,16 @@ function charsetOf(contentType: string | null): string {
 
 async function readBody(res: Response): Promise<string> {
   const buf = await res.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  // A UTF-16 byte-order mark is authoritative — AWS Health is UTF-16BE but
+  // labels itself "charset=utf-16", which TextDecoder would otherwise read as LE.
+  let encoding = charsetOf(res.headers.get("content-type"));
+  if (bytes.length >= 2) {
+    if (bytes[0] === 0xfe && bytes[1] === 0xff) encoding = "utf-16be";
+    else if (bytes[0] === 0xff && bytes[1] === 0xfe) encoding = "utf-16le";
+  }
   try {
-    return new TextDecoder(charsetOf(res.headers.get("content-type"))).decode(buf);
+    return new TextDecoder(encoding).decode(buf);
   } catch {
     return new TextDecoder("utf-8").decode(buf);
   }
