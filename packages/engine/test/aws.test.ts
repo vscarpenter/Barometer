@@ -35,26 +35,36 @@ describe("AwsAdapter", () => {
     expect(snap.sourceUrl).toContain("health.aws.amazon.com");
   });
 
-  it("maps active OPERATIONAL_ISSUE events to partial_outage and populates incidents", async () => {
+  it("shows non-US (Middle East) events but excludes them from status", async () => {
     const snap = await new AwsAdapter(config, deps(fixture("aws-incident.json"))).fetchSnapshot();
-    expect(snap.status).toBe("partial_outage");
-    expect(snap.activeIncidents).toHaveLength(2);
-
+    expect(snap.status).toBe("operational");     // me-central-1 + me-south-1 → excluded
+    expect(snap.activeIncidents).toHaveLength(2); // still shown
     const inc = snap.activeIncidents[0]!;
     expect(inc.title).toBe("Increased Error Rates (Multiple services)");
-    expect(inc.impact).toBe("major"); // OPERATIONAL_ISSUE → "major"
-    expect(inc.status).toBe("monitoring"); // code "3" → "monitoring"
-    expect(inc.startedAt).toBe("2026-03-01T12:51:25.000Z"); // epoch 1772369485
-    expect(inc.url).toBe("https://health.aws.amazon.com/health/status");
+    expect(inc.impact).toBe("major");
+    expect(inc.regions).toEqual(["me-central-1"]);
     expect(inc.id).toBe(
       "arn:aws:health:me-central-1::event/MULTIPLE_SERVICES/AWS_MULTIPLE_SERVICES_OPERATIONAL_ISSUE/AWS_MULTIPLE_SERVICES_OPERATIONAL_ISSUE_5E6B8_EF2498889B5",
     );
   });
 
-  it("uses worse of code-derived and arn-derived status per event", async () => {
-    // status "3" → partial_outage; OPERATIONAL_ISSUE → partial_outage → worse = partial_outage
-    const snap = await new AwsAdapter(config, deps(fixture("aws-incident.json"))).fetchSnapshot();
-    expect(snap.status).toBe("partial_outage");
+  it("derives status from US events only; a worse non-US event does not escalate", async () => {
+    const body = JSON.stringify([
+      { arn: "arn:aws:health:us-east-1::event/EC2/AWS_EC2_OPERATIONAL_ISSUE/a", status: "3" }, // US → partial_outage
+      { arn: "arn:aws:health:eu-west-1::event/EC2/AWS_EC2_OPERATIONAL_ISSUE/b", status: "5" }, // non-US → would be major
+    ]);
+    const snap = await new AwsAdapter(config, deps(body)).fetchSnapshot();
+    expect(snap.status).toBe("partial_outage"); // eu-west-1 major excluded
+    expect(snap.activeIncidents).toHaveLength(2);
+  });
+
+  it("fails open for a global AWS event with no region in the ARN", async () => {
+    const body = JSON.stringify([
+      { arn: "arn:aws:health::event/IAM/AWS_IAM_OPERATIONAL_ISSUE/g", status: "3" },
+    ]);
+    const snap = await new AwsAdapter(config, deps(body)).fetchSnapshot();
+    expect(snap.status).toBe("partial_outage"); // no region → counts
+    expect(snap.activeIncidents[0]!.regions).toEqual([]);
   });
 
   it("tolerates events missing display-only fields instead of degrading the whole provider", async () => {

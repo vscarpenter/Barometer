@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type ProviderSnapshot, type ProviderStatus, type Incident } from "@barometer/types";
+import { regionsAreUsRelevant, type ProviderSnapshot, type ProviderStatus, type Incident } from "@barometer/types";
 import type { ProviderAdapter, AdapterDeps, ProviderConfig } from "./types.js";
 
 /**
@@ -51,6 +51,12 @@ function statusFromArn(arn: string): ProviderStatus | null {
   if (arn.includes("INFORMATIONAL")) return "degraded";
   if (arn.includes("MAINTENANCE")) return "maintenance";
   return null;
+}
+
+/** Region id from a Health event ARN: arn:aws:health:<region>::event/... (empty for global). */
+function regionsFromArn(arn: string): string[] {
+  const region = arn.split(":")[3] ?? "";
+  return region ? [region] : [];
 }
 
 /**
@@ -159,12 +165,14 @@ export class AwsAdapter implements ProviderAdapter {
           status: lifecycleLabel(ev.status),
           startedAt,
           url: INCIDENT_URL,
+          regions: regionsFromArn(ev.arn),
         };
       });
 
-      // Overall = worst single-event status across all current events
+      // Overall = worst single-event status across US-relevant events only
       let overallStatus: ProviderStatus = "operational";
       for (const ev of events) {
+        if (!regionsAreUsRelevant(regionsFromArn(ev.arn))) continue;
         overallStatus = worseStatus(overallStatus, deriveEventStatus(ev.status, ev.arn));
       }
 
