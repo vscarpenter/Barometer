@@ -24,6 +24,7 @@ export const IncidentSchema = z.object({
   status: z.string(), // provider's lifecycle label, e.g. "investigating"
   startedAt: z.string(), // ISO 8601
   url: z.string(),
+  regions: z.array(z.string()).optional(), // affected region ids; absent = unknown (fail-open)
 });
 export type Incident = z.infer<typeof IncidentSchema>;
 
