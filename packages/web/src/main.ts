@@ -1,5 +1,11 @@
 import "./styles.css";
-import type { SummaryFile, RecentFile, ProviderStatus } from "@barometer/types";
+import {
+  SummaryFileSchema,
+  RecentFileSchema,
+  type SummaryFile,
+  type RecentFile,
+  type ProviderStatus,
+} from "@barometer/types";
 import { createPoller, isStale, secondsAgo, formatAgo } from "./poll.js";
 import { el, svgEl } from "./render/dom.js";
 import { renderHeadline } from "./render/headline.js";
@@ -22,7 +28,14 @@ const bannerSlot = createBannerRegion();
 const readingSlot = el("div");
 const gridSlot = el("div", "grid");
 const updatedText = el("span", "");
-app.append(buildMasthead(updatedText), bannerSlot, readingSlot, gridSlot, buildFooter());
+const statusDot = el("span", "masthead__dot");
+statusDot.setAttribute("aria-hidden", "true");
+app.append(buildMasthead(statusDot, updatedText), bannerSlot, readingSlot, gridSlot, buildFooter());
+
+/** Tint the masthead dot to the overall status (decorative; status is also in text). */
+function setMastheadStatus(status: ProviderStatus): void {
+  statusDot.style.background = `var(--status-${status})`;
+}
 
 function recentFor(id: string): ProviderStatus[] {
   if (!recent) return [];
@@ -34,6 +47,7 @@ function recentFor(id: string): ProviderStatus[] {
 
 function render(): void {
   if (!summary) {
+    setMastheadStatus("unknown");
     bannerSlot.replaceChildren();
     gridSlot.replaceChildren();
     readingSlot.replaceChildren(
@@ -42,15 +56,26 @@ function render(): void {
     return;
   }
 
-  const nowMs = Date.now();
-  updateBannerRegion(bannerSlot, summary.generatedAt, nowMs, isStale(summary.generatedAt, nowMs));
-  readingSlot.replaceChildren(renderHeadline(summary.overall));
-  gridSlot.replaceChildren(
-    ...(summary.providers.length
-      ? summary.providers.map((p) => renderCard(p, recentFor(p.id)))
-      : [stateMessage("No providers configured.")]),
-  );
-  updateAgo();
+  // Defense-in-depth: data is schema-validated at the poller, but a render bug
+  // shouldn't blank the page — fall back to a visible error state.
+  try {
+    const nowMs = Date.now();
+    setMastheadStatus(summary.overall.status);
+    updateBannerRegion(bannerSlot, summary.generatedAt, nowMs, isStale(summary.generatedAt, nowMs));
+    readingSlot.replaceChildren(renderHeadline(summary.overall));
+    gridSlot.replaceChildren(
+      ...(summary.providers.length
+        ? summary.providers.map((p) => renderCard(p, recentFor(p.id)))
+        : [stateMessage("No providers configured.")]),
+    );
+    updateAgo();
+  } catch (err) {
+    console.error("Barometer: render failed", err);
+    setMastheadStatus("unknown");
+    bannerSlot.replaceChildren();
+    gridSlot.replaceChildren();
+    readingSlot.replaceChildren(stateMessage("Something went wrong rendering the dashboard."));
+  }
 }
 
 function updateAgo(): void {
@@ -64,7 +89,7 @@ function stateMessage(text: string): HTMLElement {
   return div;
 }
 
-function buildMasthead(updated: HTMLElement): HTMLElement {
+function buildMasthead(dot: HTMLElement, updated: HTMLElement): HTMLElement {
   const header = el("header", "masthead");
 
   const mark = svgEl("svg");
@@ -89,8 +114,6 @@ function buildMasthead(updated: HTMLElement): HTMLElement {
   titles.append(h1, tagline);
 
   const status = el("div", "masthead__status");
-  const dot = el("span", "masthead__dot");
-  dot.setAttribute("aria-hidden", "true");
   status.append(dot, updated);
 
   header.append(mark, titles, status);
@@ -111,6 +134,7 @@ function buildFooter(): HTMLElement {
 const summaryPoller = createPoller<SummaryFile>({
   url: SUMMARY_URL,
   intervalMs: POLL_MS,
+  schema: SummaryFileSchema,
   onData: (data) => {
     summary = data;
     failed = false;
@@ -125,6 +149,7 @@ const summaryPoller = createPoller<SummaryFile>({
 const recentPoller = createPoller<RecentFile>({
   url: RECENT_URL,
   intervalMs: POLL_MS,
+  schema: RecentFileSchema,
   onData: (data) => {
     recent = data;
     render();
