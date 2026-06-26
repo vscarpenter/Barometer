@@ -57,6 +57,24 @@ describe("AwsAdapter", () => {
     expect(snap.status).toBe("partial_outage");
   });
 
+  it("tolerates events missing display-only fields instead of degrading the whole provider", async () => {
+    // A single event without summary/service_name/date must not nuke AWS to unknown:
+    // severity is still derivable from arn + status, and the missing date falls back to now().
+    const body = JSON.stringify([
+      {
+        arn: "arn:aws:health:us-east-1::event/EC2/AWS_EC2_OPERATIONAL_ISSUE/abc",
+        status: "3",
+      },
+    ]);
+    const snap = await new AwsAdapter(config, deps(body)).fetchSnapshot();
+    expect(snap.status).toBe("partial_outage"); // OPERATIONAL_ISSUE + code 3
+    expect(snap.activeIncidents).toHaveLength(1);
+    const inc = snap.activeIncidents[0]!;
+    expect(inc.startedAt).toBe(NOW); // missing date → now()
+    expect(inc.impact).toBe("major"); // OPERATIONAL_ISSUE
+    expect(ProviderSnapshotSchema.safeParse(snap).success).toBe(true);
+  });
+
   it("degrades to unknown on malformed body without throwing", async () => {
     const snap = await new AwsAdapter(config, deps("not json {{{")).fetchSnapshot();
     expect(snap.status).toBe("unknown");

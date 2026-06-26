@@ -95,16 +95,20 @@ function lifecycleLabel(code: string): string {
 }
 
 // ── Zod schema ───────────────────────────────────────────────────────────────
-// Defensive: validate ONLY the fields this adapter reads, so unrelated shape
-// changes (event_log, impacted_services) never force the snapshot to "unknown".
-// Zod's default strip mode drops everything else.
+// Defensive on two axes:
+//  1. Validate ONLY the fields this adapter reads, so unrelated shape changes
+//     (event_log, impacted_services) never force the snapshot to "unknown".
+//  2. arn + status are load-bearing (they derive severity) and stay required —
+//     if AWS stops sending them, "unknown" is the honest reading. The display
+//     fields are optional with defaults so one event missing a label never
+//     nukes the whole provider. Zod's default strip mode drops everything else.
 
 const AwsEventSchema = z.object({
-  date: z.string(),
   arn: z.string(),
   status: z.string(),
-  service_name: z.string(),
-  summary: z.string(),
+  date: z.string().optional(),
+  service_name: z.string().default(""),
+  summary: z.string().default(""),
 });
 
 const AwsEventsSchema = z.array(AwsEventSchema);
@@ -145,9 +149,12 @@ export class AwsAdapter implements ProviderAdapter {
         const rawMs = Number(ev.date) * 1000;
         const startedAt = isNaN(rawMs) ? this.deps.now() : new Date(rawMs).toISOString();
 
+        const summary = ev.summary || "AWS service event";
+        const title = ev.service_name ? `${summary} (${ev.service_name})` : summary;
+
         return {
           id: ev.arn,
-          title: `${ev.summary} (${ev.service_name})`,
+          title,
           impact: ev.arn.includes("OPERATIONAL_ISSUE") ? "major" : "minor",
           status: lifecycleLabel(ev.status),
           startedAt,
