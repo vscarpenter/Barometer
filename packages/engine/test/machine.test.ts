@@ -137,3 +137,30 @@ describe("stepAlerts notification payload", () => {
     expect(state.updatedAt).toBe("2026-06-25T13:00:00.000Z");
   });
 });
+
+describe("stepAlerts state hygiene", () => {
+  it("prunes providers no longer present in the snapshots (config removal)", () => {
+    // 'gone' was configured before and is mid-alert; 'a' is the only provider now.
+    const seeded: StateFile = {
+      providers: {
+        a: defaultState(),
+        gone: { ...defaultState(), alertState: "alerting", triggeringStatus: "major_outage" },
+      },
+      updatedAt: NOW,
+    };
+    const { state } = stepAlerts(seeded, [snap("operational")], NOW);
+    expect(Object.keys(state.providers)).toEqual(["a"]);
+    expect(state.providers["gone"]).toBeUndefined();
+  });
+});
+
+function defaultState() {
+  return {
+    alertState: "operational" as const,
+    triggeringStatus: null,
+    pendingStatus: null,
+    consecutiveCount: 0,
+    lastTransitionAt: NOW,
+    etag: null,
+  };
+}

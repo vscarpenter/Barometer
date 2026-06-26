@@ -43,7 +43,11 @@ export function stepAlerts(
   nowIso: string,
   threshold: number = DEFAULT_THRESHOLD,
 ): { state: StateFile; notifications: Notification[] } {
-  const providers: Record<string, ProviderAlertState> = { ...prev.providers };
+  // Build fresh from THIS run's snapshots so a provider removed from config
+  // doesn't leave a zombie (possibly mid-alert) entry in state.json forever.
+  // Every configured provider always yields a snapshot (fetch failure ->
+  // unknown), so an absent provider is a removed one.
+  const providers: Record<string, ProviderAlertState> = {};
   const notifications: Notification[] = [];
 
   for (const snap of snapshots) {
