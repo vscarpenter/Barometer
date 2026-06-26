@@ -41,3 +41,38 @@ describe("buildMetrics", () => {
     expect(byName("ProvidersOperational")[0]?.Value).toBe(1);
   });
 });
+
+describe("buildMetrics per-status counts", () => {
+  const mk = (id: string, status: SummaryFile["providers"][number]["status"]) => ({
+    id,
+    displayName: id,
+    status,
+    activeIncidents: [],
+    checkedAt: "t",
+    sourceUrl: "u",
+    uptime: { "24h": null, "7d": null, "30d": null, "90d": null },
+  });
+  const summary: SummaryFile = {
+    overall: { status: "major_outage", label: "Stormy", providersOperational: 1, providersTotal: 6, generatedAt: "t" },
+    providers: [
+      mk("a", "operational"),
+      mk("b", "degraded"),
+      mk("c", "partial_outage"),
+      mk("d", "major_outage"),
+      mk("e", "maintenance"),
+      mk("f", "unknown"),
+    ],
+    generatedAt: "t",
+  };
+  const metrics = buildMetrics(summary, 1);
+  const value = (name: string) => metrics.find((m) => m.MetricName === name)?.Value;
+
+  it("emits a count metric for every status bucket, including zero", () => {
+    expect(value("ProvidersOperational")).toBe(1);
+    expect(value("ProvidersDegraded")).toBe(1);
+    expect(value("ProvidersPartialOutage")).toBe(1);
+    expect(value("ProvidersMajorOutage")).toBe(1);
+    expect(value("ProvidersMaintenance")).toBe(1);
+    expect(value("ProvidersUnknown")).toBe(1);
+  });
+});
