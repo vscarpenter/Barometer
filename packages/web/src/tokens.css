@@ -1,0 +1,97 @@
+/*
+ * Design tokens (SPEC §9). Two layers: primitive ramps, then semantic tokens
+ * that reference them. Components consume ONLY semantic tokens, so the whole
+ * palette can be re-skinned (e.g. to Inkwell / Signal Ledger) by editing this
+ * file alone. Dark is the default "instrument panel"; light mode overrides the
+ * semantic layer.
+ */
+
+:root {
+  /* ── Primitive: neutrals ── */
+  --slate-950: #090d13;
+  --slate-900: #0d131c;
+  --slate-850: #121a25;
+  --slate-800: #18212e;
+  --slate-700: #232f40;
+  --slate-600: #36465c;
+  --slate-400: #6b7a90;
+  --slate-300: #9aa7b8;
+  --slate-200: #c2ccd9;
+  --slate-100: #e7edf5;
+
+  /* ── Primitive: status hues (chosen for AA when paired with icon + text) ── */
+  --hue-operational: #2dd4a7; /* fair / high pressure  */
+  --hue-degraded: #f4c14b; /* changeable           */
+  --hue-partial: #f59140; /* unsettled            */
+  --hue-major: #f4716b; /* stormy               */
+  --hue-maintenance: #5aa9f0; /* planned work         */
+  --hue-unknown: #8595a8; /* instrument fault     */
+  --hue-brand: #56c7e8; /* barometric cyan      */
+
+  /* ── Primitive: scale ── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-2: 0 8px 24px -8px rgb(0 0 0 / 0.5);
+  --ring: 0 0 0 1px var(--border) inset;
+
+  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Semantic (dark default) ── */
+  color-scheme: dark;
+  --bg: var(--slate-950);
+  --bg-grad: radial-gradient(1200px 600px at 50% -10%, #10202c 0%, var(--slate-950) 60%);
+  --surface: var(--slate-850);
+  --surface-2: var(--slate-800);
+  --border: var(--slate-700);
+  --border-soft: color-mix(in oklab, var(--slate-700) 60%, transparent);
+  --text: var(--slate-100);
+  --text-muted: var(--slate-300);
+  --text-faint: var(--slate-400);
+  --brand: var(--hue-brand);
+
+  --status-operational: var(--hue-operational);
+  --status-degraded: var(--hue-degraded);
+  --status-partial_outage: var(--hue-partial);
+  --status-major_outage: var(--hue-major);
+  --status-maintenance: var(--hue-maintenance);
+  --status-unknown: var(--hue-unknown);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #eef2f7;
+    --bg-grad: radial-gradient(1200px 600px at 50% -10%, #ffffff 0%, #e6ecf3 60%);
+    --surface: #ffffff;
+    --surface-2: #f4f7fb;
+    --border: #d3dbe6;
+    --border-soft: color-mix(in oklab, #d3dbe6 70%, transparent);
+    --text: #16202e;
+    --text-muted: #4a586b;
+    --text-faint: #74829a;
+    /* slightly deepened hues for AA on light surfaces */
+    --status-operational: #0f9e74;
+    --status-degraded: #b9821a;
+    --status-partial_outage: #c9650f;
+    --status-major_outage: #d63a33;
+    --status-maintenance: #2273c9;
+    --status-unknown: #5d6b80;
+    --brand: #1390b6;
+    --shadow-2: 0 8px 24px -10px rgb(20 40 70 / 0.18);
+  }
+}
