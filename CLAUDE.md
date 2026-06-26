@@ -67,6 +67,9 @@ Config lives in `infra/terraform.tfvars` (gitignored values: zone id, alert emai
 - **Availability rule (the one knob, in `packages/types/src/availability.ts`):** `operational`=up;
   `degraded`/`partial_outage`/`major_outage`=down; `maintenance`/`unknown`=**excluded** from the
   denominator. Planned maintenance and our own fetch failures never produce a false 100% or false outage.
+  Region scoping is a second knob (`packages/types/src/region.ts`, `isUsRelevant`): an incident
+  counts toward the reading only if it has no region data (fail-open), a `global` region, or a
+  `us-*` region — so non-US-only incidents stay visible but never flip the US reading or alerts.
 - **One Statuspage adapter, three bespoke.** 6 providers (Cloudflare, GitHub, OpenAI, Anthropic,
   Vercel, DigitalOcean) share one Atlassian-Statuspage adapter (`/api/v2/summary.json`). AWS
   (Health JSON, **UTF-16BE**), Azure (RSS), and GCP (`incidents.json`) have bespoke adapters.
@@ -121,42 +124,7 @@ semantics) and sparkline sample-window size (legibility tradeoff).
 
 ## Future work
 
-### 1. Make Barometer US-specific  ← next task
-
-**Problem:** Today the engine flags any active incident regardless of region, so a provider gets marked
-down for incidents that only affect Europe / Middle East / APAC. Example seen live: GCP showed a
-partial outage for *"Network traffic originating from Delhi, Chennai, Mumbai"* (asia-south2); AWS
-surfaces `me-central-1` events. For a US audience these shouldn't count as "the internet is unhealthy."
-
-**Goal:** Scope the reading (and ideally the alerting) to US regions — exclude incidents affecting
-*only* non-US regions; keep global and US-affecting ones.
-
-**Where the region data lives (varies per adapter — this is the crux):**
-- **GCP** — *structured.* `incidents.json` has `currently_affected_locations: [{title, id}]` with ids
-  like `asia-south2`, `us-central1`, `global`. The adapter currently **drops** these. Filter on a
-  US-region allowlist (`us-*`) plus `global`. Easiest win.
-- **AWS** — *semi-structured.* The region is encoded in the event ARN
-  (`arn:aws:health:me-central-1::event/...`), currently used only as the incident id. Parse region
-  from the ARN; treat empty/global as global.
-- **Statuspage providers** (Cloudflare, GitHub, OpenAI, Anthropic, Vercel, DigitalOcean) — *mostly
-  prose.* `/api/v2/summary.json` incidents reference affected components; some component **names** are
-  regional (e.g. Cloudflare per-PoP), but most region info is in the incident title/body. Would need
-  component-name matching and/or keyword extraction. Less reliable.
-- **Azure** — *prose.* RSS description text; needs region keyword extraction.
-
-**Open design questions (warrants a brainstorm → SPEC, per the spec-first workflow):**
-- What's the canonical US-region allowlist, and how are `global`/unlabeled incidents treated (assume
-  US-affecting)?
-- Is this a hard filter (drop non-US incidents entirely) or a weighting (still show them, but don't let
-  them flip the overall reading / fire alerts)? Affects `availability.ts` and the overall reading.
-- For prose-only feeds where region can't be reliably extracted, fail open (count it) or open a
-  config to mark certain providers "US region unknown — always count"?
-- Surface the affected regions in the UI per incident card?
-
-This touches every adapter, the snapshot schema (add affected regions), the availability/aggregate
-logic, and possibly the alert machine — non-trivial. Start with brainstorming → SPEC.md, not code.
-
-### 2. Other
+### 1. Other
 
 - **Telegram notifier** — add a `TelegramNotifier implements Notifier` behind the existing interface;
   wire a Terraform var to select the channel. (Designed for this from day one.)
