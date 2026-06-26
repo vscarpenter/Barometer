@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:a10="http://www.w3.org/2005/Atom"
+  version="2.0">
+  <channel xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <title>Azure Status</title>
+    <link>https://azurestatusprodcus.azurewebsites.net/en-us/status/</link>
+    <description>Azure Status</description>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 25 Jun 2026 14:00:00 Z</lastBuildDate>
+    <item>
+      <title><![CDATA[Azure Storage – Outage in East US]]></title>
+      <description><![CDATA[<p>We are aware of an outage affecting Azure Blob Storage in the East US region. Customers may experience errors connecting to storage accounts. Our engineering team is investigating the issue and will provide updates every 30 minutes.</p>]]></description>
+      <pubDate>Wed, 25 Jun 2026 13:15:00 Z</pubDate>
+      <link>https://azure.status.microsoft/en-us/status/</link>
+      <guid>https://azure.status.microsoft/en-us/status/#azure-storage-outage-eastus-2026-06-25</guid>
+    </item>
+    <item>
+      <title><![CDATA[Azure App Service – Elevated Latency in West Europe]]></title>
+      <description><![CDATA[<p>Customers may be experiencing elevated latency when accessing Azure App Service resources in West Europe. We are investigating the root cause and working to restore normal performance.</p>]]></description>
+      <pubDate>Wed, 25 Jun 2026 12:30:00 Z</pubDate>
+      <link>https://azure.status.microsoft/en-us/status/</link>
+      <guid>https://azure.status.microsoft/en-us/status/#azure-app-service-latency-westeurope-2026-06-25</guid>
+    </item>
+  </channel>
+</rss>
