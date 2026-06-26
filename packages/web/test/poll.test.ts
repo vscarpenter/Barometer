@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
+import { z } from "zod";
 import { secondsAgo, isStale, formatAgo, createPoller } from "../src/poll.js";
 
 const NOW = Date.parse("2026-06-25T12:00:00.000Z");
@@ -74,5 +75,33 @@ describe("createPoller", () => {
     await poller.refresh();
 
     expect(onError).toHaveBeenCalledOnce();
+  });
+
+  it("validates the response against the schema and routes a wrong shape to onError", async () => {
+    const schema = z.object({ hello: z.string() });
+    const onData = vi.fn();
+    const onError = vi.fn();
+    // Valid JSON, wrong shape (hello should be a string). Without validation this
+    // would reach onData and could throw deep in render(); with it, fail closed.
+    const fetchImpl = (async () => new Response(JSON.stringify({ hello: 42 }), { status: 200 })) as typeof fetch;
+    const poller = createPoller<{ hello: string }>({ url: "/x", intervalMs: 1000, fetchImpl, onData, onError, schema });
+
+    await poller.refresh();
+
+    expect(onData).not.toHaveBeenCalled();
+    expect(onError).toHaveBeenCalledOnce();
+  });
+
+  it("delivers a schema-valid response to onData", async () => {
+    const schema = z.object({ hello: z.string() });
+    const onData = vi.fn();
+    const onError = vi.fn();
+    const fetchImpl = (async () => new Response(JSON.stringify({ hello: "world" }), { status: 200 })) as typeof fetch;
+    const poller = createPoller<{ hello: string }>({ url: "/x", intervalMs: 1000, fetchImpl, onData, onError, schema });
+
+    await poller.refresh();
+
+    expect(onData).toHaveBeenCalledWith({ hello: "world" });
+    expect(onError).not.toHaveBeenCalled();
   });
 });

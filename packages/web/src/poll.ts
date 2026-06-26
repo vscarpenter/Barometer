@@ -3,6 +3,7 @@
  * testable; createPoller injects fetchImpl for the same reason. The poller
  * refreshes on an interval and whenever the tab becomes visible again.
  */
+import type { ZodType } from "zod";
 
 export function secondsAgo(iso: string, nowMs: number): number {
   const then = Date.parse(iso);
@@ -37,17 +38,20 @@ export interface PollerOptions<T> {
   onData: (data: T) => void;
   onError: (err: unknown) => void;
   fetchImpl?: typeof fetch;
+  /** Validate the response at the trust boundary; a wrong shape routes to onError. */
+  schema?: ZodType<T>;
 }
 
 export function createPoller<T>(opts: PollerOptions<T>): Poller {
-  const { url, intervalMs, onData, onError, fetchImpl = fetch } = opts;
+  const { url, intervalMs, onData, onError, fetchImpl = fetch, schema } = opts;
   let timer: ReturnType<typeof setInterval> | undefined;
 
   async function refresh(): Promise<void> {
     try {
       const res = await fetchImpl(url, { cache: "no-store" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      onData((await res.json()) as T);
+      const json = await res.json();
+      onData(schema ? schema.parse(json) : (json as T));
     } catch (err) {
       onError(err);
     }
