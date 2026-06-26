@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
       # This module must receive both the default aws provider and an aliased
       # aws.us_east_1 provider. CloudFront ACM certificates must live in us-east-1.
       configuration_aliases = [aws.us_east_1]

@@ -12,7 +12,7 @@ runs for a few dollars a month.
 EventBridge Scheduler (every 5 min)
         │
         ▼
-   Lambda (engine, Node 20)        fetch all providers concurrently → normalize → detect
+   Lambda (engine, Node 24)        fetch all providers concurrently → normalize → detect
         │                          transitions → debounce → alert → tier history
         ▼
    S3 (private; CloudFront OAC only)

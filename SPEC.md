@@ -31,7 +31,7 @@ spec → plan → implementation in a continuous pass (TDD, frequent commits), p
 EventBridge Scheduler (every 5 min)
         |
         v
-   Lambda (Barometer engine, Node 20)
+   Lambda (Barometer engine, Node 24)
         |  read prior state/history from S3   (single writer => no write races)
         |  fetch all providers concurrently   (capped, timeout + retries)
         |  normalize to common schema          (one provider failing => "unknown", run continues)
@@ -326,7 +326,7 @@ Composable modules; no wildcard IAM.
 - **cdn** — CloudFront with OAC, HTTPS-only (redirect), default behavior → `/app` (SPA), short-TTL behaviors
   for `/status/*` and `/history/*`. Custom domain `barometer.vinny.dev`; ACM cert in **us-east-1** (aliased
   provider) with Route53 DNS validation + alias record.
-- **engine** — Lambda (Node 20, esbuild bundle), env vars for config, CloudWatch log group. Execution role
+- **engine** — Lambda (Node 24, esbuild bundle), env vars for config, CloudWatch log group. Execution role
   (least-privilege): `s3:GetObject`+`s3:PutObject` on **only** `/status/*` and `/history/*` of the bucket;
   `sns:Publish` on **only** the one topic ARN; `cloudwatch:PutMetricData` conditioned on the `Barometer`
   namespace; standard logs.

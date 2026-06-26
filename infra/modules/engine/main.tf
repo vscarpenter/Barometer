@@ -25,7 +25,7 @@ resource "aws_cloudwatch_log_group" "lambda" {
 resource "aws_lambda_function" "engine" {
   function_name    = var.function_name
   role             = aws_iam_role.lambda_exec.arn
-  runtime          = "nodejs20.x"
+  runtime          = "nodejs24.x"
   handler          = "handler.handler" # handler.mjs exports { handler }
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
