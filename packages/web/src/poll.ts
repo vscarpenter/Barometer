@@ -5,7 +5,9 @@
  */
 
 export function secondsAgo(iso: string, nowMs: number): number {
-  return Math.max(0, Math.floor((nowMs - Date.parse(iso)) / 1000));
+  const then = Date.parse(iso);
+  if (Number.isNaN(then)) return Infinity; // unparseable => infinitely old, so isStale fails safe
+  return Math.max(0, Math.floor((nowMs - then) / 1000));
 }
 
 /** Stale guard: generatedAt older than thresholdMin minutes means the engine may be down. */
@@ -13,8 +15,9 @@ export function isStale(generatedAt: string, nowMs: number, thresholdMin = 15): 
   return secondsAgo(generatedAt, nowMs) > thresholdMin * 60;
 }
 
-/** Compact human duration: "12s", "4m", "1h 5m". */
+/** Compact human duration: "12s", "4m", "1h 5m". Non-finite (bad timestamp) -> "unknown". */
 export function formatAgo(seconds: number): string {
+  if (!Number.isFinite(seconds)) return "unknown";
   if (seconds < 60) return `${seconds}s`;
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m`;
