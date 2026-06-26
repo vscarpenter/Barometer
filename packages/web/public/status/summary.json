@@ -1,0 +1,156 @@
+{
+  "overall": {
+    "status": "partial_outage",
+    "label": "Unsettled",
+    "providersOperational": 6,
+    "providersTotal": 9,
+    "generatedAt": "2026-06-26T03:37:11.872Z"
+  },
+  "providers": [
+    {
+      "id": "aws",
+      "displayName": "AWS",
+      "status": "operational",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.aws.com",
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "90d": 100
+      }
+    },
+    {
+      "id": "azure",
+      "displayName": "Microsoft Azure",
+      "status": "operational",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.azure.com",
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "90d": 100
+      }
+    },
+    {
+      "id": "gcp",
+      "displayName": "Google Cloud",
+      "status": "degraded",
+      "activeIncidents": [
+        {
+          "id": "gcp-1",
+          "title": "Networking latency in europe-west1",
+          "impact": "minor",
+          "status": "investigating",
+          "startedAt": "2026-06-26T02:07:11.872Z",
+          "url": "https://example.com/incidents/gcp"
+        }
+      ],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.gcp.com",
+      "uptime": {
+        "24h": 98.6,
+        "7d": 99.5,
+        "30d": 99.69999999999999,
+        "90d": 99.89999999999999
+      }
+    },
+    {
+      "id": "cloudflare",
+      "displayName": "Cloudflare",
+      "status": "operational",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.cloudflare.com",
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "90d": 100
+      }
+    },
+    {
+      "id": "github",
+      "displayName": "GitHub",
+      "status": "partial_outage",
+      "activeIncidents": [
+        {
+          "id": "github-1",
+          "title": "Elevated errors on Actions and Pages",
+          "impact": "major",
+          "status": "investigating",
+          "startedAt": "2026-06-26T02:07:11.872Z",
+          "url": "https://example.com/incidents/github"
+        }
+      ],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.github.com",
+      "uptime": {
+        "24h": 96.2,
+        "7d": 97.10000000000001,
+        "30d": 97.3,
+        "90d": 97.5
+      }
+    },
+    {
+      "id": "openai",
+      "displayName": "OpenAI",
+      "status": "operational",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.openai.com",
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "90d": 100
+      }
+    },
+    {
+      "id": "anthropic",
+      "displayName": "Anthropic",
+      "status": "operational",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.anthropic.com",
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "90d": 100
+      }
+    },
+    {
+      "id": "vercel",
+      "displayName": "Vercel",
+      "status": "maintenance",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.vercel.com",
+      "uptime": {
+        "24h": null,
+        "7d": 99.8,
+        "30d": 99.9,
+        "90d": 99.95
+      }
+    },
+    {
+      "id": "digitalocean",
+      "displayName": "DigitalOcean",
+      "status": "operational",
+      "activeIncidents": [],
+      "checkedAt": "2026-06-26T03:37:11.872Z",
+      "sourceUrl": "https://status.digitalocean.com",
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "90d": 100
+      }
+    }
+  ],
+  "generatedAt": "2026-06-26T03:37:11.872Z"
+}

@@ -13,6 +13,15 @@ export function isStale(generatedAt: string, nowMs: number, thresholdMin = 15): 
   return secondsAgo(generatedAt, nowMs) > thresholdMin * 60;
 }
 
+/** Compact human duration: "12s", "4m", "1h 5m". */
+export function formatAgo(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.floor(minutes / 60);
+  return `${hours}h ${minutes % 60}m`;
+}
+
 export interface Poller {
   start(): void;
   stop(): void;

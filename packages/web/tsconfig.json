@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+    "baseUrl": "../..",
+    "paths": {
+      "@barometer/types": ["packages/types/src/index.ts"]
+    }
+  },
+  "include": ["src", "test", "vite.config.ts"]
+}
