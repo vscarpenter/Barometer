@@ -4,7 +4,7 @@ import { createPoller, isStale, secondsAgo, formatAgo } from "./poll.js";
 import { el, svgEl } from "./render/dom.js";
 import { renderHeadline } from "./render/headline.js";
 import { renderCard } from "./render/card.js";
-import { renderStaleBanner } from "./render/banner.js";
+import { createBannerRegion, updateBannerRegion } from "./render/banner.js";
 
 const SUMMARY_URL = "/status/summary.json";
 const RECENT_URL = "/history/recent.json";
@@ -18,7 +18,7 @@ let failed = false;
 const app = document.querySelector<HTMLDivElement>("#app")!;
 app.replaceChildren();
 
-const bannerSlot = el("div");
+const bannerSlot = createBannerRegion();
 const readingSlot = el("div");
 const gridSlot = el("div", "grid");
 const updatedText = el("span", "");
@@ -43,9 +43,7 @@ function render(): void {
   }
 
   const nowMs = Date.now();
-  bannerSlot.replaceChildren(
-    ...(isStale(summary.generatedAt, nowMs) ? [renderStaleBanner(summary.generatedAt, nowMs)] : []),
-  );
+  updateBannerRegion(bannerSlot, summary.generatedAt, nowMs, isStale(summary.generatedAt, nowMs));
   readingSlot.replaceChildren(renderHeadline(summary.overall));
   gridSlot.replaceChildren(
     ...(summary.providers.length

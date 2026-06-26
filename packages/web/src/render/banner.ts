@@ -21,12 +21,34 @@ function warningIcon(): SVGElement {
 }
 
 /**
- * Stale-data guard banner (SPEC §8). A polite live region so screen readers are
- * told when the engine may be down instead of silently trusting stale green.
+ * The persistent stale-data live region (SPEC §8). Created empty at load and
+ * kept in the DOM, so when it later gains content a screen reader announces it.
+ * A region inserted already-populated is announced unreliably — hence the
+ * region owns role=status, and renderStaleBanner below is purely visual.
+ */
+export function createBannerRegion(): HTMLElement {
+  const region = el("div", "banner-region");
+  region.setAttribute("role", "status");
+  region.setAttribute("aria-live", "polite");
+  return region;
+}
+
+/** Show the stale warning (stale) or clear it (fresh), in place — same node. */
+export function updateBannerRegion(
+  region: HTMLElement,
+  generatedAt: string,
+  nowMs: number,
+  stale: boolean,
+): void {
+  region.replaceChildren(...(stale ? [renderStaleBanner(generatedAt, nowMs)] : []));
+}
+
+/**
+ * Stale-data guard banner visual (SPEC §8): warning icon + text. The live
+ * region is the container (createBannerRegion); this element carries no role.
  */
 export function renderStaleBanner(generatedAt: string, nowMs: number): HTMLElement {
   const banner = el("div", "banner");
-  banner.setAttribute("role", "status");
   banner.appendChild(warningIcon());
   const text = el("span");
   text.textContent = `Data may be stale — last updated ${formatAgo(secondsAgo(generatedAt, nowMs))} ago. The engine may be down.`;

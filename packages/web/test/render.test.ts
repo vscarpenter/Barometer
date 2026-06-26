@@ -3,7 +3,7 @@ import type { OverallReading, SummaryProvider } from "@barometer/types";
 import { renderHeadline } from "../src/render/headline.js";
 import { renderCard } from "../src/render/card.js";
 import { renderSparkline } from "../src/render/sparkline.js";
-import { renderStaleBanner } from "../src/render/banner.js";
+import { renderStaleBanner, createBannerRegion, updateBannerRegion } from "../src/render/banner.js";
 
 const overall: OverallReading = {
   status: "partial_outage",
@@ -82,9 +82,30 @@ describe("renderSparkline", () => {
 });
 
 describe("renderStaleBanner", () => {
-  it("is a polite live region warning about staleness", () => {
+  it("warns about staleness with an icon and text", () => {
     const banner = renderStaleBanner("2026-06-25T11:00:00.000Z", Date.parse("2026-06-25T12:00:00.000Z"));
-    expect(banner.getAttribute("role")).toBe("status");
     expect(banner.textContent?.toLowerCase()).toContain("stale");
+    expect(banner.querySelector("svg")).toBeTruthy();
+  });
+});
+
+describe("banner live region", () => {
+  const NOW = Date.parse("2026-06-25T12:00:00.000Z");
+
+  it("is a persistent, empty, polite live region at creation", () => {
+    const region = createBannerRegion();
+    // The region must exist BEFORE it has content so a screen reader announces
+    // the change; a region inserted already-populated announces unreliably.
+    expect(region.getAttribute("role")).toBe("status");
+    expect(region.getAttribute("aria-live")).toBe("polite");
+    expect(region.childNodes.length).toBe(0);
+  });
+
+  it("populates in place when stale and clears in place when fresh", () => {
+    const region = createBannerRegion();
+    updateBannerRegion(region, "2026-06-25T11:00:00.000Z", NOW, true);
+    expect(region.textContent?.toLowerCase()).toContain("stale");
+    updateBannerRegion(region, "2026-06-25T11:59:00.000Z", NOW, false);
+    expect(region.childNodes.length).toBe(0); // same node, emptied — not replaced
   });
 });
