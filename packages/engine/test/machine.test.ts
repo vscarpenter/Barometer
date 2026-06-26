@@ -118,6 +118,33 @@ describe("stepAlerts notification payload", () => {
     expect(note.incidentUrl).toBe("https://example.com/incidents/i1");
   });
 
+  it("cites the US incident in the notification when a non-US incident is listed first", () => {
+    const apacIncident: Incident = {
+      id: "apac1",
+      title: "APAC disruption",
+      impact: "critical",
+      status: "investigating",
+      startedAt: NOW,
+      url: "https://example.com/incidents/apac1",
+      regions: ["asia-south2"],
+    };
+    const usIncident: Incident = {
+      id: "us1",
+      title: "US edge outage",
+      impact: "critical",
+      status: "investigating",
+      startedAt: NOW,
+      url: "https://example.com/incidents/us1",
+      regions: ["us-east-1"],
+    };
+    let state = EMPTY;
+    state = stepAlerts(state, [snap("major_outage", [apacIncident, usIncident])], NOW).state;
+    const { notifications } = stepAlerts(state, [snap("major_outage", [apacIncident, usIncident])], NOW);
+    const note = notifications[0]!;
+    expect(note.incidentTitle).toBe("US edge outage");
+    expect(note.incidentUrl).toBe("https://example.com/incidents/us1");
+  });
+
   it("preserves a per-provider etag across steps and stamps updatedAt", () => {
     const seeded: StateFile = {
       providers: {

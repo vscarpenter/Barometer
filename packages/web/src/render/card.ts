@@ -33,7 +33,7 @@ export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]):
   head.append(led, name, pill);
   card.appendChild(head);
 
-  const incident = provider.activeIncidents[0];
+  const incident = provider.activeIncidents.find(isUsRelevant) ?? provider.activeIncidents[0];
   if (incident) {
     const counted = isUsRelevant(incident);
     const para = el("p", counted ? "card__incident" : "card__incident card__incident--muted");

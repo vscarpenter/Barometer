@@ -46,6 +46,9 @@ describe("AwsAdapter", () => {
     expect(inc.id).toBe(
       "arn:aws:health:me-central-1::event/MULTIPLE_SERVICES/AWS_MULTIPLE_SERVICES_OPERATIONAL_ISSUE/AWS_MULTIPLE_SERVICES_OPERATIONAL_ISSUE_5E6B8_EF2498889B5",
     );
+    expect(inc.status).toBe("monitoring");                   // code "3" → lifecycleLabel
+    expect(inc.startedAt).toBe("2026-03-01T12:51:25.000Z"); // epoch 1772369485 → ISO
+    expect(inc.url).toBe("https://health.aws.amazon.com/health/status"); // INCIDENT_URL
   });
 
   it("derives status from US events only; a worse non-US event does not escalate", async () => {

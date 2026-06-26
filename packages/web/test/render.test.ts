@@ -84,6 +84,25 @@ describe("renderCard", () => {
     const c = renderCard(p, []);
     expect(c.querySelector(".card__incident--muted")).toBeNull();
     expect(c.textContent).toContain("us-east-1");
+    expect(c.textContent).toContain("global");
+  });
+
+  it("shows the US incident when a non-US incident is listed first", () => {
+    const p: SummaryProvider = {
+      ...provider, status: "partial_outage",
+      activeIncidents: [
+        { id: "a1", title: "APAC", impact: "major", status: "investigating", startedAt: "t", url: "https://x/a1", regions: ["asia-south2"] },
+        { id: "u1", title: "US edge", impact: "major", status: "investigating", startedAt: "t", url: "https://x/u1", regions: ["us-east-1"] },
+      ],
+    };
+    const c = renderCard(p, []);
+    expect(c.textContent).toContain("US edge");
+    expect(c.querySelector(".card__incident--muted")).toBeNull();
+    expect(c.textContent).toContain("us-east-1");
+  });
+
+  it("does not mute a region-less incident (fails open)", () => {
+    expect(renderCard(provider, []).querySelector(".card__incident--muted")).toBeNull();
   });
 });
 

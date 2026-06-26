@@ -1,5 +1,6 @@
 import {
   classify,
+  isUsRelevant,
   type ProviderSnapshot,
   type ProviderStatus,
   type StateFile,
@@ -115,7 +116,7 @@ function resetStreak(state: ProviderAlertState): void {
 }
 
 function outage(snap: ProviderSnapshot): Notification {
-  const inc = snap.activeIncidents[0];
+  const inc = snap.activeIncidents.find(isUsRelevant) ?? snap.activeIncidents[0];
   return {
     kind: "outage",
     providerId: snap.id,
