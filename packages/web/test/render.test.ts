@@ -50,6 +50,15 @@ describe("renderCard", () => {
     expect(link?.getAttribute("href")).toBe("https://x/i1");
     expect(card.textContent).toContain("Edge errors in EU");
   });
+  it("never makes a javascript: incident URL clickable, but still shows the title", () => {
+    const hostile: SummaryProvider = {
+      ...provider,
+      activeIncidents: [{ ...provider.activeIncidents[0]!, url: "javascript:alert(document.cookie)" }],
+    };
+    const hostileCard = renderCard(hostile, []);
+    expect(hostileCard.querySelector("a")).toBeNull(); // no clickable link
+    expect(hostileCard.textContent).toContain("Edge errors in EU"); // title still surfaced
+  });
   it("includes a sparkline and the uptime windows (null -> dash)", () => {
     expect(card.querySelector("svg")).toBeTruthy();
     expect(card.textContent).toContain("98.5");

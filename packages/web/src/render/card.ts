@@ -7,6 +7,11 @@ function formatUptime(value: number | null): string {
   return value === null ? "—" : `${+value.toFixed(2)}%`;
 }
 
+/** Only http(s) URLs are safe to put in an href (blocks javascript:, data:, etc.). */
+function isSafeHttpUrl(url: string): boolean {
+  return /^https?:\/\//i.test(url);
+}
+
 /** One provider instrument tile (SPEC §8): LED + name + status pill, incident, sparkline, uptime. */
 export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]): HTMLElement {
   const card = el("article", "card");
@@ -30,12 +35,19 @@ export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]):
   const incident = provider.activeIncidents[0];
   if (incident) {
     const para = el("p", "card__incident");
-    const link = el("a");
-    link.href = incident.url;
-    link.target = "_blank";
-    link.rel = "noreferrer";
-    link.textContent = incident.title;
-    para.appendChild(link);
+    // incident.url comes from a third-party status feed. Only link http(s) —
+    // a hostile/compromised feed could otherwise inject javascript: and run
+    // script in our origin. Allowlist (not denylist); fall back to plain text.
+    if (isSafeHttpUrl(incident.url)) {
+      const link = el("a");
+      link.href = incident.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = incident.title;
+      para.appendChild(link);
+    } else {
+      para.textContent = incident.title;
+    }
     card.appendChild(para);
   }
 
