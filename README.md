@@ -67,15 +67,17 @@ infra/              Terraform modules (storage, cdn, engine, schedule, alerting,
 
 ## Local development
 
+Requires [Bun](https://bun.sh).
+
 ```bash
-npm install
-npm test            # all packages, no network access
-npm run typecheck   # strict TS across types/engine/web
-npm run dryrun      # fetch all providers live + print summary.json (no S3 writes, no alerts)
-npm run dev -w @barometer/web   # local dashboard against demo data in packages/web/public
+bun install
+bun run test        # all packages, no network access
+bun run typecheck   # strict TS across types/engine/web
+bun run dryrun      # fetch all providers live + print summary.json (no S3 writes, no alerts)
+bun run --filter '@barometer/web' dev   # local dashboard against demo data in packages/web/public
 ```
 
-`npm run dryrun` is the fastest way to see the engine end-to-end; it runs the full fetch + normalize against
+`bun run dryrun` is the fastest way to see the engine end-to-end; it runs the full fetch + normalize against
 the real provider APIs and prints `summary.json` to stdout.
 
 ## Configuration

@@ -165,13 +165,13 @@ logic, and possibly the alert machine — non-trivial. Start with brainstorming 
 ## Dev workflow
 
 ```bash
-npm test            # all packages, no network (vitest; jsdom for web)
-npm run typecheck   # strict TS across types/engine/web
-npm run dryrun      # fetch all 9 providers live + print summary.json (no S3 writes, no alerts)
-npm run dev -w @barometer/web   # local dashboard against demo data in packages/web/public
+bun run test        # all packages, no network (vitest; jsdom for web)
+bun run typecheck   # strict TS across types/engine/web
+bun run dryrun      # fetch all 9 providers live + print summary.json (no S3 writes, no alerts)
+bun run --filter '@barometer/web' dev   # local dashboard against demo data in packages/web/public
 ```
 
-`npm run dryrun` is the fastest end-to-end check of the engine against real provider APIs — use it to
+`bun run dryrun` is the fastest end-to-end check of the engine against real provider APIs — use it to
 validate adapter changes (it caught the AWS UTF-16BE decode bug that unit tests with UTF-8 fixtures missed).
 
 **Process:** This user works spec-first (brainstorm → SPEC.md → plan → implement) and wants design

@@ -21,7 +21,7 @@ spec → plan → implementation in a continuous pass (TDD, frequent commits), p
 | Check interval | 5 minutes (Terraform variable). |
 | Retention | 48h high-resolution samples; 90 daily rollup buckets (Terraform variables). |
 | Availability rule | `operational` = up. `degraded`/`partial_outage`/`major_outage` = down. `maintenance`/`unknown` excluded from the denominator. (Config knob.) |
-| Tooling | npm workspaces · esbuild (Lambda bundle) · Vite (web) · Vitest (tests) · zod (runtime validation) · Terraform (infra). |
+| Tooling | Bun workspaces · esbuild (Lambda bundle) · Vite (web) · Vitest (tests) · zod (runtime validation) · Terraform (infra). |
 
 ---
 
@@ -384,7 +384,7 @@ barometer/
   README.md        setup, deploy, configuration, cost notes, teardown
 ```
 
-npm workspaces. `packages/types` is the shared dependency of `engine` and `web`.
+Bun workspaces. `packages/types` is the shared dependency of `engine` and `web`.
 
 ---
 

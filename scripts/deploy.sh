@@ -6,11 +6,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "==> Installing dependencies"
-npm ci
+bun install --frozen-lockfile
 
 echo "==> Building web bundle and Lambda artifact"
-npm run build -w @barometer/web
-npm run build -w @barometer/engine
+bun run --filter '@barometer/web' build
+bun run --filter '@barometer/engine' build
 
 echo "==> terraform apply"
 terraform -chdir=infra apply "$@"
