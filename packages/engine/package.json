@@ -1,0 +1,22 @@
+{
+  "name": "@barometer/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "node esbuild.mjs"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudwatch": "^3.620.0",
+    "@aws-sdk/client-s3": "^3.620.0",
+    "@aws-sdk/client-sns": "^3.620.0",
+    "@barometer/types": "*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@barometer/types": ["packages/types/src/index.ts"],
+      "@barometer/types/*": ["packages/types/src/*"]
+    },
+    "types": ["node"]
+  },
+  "include": [
+    "packages/types/src",
+    "packages/types/test",
+    "packages/engine/src",
+    "packages/engine/test"
+  ]
+}
