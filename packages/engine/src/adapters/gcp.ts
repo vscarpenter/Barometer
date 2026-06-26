@@ -24,7 +24,7 @@ const SEVERITY_TO_IMPACT: Record<string, Incident["impact"]> = {
 const GcpIncidentSchema = z.object({
   id: z.string(),
   begin: z.string(),
-  end: z.string().optional(),
+  end: z.string().nullish(), // absent OR null both mean "still active"
   external_desc: z.string(),
   most_recent_update: z.object({ status: z.string() }).optional(),
   status_impact: z.string(),

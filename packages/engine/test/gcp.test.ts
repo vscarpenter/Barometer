@@ -25,6 +25,23 @@ const config: ProviderConfig = {
 };
 
 describe("GcpAdapter", () => {
+  it("treats an active incident with explicit end:null as active (not unknown)", async () => {
+    const body = JSON.stringify([
+      {
+        id: "x1",
+        begin: "2026-06-25T00:00:00.000Z",
+        end: null,
+        external_desc: "Networking disruption",
+        status_impact: "SERVICE_OUTAGE",
+        severity: "high",
+        uri: "incidents/x1",
+      },
+    ]);
+    const snap = await new GcpAdapter(config, deps(body)).fetchSnapshot();
+    expect(snap.status).toBe("major_outage");
+    expect(snap.activeIncidents).toHaveLength(1);
+  });
+
   it("maps an empty incident list to operational", async () => {
     const snap = await new GcpAdapter(config, deps(fixture("gcp-healthy.json"))).fetchSnapshot();
     expect(snap.status).toBe("operational");
