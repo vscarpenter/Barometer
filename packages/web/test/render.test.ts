@@ -64,6 +64,27 @@ describe("renderCard", () => {
     expect(card.textContent).toContain("98.5");
     expect(card.textContent).toContain("—"); // 30d is null
   });
+
+  it("mutes and labels a non-US-only incident", () => {
+    const p: SummaryProvider = {
+      ...provider, status: "operational",
+      activeIncidents: [{ id: "n1", title: "APAC latency", impact: "major", status: "monitoring", startedAt: "t", url: "https://x/n1", regions: ["asia-south2"] }],
+    };
+    const c = renderCard(p, []);
+    expect(c.querySelector(".card__incident--muted")).not.toBeNull();
+    expect(c.textContent?.toLowerCase()).toContain("not counted");
+    expect(c.textContent).toContain("asia-south2");
+  });
+
+  it("tags a US/global incident without muting it", () => {
+    const p: SummaryProvider = {
+      ...provider, status: "partial_outage",
+      activeIncidents: [{ id: "u1", title: "Edge errors", impact: "major", status: "monitoring", startedAt: "t", url: "https://x/u1", regions: ["us-east-1", "global"] }],
+    };
+    const c = renderCard(p, []);
+    expect(c.querySelector(".card__incident--muted")).toBeNull();
+    expect(c.textContent).toContain("us-east-1");
+  });
 });
 
 describe("renderSparkline", () => {

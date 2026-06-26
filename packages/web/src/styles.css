@@ -172,6 +172,8 @@ body {
 .card__incident a {
   color: var(--text);
 }
+.card__incident--muted { opacity: 0.6; }
+.card__regions { font-size: 0.75em; opacity: 0.7; white-space: nowrap; }
 .card__spark {
   display: block;
   inline-size: 100%;

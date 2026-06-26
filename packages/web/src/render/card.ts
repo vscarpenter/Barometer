@@ -1,4 +1,5 @@
 import type { SummaryProvider, ProviderStatus, UptimeWindows } from "@barometer/types";
+import { isUsRelevant } from "@barometer/types";
 import { el } from "./dom.js";
 import { statusLabel, makeStatusIcon } from "./status.js";
 import { renderSparkline } from "./sparkline.js";
@@ -34,7 +35,8 @@ export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]):
 
   const incident = provider.activeIncidents[0];
   if (incident) {
-    const para = el("p", "card__incident");
+    const counted = isUsRelevant(incident);
+    const para = el("p", counted ? "card__incident" : "card__incident card__incident--muted");
     // incident.url comes from a third-party status feed. Only link http(s) —
     // a hostile/compromised feed could otherwise inject javascript: and run
     // script in our origin. Allowlist (not denylist); fall back to plain text.
@@ -47,6 +49,14 @@ export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]):
       para.appendChild(link);
     } else {
       para.textContent = incident.title;
+    }
+    if (incident.regions && incident.regions.length > 0) {
+      const tag = el("span", "card__regions");
+      tag.textContent = counted
+        ? incident.regions.join(", ")
+        : `${incident.regions.join(", ")} — outside US, not counted`;
+      para.appendChild(document.createTextNode(" "));
+      para.appendChild(tag);
     }
     card.appendChild(para);
   }
