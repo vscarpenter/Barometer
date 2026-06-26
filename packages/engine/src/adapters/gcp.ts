@@ -4,11 +4,10 @@ import type { ProviderAdapter, AdapterDeps, ProviderConfig } from "./types.js";
 
 /**
  * Adapter for Google Cloud Platform status.
- * Reads https://status.cloud.google.com/incidents.json — a flat JSON array where
- * each element is an incident. Active incidents have no `end` field. SPEC §5.x.
+ * Reads config.url (https://status.cloud.google.com/incidents.json) — a flat
+ * JSON array where each element is an incident. Active incidents have no `end`
+ * field. SPEC §5.2.
  */
-
-const ENDPOINT = "https://status.cloud.google.com/incidents.json";
 
 const STATUS_IMPACT_TO_PROVIDER_STATUS: Record<string, ProviderStatus> = {
   SERVICE_OUTAGE: "major_outage",
@@ -48,13 +47,14 @@ function worstProviderStatus(statuses: ProviderStatus[]): ProviderStatus {
 
 export class GcpAdapter implements ProviderAdapter {
   readonly id: string;
-  private readonly sourceUrl = ENDPOINT;
+  private readonly sourceUrl: string;
 
   constructor(
     private readonly config: ProviderConfig,
     private readonly deps: AdapterDeps,
   ) {
     this.id = config.id;
+    this.sourceUrl = config.url;
   }
 
   async fetchSnapshot(): Promise<ProviderSnapshot> {

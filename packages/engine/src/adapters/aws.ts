@@ -29,7 +29,8 @@ import type { ProviderAdapter, AdapterDeps, ProviderConfig } from "./types.js";
  *   other → "active"
  */
 
-const SOURCE_URL = "https://health.aws.amazon.com/public/currentevents";
+// config.url is the full feed endpoint (https://health.aws.amazon.com/public/currentevents).
+// INCIDENT_URL is the separate human-facing dashboard link surfaced on incidents.
 const INCIDENT_URL = "https://health.aws.amazon.com/health/status";
 
 // ── Status derivation ────────────────────────────────────────────────────────
@@ -112,17 +113,19 @@ const AwsEventsSchema = z.array(AwsEventSchema);
 
 export class AwsAdapter implements ProviderAdapter {
   readonly id: string;
+  private readonly sourceUrl: string;
 
   constructor(
     private readonly config: ProviderConfig,
     private readonly deps: AdapterDeps,
   ) {
     this.id = config.id;
+    this.sourceUrl = config.url;
   }
 
   async fetchSnapshot(): Promise<ProviderSnapshot> {
     try {
-      const res = await this.deps.fetch(SOURCE_URL);
+      const res = await this.deps.fetch(this.sourceUrl);
       if (res.status !== 200) return this.unknown();
 
       const events = AwsEventsSchema.parse(JSON.parse(res.body));
@@ -134,7 +137,7 @@ export class AwsAdapter implements ProviderAdapter {
           status: "operational",
           activeIncidents: [],
           checkedAt: this.deps.now(),
-          sourceUrl: SOURCE_URL,
+          sourceUrl: this.sourceUrl,
         };
       }
 
@@ -164,7 +167,7 @@ export class AwsAdapter implements ProviderAdapter {
         status: overallStatus,
         activeIncidents,
         checkedAt: this.deps.now(),
-        sourceUrl: SOURCE_URL,
+        sourceUrl: this.sourceUrl,
       };
     } catch {
       return this.unknown();
@@ -178,7 +181,7 @@ export class AwsAdapter implements ProviderAdapter {
       status: "unknown",
       activeIncidents: [],
       checkedAt: this.deps.now(),
-      sourceUrl: SOURCE_URL,
+      sourceUrl: this.sourceUrl,
     };
   }
 }

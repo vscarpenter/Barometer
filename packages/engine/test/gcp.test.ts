@@ -21,7 +21,7 @@ const config: ProviderConfig = {
   id: "gcp",
   displayName: "Google Cloud Platform",
   type: "gcp",
-  url: "https://status.cloud.google.com",
+  url: "https://status.cloud.google.com/incidents.json",
 };
 
 describe("GcpAdapter", () => {
