@@ -30,6 +30,8 @@ export async function handler(): Promise<void> {
       store: new S3Store(bucket),
       notifier: new SnsNotifier(topicArn),
       now: () => new Date(),
+      retentionHours: numEnv("RETENTION_RECENT_HOURS", 48),
+      retentionDays: numEnv("RETENTION_ROLLUP_DAYS", 90),
     });
     const durationMs = Date.now() - start;
     log({
@@ -64,6 +66,11 @@ function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) throw new Error(`Missing required env var: ${name}`);
   return value;
+}
+
+function numEnv(name: string, fallback: number): number {
+  const value = Number(process.env[name]);
+  return Number.isFinite(value) && value > 0 ? value : fallback;
 }
 
 function log(fields: Record<string, unknown>): void {
