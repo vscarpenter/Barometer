@@ -1,0 +1,30 @@
+{
+  "page": {
+    "id": "yh6f0r4529hb",
+    "name": "Cloudflare",
+    "url": "https://www.cloudflarestatus.com",
+    "updated_at": "2026-06-25T00:00:00.000Z"
+  },
+  "components": [
+    {
+      "id": "zvm7mqn92xzc",
+      "name": "Cloudflare Sites and Services - Workers AI",
+      "status": "operational",
+      "only_show_if_degraded": false,
+      "group": false
+    },
+    {
+      "id": "abc123def456",
+      "name": "Cloudflare Sites and Services - CDN/Cache",
+      "status": "operational",
+      "only_show_if_degraded": false,
+      "group": false
+    }
+  ],
+  "incidents": [],
+  "scheduled_maintenances": [],
+  "status": {
+    "indicator": "none",
+    "description": "All Systems Operational"
+  }
+}

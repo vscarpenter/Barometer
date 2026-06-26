@@ -1,0 +1,47 @@
+{
+  "page": {
+    "id": "yh6f0r4529hb",
+    "name": "Cloudflare",
+    "url": "https://www.cloudflarestatus.com",
+    "updated_at": "2026-06-25T00:00:00.000Z"
+  },
+  "components": [
+    {
+      "id": "zvm7mqn92xzc",
+      "name": "Cloudflare Sites and Services - Workers AI",
+      "status": "partial_outage",
+      "only_show_if_degraded": false,
+      "group": false
+    }
+  ],
+  "incidents": [
+    {
+      "id": "ps1snnzz54pq",
+      "name": "Elevated 5xx errors on the CDN edge",
+      "status": "investigating",
+      "created_at": "2026-06-25T14:02:19.241Z",
+      "updated_at": "2026-06-25T14:20:52.265Z",
+      "monitoring_at": null,
+      "resolved_at": null,
+      "impact": "major",
+      "shortlink": "https://stspg.io/hp348196t57r",
+      "started_at": "2026-06-25T14:02:19.230Z",
+      "page_id": "yh6f0r4529hb"
+    },
+    {
+      "id": "resolved01",
+      "name": "A resolved blip that must be ignored",
+      "status": "resolved",
+      "resolved_at": "2026-06-24T10:00:00.000Z",
+      "impact": "minor",
+      "shortlink": "https://stspg.io/resolved01",
+      "started_at": "2026-06-24T09:00:00.000Z",
+      "page_id": "yh6f0r4529hb"
+    }
+  ],
+  "scheduled_maintenances": [],
+  "status": {
+    "indicator": "major",
+    "description": "Partial System Outage"
+  }
+}
