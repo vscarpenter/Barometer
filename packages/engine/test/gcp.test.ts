@@ -96,6 +96,24 @@ describe("GcpAdapter", () => {
     expect(snap.activeIncidents[0]!.regions).toEqual(["asia-south2"]);
   });
 
+  it("treats an incident with no location data as US-relevant (fail-open)", async () => {
+    const body = JSON.stringify([
+      {
+        id: "noloc1",
+        begin: "2026-06-25T00:00:00.000Z",
+        end: null,
+        external_desc: "Unknown region",
+        status_impact: "SERVICE_OUTAGE",
+        severity: "high",
+        uri: "incidents/noloc1",
+        // currently_affected_locations intentionally absent
+      },
+    ]);
+    const snap = await new GcpAdapter(config, deps(body)).fetchSnapshot();
+    expect(snap.status).toBe("major_outage"); // fail-open → counts
+    expect(snap.activeIncidents[0]!.regions).toEqual([]);
+  });
+
   it("degrades to unknown on a malformed body without throwing", async () => {
     const snap = await new GcpAdapter(config, deps("not json {{{")).fetchSnapshot();
     expect(snap.status).toBe("unknown");

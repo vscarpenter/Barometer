@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { regionsAreUsRelevant } from "@barometer/types";
-import type { ProviderSnapshot, ProviderStatus, Incident } from "@barometer/types";
+import { regionsAreUsRelevant, type ProviderSnapshot, type ProviderStatus, type Incident } from "@barometer/types";
 import type { ProviderAdapter, AdapterDeps, ProviderConfig } from "./types.js";
 
 /**
