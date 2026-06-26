@@ -23,6 +23,21 @@ export interface FetchOptions {
 
 const realSleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
+/** Response.text() always decodes UTF-8; respect the declared charset (AWS Health serves UTF-16). */
+function charsetOf(contentType: string | null): string {
+  const match = contentType ? /charset=([^;]+)/i.exec(contentType) : null;
+  return match ? match[1]!.trim().toLowerCase() : "utf-8";
+}
+
+async function readBody(res: Response): Promise<string> {
+  const buf = await res.arrayBuffer();
+  try {
+    return new TextDecoder(charsetOf(res.headers.get("content-type"))).decode(buf);
+  } catch {
+    return new TextDecoder("utf-8").decode(buf);
+  }
+}
+
 export async function fetchWithRetry(url: string, opts: FetchOptions = {}): Promise<FetchResult> {
   const {
     etag = null,
@@ -51,9 +66,9 @@ export async function fetchWithRetry(url: string, opts: FetchOptions = {}): Prom
       if (res.status >= 500) {
         lastError = new Error(`HTTP ${res.status}`);
         if (attempt < retries) continue;
-        return { status: res.status, body: await res.text(), etag: resEtag };
+        return { status: res.status, body: await readBody(res), etag: resEtag };
       }
-      return { status: res.status, body: await res.text(), etag: resEtag };
+      return { status: res.status, body: await readBody(res), etag: resEtag };
     } catch (err) {
       lastError = err;
     } finally {

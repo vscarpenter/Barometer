@@ -81,6 +81,21 @@ describe("fetchWithRetry", () => {
     expect(calls).toBe(2);
   });
 
+  it("decodes a non-UTF-8 charset declared in the content-type", async () => {
+    // AWS Health serves UTF-16LE; Response.text() would decode it as UTF-8 and garble it.
+    const json = JSON.stringify({ hello: "wörld", n: 1 });
+    const utf16 = Buffer.from("﻿" + json, "utf16le"); // BOM + UTF-16LE body
+    const fetchImpl = (async () =>
+      new Response(utf16, {
+        status: 200,
+        headers: { "content-type": "application/json;charset=utf-16le" },
+      })) as typeof fetch;
+
+    const res = await fetchWithRetry("https://x", { fetchImpl, sleep: noSleep });
+
+    expect(JSON.parse(res.body)).toEqual({ hello: "wörld", n: 1 });
+  });
+
   it("throws after exhausting retries", async () => {
     let calls = 0;
     const fetchImpl = (async () => {
