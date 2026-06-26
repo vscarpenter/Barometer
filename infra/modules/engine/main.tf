@@ -29,8 +29,10 @@ resource "aws_lambda_function" "engine" {
   handler          = "handler.handler" # handler.mjs exports { handler }
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
-  timeout          = 30
-  memory_size      = 256
+  # 60s headroom for the single-wave fetch of all providers when several are slow
+  # and hit retry backoff. Billed per actual ms, so the ceiling is free unless used.
+  timeout     = 60
+  memory_size = 256
 
   environment {
     variables = merge(
