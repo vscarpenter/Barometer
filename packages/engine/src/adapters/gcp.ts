@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { regionsAreUsRelevant } from "@barometer/types";
 import type { ProviderSnapshot, ProviderStatus, Incident } from "@barometer/types";
 import type { ProviderAdapter, AdapterDeps, ProviderConfig } from "./types.js";
 
@@ -30,6 +31,7 @@ const GcpIncidentSchema = z.object({
   status_impact: z.string(),
   severity: z.string(),
   uri: z.string(),
+  currently_affected_locations: z.array(z.object({ id: z.string() })).nullish(),
 });
 
 const GcpResponseSchema = z.array(GcpIncidentSchema);
@@ -72,14 +74,15 @@ export class GcpAdapter implements ProviderAdapter {
         status: i.most_recent_update?.status ?? "active",
         startedAt: i.begin,
         url: `https://status.cloud.google.com/${i.uri}`,
+        regions: (i.currently_affected_locations ?? []).map((l) => l.id),
       }));
 
+      // US-scoped status: only incidents whose regions count feed worstProviderStatus.
+      const usRelevantStatuses = activeRaw
+        .filter((i) => regionsAreUsRelevant((i.currently_affected_locations ?? []).map((l) => l.id)))
+        .map((i) => STATUS_IMPACT_TO_PROVIDER_STATUS[i.status_impact] ?? "degraded");
       const status =
-        activeRaw.length === 0
-          ? "operational"
-          : worstProviderStatus(
-              activeRaw.map((i) => STATUS_IMPACT_TO_PROVIDER_STATUS[i.status_impact] ?? "degraded"),
-            );
+        usRelevantStatuses.length === 0 ? "operational" : worstProviderStatus(usRelevantStatuses);
 
       return {
         id: this.config.id,

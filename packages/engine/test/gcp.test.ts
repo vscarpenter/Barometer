@@ -66,6 +66,7 @@ describe("GcpAdapter", () => {
     expect(inc.status).toBe("SERVICE_DISRUPTION"); // most_recent_update.status
     expect(inc.startedAt).toBe("2026-06-05T07:00:00+00:00");
     expect(inc.url).toBe("https://status.cloud.google.com/incidents/5fGQt4VbkDnr3Yp8PXPr");
+    expect(inc.regions).toEqual(["asia-south2", "global"]); // global → still counts
   });
 
   it("excludes resolved incidents even when they have a worse status_impact than active ones", async () => {
@@ -74,6 +75,25 @@ describe("GcpAdapter", () => {
     const snap = await new GcpAdapter(config, deps(fixture("gcp-incident.json"))).fetchSnapshot();
     const ids = snap.activeIncidents.map((i) => i.id);
     expect(ids).not.toContain("41E5S3mkTGDfkZuJZH5k");
+  });
+
+  it("excludes a non-US-only incident from status but still lists it", async () => {
+    const body = JSON.stringify([
+      {
+        id: "apac1",
+        begin: "2026-06-25T00:00:00.000Z",
+        end: null,
+        external_desc: "APAC latency",
+        status_impact: "SERVICE_OUTAGE",
+        severity: "high",
+        uri: "incidents/apac1",
+        currently_affected_locations: [{ id: "asia-south2" }],
+      },
+    ]);
+    const snap = await new GcpAdapter(config, deps(body)).fetchSnapshot();
+    expect(snap.status).toBe("operational"); // asia-south2 only → excluded
+    expect(snap.activeIncidents).toHaveLength(1); // still shown
+    expect(snap.activeIncidents[0]!.regions).toEqual(["asia-south2"]);
   });
 
   it("degrades to unknown on a malformed body without throwing", async () => {
