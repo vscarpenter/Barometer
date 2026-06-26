@@ -27,6 +27,8 @@ engine every 5 min; the dashboard polls every 60s; two CloudWatch alarms page SN
 | EventBridge schedule | `barometer-engine-schedule` — `rate(5 minutes)`, ENABLED |
 
 Deploy flow: `scripts/deploy.sh -var-file=terraform.tfvars` → confirm the SNS email → `scripts/seed.sh`.
+For infra-only changes, `scripts/plan-apply.sh -var-file=terraform.tfvars` plans → confirms → applies the
+saved plan (and runs `terraform init`, which `deploy.sh` skips).
 Config lives in `infra/terraform.tfvars` (gitignored values: zone id, alert email, bucket name).
 
 ---

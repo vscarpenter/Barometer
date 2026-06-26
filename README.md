@@ -99,8 +99,9 @@ All tunables are Terraform variables (see [`infra/variables.tf`](./infra/variabl
 
 ## Deploy
 
-**Prerequisites:** Terraform ≥ 1.5, the AWS CLI authenticated to the target account, Node ≥ 20, and a Route 53
-hosted zone for `domain_name` (the ACM certificate and the alias records depend on it).
+**Prerequisites:** Terraform ≥ 1.5, the AWS CLI authenticated to the target account, [Bun](https://bun.sh)
+(for the web + Lambda build), and a Route 53 hosted zone for `domain_name` (the ACM certificate and the
+alias records depend on it).
 
 ```bash
 cp infra/example.tfvars infra/terraform.tfvars   # then edit route53_zone_id, alert_email, bucket_name
@@ -118,6 +119,10 @@ scripts/seed.sh    # invokes the Lambda once
 `scripts/deploy.sh` builds the web bundle and the Lambda zip, runs `terraform apply`, and syncs
 `packages/web/dist` to the `/app` prefix with the right cache headers (hashed assets immutable, `index.html`
 no-cache). The engine's status/history JSON is written by the Lambda, never by the deploy.
+
+For infra-only changes (e.g. a provider upgrade or a Lambda runtime bump), `scripts/plan-apply.sh
+-var-file=terraform.tfvars` is a review-gated alternative: it builds the Lambda bundle, runs `terraform init`,
+shows the plan, and applies only the saved plan after you confirm — without re-uploading the frontend.
 
 ## Teardown
 
