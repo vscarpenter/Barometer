@@ -56,6 +56,19 @@ describe("runOnce", () => {
     expect(await store.readJson("status/state.json", StateFileSchema, null as never)).toBeTruthy();
   });
 
+  it("fetches every adapter even when there are more adapters than the concurrency cap", async () => {
+    // Guards the work-stealing drain: with a low cap the queue must spill into
+    // later waves, never dropping an adapter. This is what lets the cap be a
+    // pure latency knob (default fetches the 9 providers in one wave).
+    const adapters = Array.from({ length: 7 }, (_, i) => okAdapter(`p${i}`, "operational"));
+    const store = new MemoryStore();
+    const summary = await runOnce({ ...baseDeps(adapters, store), concurrency: 3 });
+
+    expect(summary.overall.providersTotal).toBe(7);
+    expect(new Set(summary.providers.map((p) => p.id)).size).toBe(7);
+    expect(summary.providers.every((p) => p.status === "operational")).toBe(true);
+  });
+
   it("fires an alert through the notifier on a sustained outage (debounced)", async () => {
     const spy = vi.spyOn(console, "log").mockImplementation(() => {});
     const store = new MemoryStore();

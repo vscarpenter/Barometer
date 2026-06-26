@@ -44,8 +44,11 @@ export async function runOnce(deps: RunDeps): Promise<SummaryFile> {
   const {
     store,
     notifier,
+    // Default fetches the 9 providers in a single wave. They are independent
+    // hosts with no shared rate limit, so capping lower only adds tail latency;
+    // the cap exists to bound fan-out if the provider list ever grows large.
     adapters,
-    concurrency = 6,
+    concurrency = 10,
     retentionHours = 48,
     retentionDays = 90,
   } = deps;
