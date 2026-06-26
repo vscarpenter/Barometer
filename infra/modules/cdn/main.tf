@@ -52,6 +52,58 @@ resource "aws_acm_certificate_validation" "cert" {
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
 
+# ── Security response headers (CSP / HSTS / nosniff / frame / referrer) ────────
+#
+# CSP: the built SPA loads one external module script and one external stylesheet
+# (no inline <script>), so script-src can be strict 'self' — which also blocks
+# javascript: URIs as defense-in-depth alongside the render-time href allowlist.
+# img-src allows data: for the inline-SVG favicon. style-src permits 'unsafe-inline'
+# to cover the runtime CSSOM tints (element.style --c / background); style injection
+# is low risk since all text is written via textContent, never innerHTML.
+resource "aws_cloudfront_response_headers_policy" "security" {
+  name = "${var.bucket_id}-security-headers"
+
+  security_headers_config {
+    content_security_policy {
+      content_security_policy = join(" ", [
+        "default-src 'self';",
+        "script-src 'self';",
+        "style-src 'self' 'unsafe-inline';",
+        "img-src 'self' data:;",
+        "connect-src 'self';",
+        "font-src 'self';",
+        "object-src 'none';",
+        "base-uri 'self';",
+        "frame-ancestors 'none';",
+        "form-action 'self';",
+        "upgrade-insecure-requests",
+      ])
+      override = true
+    }
+
+    strict_transport_security {
+      access_control_max_age_sec = 63072000 # 2 years
+      include_subdomains         = true
+      preload                    = false # opt into hstspreload.org separately; it is hard to reverse
+      override                   = true
+    }
+
+    content_type_options {
+      override = true # X-Content-Type-Options: nosniff
+    }
+
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+  }
+}
+
 # ── CloudFront Distribution ────────────────────────────────────────────────────
 #
 # Routing design — two origins, same S3 bucket, different origin paths:
@@ -93,11 +145,12 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   # Default behavior: SPA (everything not matched by ordered behaviors below)
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-app"
-    viewer_protocol_policy = "redirect-to-https"
-    compress               = true
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = "s3-app"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
 
     forwarded_values {
       query_string = false
@@ -116,12 +169,13 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   # status/* — short TTL; Lambda writes every 5 min, cache for 60 s
   ordered_cache_behavior {
-    path_pattern           = "status/*"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-data"
-    viewer_protocol_policy = "redirect-to-https"
-    compress               = true
+    path_pattern               = "status/*"
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = "s3-data"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
 
     forwarded_values {
       query_string = false
@@ -137,12 +191,13 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   # history/* — same short TTL cadence as status/
   ordered_cache_behavior {
-    path_pattern           = "history/*"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-data"
-    viewer_protocol_policy = "redirect-to-https"
-    compress               = true
+    path_pattern               = "history/*"
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = "s3-data"
+    viewer_protocol_policy     = "redirect-to-https"
+    compress                   = true
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
 
     forwarded_values {
       query_string = false
