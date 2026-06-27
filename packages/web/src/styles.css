@@ -328,6 +328,23 @@ footer {
 footer a {
   color: var(--text-muted);
 }
+.footer__note {
+  margin: 0;
+}
+.footer__meta {
+  margin-block-start: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.footer__version {
+  font-family: var(--font-mono);
+}
+.footer__sep {
+  opacity: 0.6;
+}
 
 .sr-only {
   position: absolute;

@@ -148,3 +148,7 @@ persist for 2 consecutive checks (debounce) before it triggers; recovery require
 checks. `maintenance` and `unknown` are "hold" states — they never alert and never count as recovery, so
 planned work and transient fetch failures generate no noise. Default channel is SNS email; the delivery sits
 behind a `Notifier` interface so a Telegram path is a small addition later.
+
+## License
+
+[MIT](./LICENSE) © Vinny Carpenter

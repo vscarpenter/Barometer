@@ -246,13 +246,53 @@ function buildThemeToggle(): HTMLButtonElement {
 
 function buildFooter(): HTMLElement {
   const footer = el("footer");
-  footer.append(
-    document.createTextNode("Barometer reads each provider's public status page every 5 minutes. "),
-  );
-  const span = el("span");
-  span.textContent = "Raw status is normalized; weather labels are presentation only.";
-  footer.appendChild(span);
+
+  const note = el("p", "footer__note");
+  note.textContent =
+    "Barometer reads each provider's public status page every 5 minutes. " +
+    "Raw status is normalized; weather labels are presentation only.";
+
+  const version = el("span", "footer__version");
+  version.textContent = `v${__APP_VERSION__}`;
+
+  const deployed = el("span");
+  deployed.textContent = `Deployed ${formatBuildTime(__BUILD_TIME__)}`;
+
+  const credit = el("span");
+  credit.append(document.createTextNode("Crafted by "));
+  const link = el("a");
+  link.href = "https://vinny.dev/";
+  link.textContent = "Vinny Carpenter";
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  credit.appendChild(link);
+
+  const meta = el("p", "footer__meta");
+  meta.append(version, footerSep(), deployed, footerSep(), credit);
+
+  footer.append(note, meta);
   return footer;
+}
+
+/** Decorative "·" between footer items; hidden from the accessibility tree. */
+function footerSep(): HTMLElement {
+  const dot = el("span", "footer__sep");
+  dot.textContent = "·";
+  dot.setAttribute("aria-hidden", "true");
+  return dot;
+}
+
+/** Build timestamp → e.g. "Jun 26, 2026, 8:15 PM UTC". Falls back to the raw
+ *  ISO string if it can't be parsed (fail safe, like the rest of the app). */
+function formatBuildTime(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  const formatted = new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "UTC",
+  }).format(date);
+  return `${formatted} UTC`;
 }
 
 const summaryPoller = createPoller<SummaryFile>({
