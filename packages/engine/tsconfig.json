@@ -1,9 +1,8 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": "../..",
     "paths": {
-      "@barometer/types": ["packages/types/src/index.ts"]
+      "@barometer/types": ["../../packages/types/src/index.ts"]
     },
     "types": ["node"]
   },
