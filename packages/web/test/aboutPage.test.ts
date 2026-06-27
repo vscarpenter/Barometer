@@ -21,6 +21,17 @@ describe("renderAboutPage", () => {
     expect(t).toContain("DigitalOcean");
   });
 
+  it("lists the live provider set and asserts no stale hardcoded count", () => {
+    const items = page.querySelectorAll(".about__providers li");
+    const t = page.textContent ?? "";
+    expect(items.length).toBe(11); // the live set, including the DNS active probes
+    expect(t).toContain("Cloudflare DNS"); // 1.1.1.1 probe
+    expect(t).toContain("Google DNS"); // 8.8.8.8 probe
+    // The prose is count-neutral so it can't drift from the dashboard (11) or the
+    // diagram art (still drawn with 9). The enumerated list is the source of truth.
+    expect(t).not.toMatch(/\bnine\b/i);
+  });
+
   it("links to the GitHub repository (new tab, safe rel)", () => {
     const gh = page.querySelector<HTMLAnchorElement>('a[href*="github.com/vscarpenter/Barometer"]');
     expect(gh).not.toBeNull();

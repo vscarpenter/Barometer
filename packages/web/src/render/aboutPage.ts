@@ -9,6 +9,9 @@ const ARCH_ALT =
   "CloudFront and Route 53 to a vanilla-TypeScript dashboard, with CloudWatch alarms " +
   "paging an SNS email alert.";
 
+// The live provider set, including the two DNS active probes. Kept in step with
+// packages/engine/src/config/providers.ts. The surrounding prose is count-neutral
+// so it can't drift from this list (or from the dashboard's live count).
 const PROVIDERS = [
   "Amazon Web Services",
   "Microsoft Azure",
@@ -19,6 +22,8 @@ const PROVIDERS = [
   "Anthropic",
   "Vercel",
   "DigitalOcean",
+  "Cloudflare DNS (1.1.1.1)",
+  "Google DNS (8.8.8.8)",
 ];
 
 function externalLink(href: string, text: string): HTMLAnchorElement {
@@ -67,7 +72,7 @@ function diagram(): HTMLElement {
   }
   const caption = el("figcaption", "about__figcaption");
   caption.textContent =
-    "Nine public status feeds → one normalized schema → tiered JSON on S3 → this dashboard.";
+    "Public status feeds → one normalized schema → tiered JSON on S3 → this dashboard.";
   figure.appendChild(caption);
   return figure;
 }
@@ -106,7 +111,7 @@ export function renderAboutPage(): HTMLElement {
   );
   how.appendChild(
     para(
-      "A scheduled AWS Lambda fetches all nine feeds, maps each provider's own format " +
+      "A scheduled AWS Lambda fetches every feed, maps each provider's own format " +
         "into one shared schema, and writes tiered JSON to S3. This dashboard polls that " +
         "JSON every 60 seconds — there is no server rendering the page and no database.",
     ),
@@ -132,7 +137,7 @@ export function renderAboutPage(): HTMLElement {
   root.appendChild(rule);
 
   const watches = section("What it watches");
-  watches.appendChild(para("Nine cloud, network, and AI providers:"));
+  watches.appendChild(para("Barometer watches these cloud, network, and AI providers:"));
   const list = el("ul", "about__providers");
   for (const name of PROVIDERS) {
     const li = el("li");
