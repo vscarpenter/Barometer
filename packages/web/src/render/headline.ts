@@ -1,47 +1,49 @@
-import type { OverallReading, ProviderStatus } from "@barometer/types";
+import type { OverallReading, SummaryProvider } from "@barometer/types";
 import { el } from "./dom.js";
 import { statusLabel, makeStatusIcon } from "./status.js";
+import { renderDial, updateDial } from "./dial.js";
 
-// Marker position on the Stormy→Fair pressure scale, as % from the left.
-// maintenance/unknown don't worsen the reading (SPEC §4), so they read "fair".
-const SCALE_POS: Record<ProviderStatus, number> = {
-  major_outage: 8,
-  partial_outage: 34,
-  degraded: 62,
-  operational: 90,
-  maintenance: 90,
-  unknown: 50,
-};
+const MAX_OFFENDERS = 3;
+
+type Offender = Pick<SummaryProvider, "displayName" | "status">;
+
+/** "GitHub major outage, GCP degraded" (+N more) — names what's wrong, clamped. */
+function offendersText(offenders: Offender[]): string | null {
+  if (offenders.length === 0) return null;
+  const shown = offenders
+    .slice(0, MAX_OFFENDERS)
+    .map((p) => `${p.displayName} ${statusLabel(p.status).toLowerCase()}`);
+  const extra = offenders.length - shown.length;
+  return shown.join(", ") + (extra > 0 ? `, +${extra} more` : "");
+}
 
 const SCALE_LABELS = ["Stormy", "Unsettled", "Changeable", "Fair"] as const;
 
-/** The Almanac reading band: weather word + Stormy→Fair pressure scale (SPEC §8/§9). */
-export function renderHeadline(overall: OverallReading): HTMLElement {
+export interface HeadlineComponent {
+  element: HTMLElement;
+  update(overall: OverallReading, offenders?: Offender[]): void;
+}
+
+/**
+ * The Almanac reading band: weather word + live barometer dial (SPEC §8/§9).
+ * Built once; update() refreshes it IN PLACE — the dial nodes persist so the
+ * needle's CSS transition animates the sweep instead of snapping a rebuilt
+ * needle into position each poll.
+ */
+export function createHeadline(): HeadlineComponent {
   const section = el("section", "reading");
-  section.setAttribute("data-status", overall.status);
-  section.setAttribute("aria-label", `Overall internet health: ${statusLabel(overall.status)}`);
-  section.style.setProperty("--c", `var(--status-${overall.status})`);
 
   const inner = el("div", "reading__inner");
 
   const top = el("div", "reading__top");
   const icon = el("span", "reading__icon");
   icon.setAttribute("aria-hidden", "true");
-  icon.appendChild(makeStatusIcon(overall.status, 26));
   const weather = el("h2", "reading__weather");
-  weather.textContent = overall.label;
   top.append(icon, weather);
 
   const sub = el("p", "reading__sub");
-  const count = el("span", "reading__count");
-  count.textContent = `${overall.providersOperational} of ${overall.providersTotal}`;
-  sub.append(count, document.createTextNode(` providers operational · ${statusLabel(overall.status)}`));
 
-  const scale = el("div", "reading__scale");
-  scale.appendChild(el("div", "reading__scale-track"));
-  const marker = el("div", "reading__marker");
-  marker.style.left = `${SCALE_POS[overall.status]}%`;
-  scale.appendChild(marker);
+  const dial = renderDial("unknown"); // persistent; update() swings the needle
 
   const labels = el("div", "reading__scale-labels");
   for (const t of SCALE_LABELS) {
@@ -50,7 +52,48 @@ export function renderHeadline(overall: OverallReading): HTMLElement {
     labels.appendChild(span);
   }
 
-  inner.append(top, sub, scale, labels);
+  inner.append(top, sub, dial, labels);
   section.appendChild(inner);
-  return section;
+
+  // Toggled in/out between sub and dial as offenders come and go.
+  let offendersEl: HTMLElement | null = null;
+
+  function update(overall: OverallReading, offenders: Offender[] = []): void {
+    section.setAttribute("data-status", overall.status);
+    section.setAttribute("aria-label", `Overall internet health: ${statusLabel(overall.status)}`);
+    section.style.setProperty("--c", `var(--status-${overall.status})`);
+
+    icon.replaceChildren(makeStatusIcon(overall.status, 26));
+    weather.textContent = overall.label;
+
+    const count = el("span", "reading__count");
+    count.textContent = `${overall.providersOperational} of ${overall.providersTotal}`;
+    sub.replaceChildren(
+      count,
+      document.createTextNode(` providers operational · ${statusLabel(overall.status)}`),
+    );
+
+    const names = offendersText(offenders);
+    if (names) {
+      if (!offendersEl) {
+        offendersEl = el("p", "reading__offenders");
+        sub.after(offendersEl);
+      }
+      offendersEl.textContent = names;
+    } else if (offendersEl) {
+      offendersEl.remove();
+      offendersEl = null;
+    }
+
+    updateDial(dial, overall.status);
+  }
+
+  return { element: section, update };
+}
+
+/** One-shot reading band — convenience for tests and any non-persistent caller. */
+export function renderHeadline(overall: OverallReading, offenders: Offender[] = []): HTMLElement {
+  const headline = createHeadline();
+  headline.update(overall, offenders);
+  return headline.element;
 }

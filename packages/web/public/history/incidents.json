@@ -1,0 +1,68 @@
+{
+  "incidents": [
+    {
+      "key": "github:github-1",
+      "providerId": "github",
+      "providerName": "GitHub",
+      "title": "Elevated 5xx errors on the API",
+      "impact": "major",
+      "url": "https://www.githubstatus.com",
+      "firstSeen": "2026-06-26T02:50:00.000Z",
+      "lastSeen": "2026-06-26T03:37:11.872Z",
+      "resolvedAt": null
+    },
+    {
+      "key": "gcp:gcp-1",
+      "providerId": "gcp",
+      "providerName": "Google Cloud",
+      "title": "Networking latency in asia-south2",
+      "impact": "minor",
+      "url": "https://status.cloud.google.com",
+      "regions": [
+        "asia-south2"
+      ],
+      "firstSeen": "2026-06-26T03:10:00.000Z",
+      "lastSeen": "2026-06-26T03:37:11.872Z",
+      "resolvedAt": null
+    },
+    {
+      "key": "cloudflare:cf-901",
+      "providerName": "Cloudflare",
+      "providerId": "cloudflare",
+      "title": "Edge errors in us-east",
+      "impact": "major",
+      "url": "https://www.cloudflarestatus.com",
+      "regions": [
+        "us-east-1"
+      ],
+      "firstSeen": "2026-06-24T14:00:00.000Z",
+      "lastSeen": "2026-06-24T15:20:00.000Z",
+      "resolvedAt": "2026-06-24T15:25:00.000Z"
+    },
+    {
+      "key": "aws:aws-77",
+      "providerId": "aws",
+      "providerName": "AWS",
+      "title": "Increased error rates for EC2 APIs",
+      "impact": "critical",
+      "url": "https://health.aws.amazon.com",
+      "regions": [
+        "us-east-1"
+      ],
+      "firstSeen": "2026-06-21T09:00:00.000Z",
+      "lastSeen": "2026-06-21T11:40:00.000Z",
+      "resolvedAt": "2026-06-21T11:45:00.000Z"
+    },
+    {
+      "key": "openai:oai-12",
+      "providerId": "openai",
+      "providerName": "OpenAI",
+      "title": "Elevated latency on chat completions",
+      "impact": "minor",
+      "url": "https://status.openai.com",
+      "firstSeen": "2026-06-19T18:00:00.000Z",
+      "lastSeen": "2026-06-19T19:10:00.000Z",
+      "resolvedAt": "2026-06-19T19:15:00.000Z"
+    }
+  ]
+}

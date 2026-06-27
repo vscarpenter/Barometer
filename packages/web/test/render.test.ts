@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { OverallReading, SummaryProvider } from "@barometer/types";
-import { renderHeadline } from "../src/render/headline.js";
+import { renderHeadline, createHeadline } from "../src/render/headline.js";
 import { renderCard } from "../src/render/card.js";
 import { renderSparkline } from "../src/render/sparkline.js";
 import { renderStaleBanner, createBannerRegion, updateBannerRegion } from "../src/render/banner.js";
@@ -35,11 +35,49 @@ describe("renderHeadline", () => {
     expect(el.textContent).toContain("7");
     expect(el.textContent).toContain("9");
   });
-  it("renders the pressure scale with the marker at the reading position", () => {
-    expect(el.querySelector(".reading__scale-track")).not.toBeNull();
-    const marker = el.querySelector<HTMLElement>(".reading__marker");
-    expect(marker).not.toBeNull();
-    expect(marker!.style.left).toBe("34%"); // partial_outage sits at 34% on Stormy→Fair
+  it("renders the live dial with the needle swung to the reading angle", () => {
+    const dial = el.querySelector<SVGElement>(".reading__dial");
+    expect(dial).not.toBeNull();
+    const needle = dial!.querySelector<SVGElement>(".dial__needle");
+    expect(needle).not.toBeNull();
+    // partial_outage → -29deg (see dial.ts NEEDLE_ANGLE)
+    expect(needle!.style.transform).toContain("rotate(-29deg)");
+  });
+  it("names the offenders when provided, clamped to 3 + more", () => {
+    const withOffenders = renderHeadline(overall, [
+      { displayName: "GitHub", status: "major_outage" },
+      { displayName: "GCP", status: "degraded" },
+      { displayName: "Vercel", status: "partial_outage" },
+      { displayName: "AWS", status: "degraded" },
+    ]);
+    const text = withOffenders.querySelector(".reading__offenders")?.textContent ?? "";
+    expect(text).toContain("GitHub major outage");
+    expect(text).toContain("GCP degraded");
+    expect(text).toContain("+1 more");
+  });
+  it("omits the offenders line when there are none", () => {
+    expect(renderHeadline(overall).querySelector(".reading__offenders")).toBeNull();
+  });
+});
+
+describe("createHeadline", () => {
+  it("reuses the SAME dial needle across updates so the sweep can animate", () => {
+    const h = createHeadline();
+    h.update(overall); // partial_outage → -29deg
+    const needle = h.element.querySelector<SVGElement>(".dial__needle")!;
+    expect(needle.style.transform).toContain("rotate(-29deg)");
+    h.update({ ...overall, status: "operational", label: "Fair" });
+    // same node, only its transform changed — that's what lets CSS animate it
+    expect(h.element.querySelector(".dial__needle")).toBe(needle);
+    expect(needle.style.transform).toContain("rotate(72deg)");
+  });
+
+  it("adds and removes the offenders line in place as offenders come and go", () => {
+    const h = createHeadline();
+    h.update(overall, [{ displayName: "GitHub", status: "major_outage" }]);
+    expect(h.element.querySelector(".reading__offenders")?.textContent).toContain("GitHub major outage");
+    h.update(overall, []);
+    expect(h.element.querySelector(".reading__offenders")).toBeNull();
   });
 });
 
@@ -109,6 +147,37 @@ describe("renderCard", () => {
 
   it("does not mute a region-less incident (fails open)", () => {
     expect(renderCard(provider, []).querySelector(".card__incident--muted")).toBeNull();
+  });
+
+  it("becomes a keyboard-operable button that opens the drill-down when given a handler", () => {
+    let opened: string | null = null;
+    const c = renderCard(provider, [], (p) => {
+      opened = p.id;
+    });
+    expect(c.getAttribute("role")).toBe("button");
+    expect(c.getAttribute("tabindex")).toBe("0");
+    expect(c.getAttribute("aria-haspopup")).toBe("dialog");
+    c.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    expect(opened).toBe("cloudflare");
+    opened = null;
+    c.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    expect(opened).toBe("cloudflare");
+  });
+
+  it("stays inert (no button role) when no handler is given", () => {
+    expect(renderCard(provider, []).getAttribute("role")).toBeNull();
+  });
+
+  it("renders the incident as plain text (no nested link) when it is an interactive button", () => {
+    // A link inside a role=button is invalid ARIA, and the card's Enter/Space
+    // handler would hijack the link. The drill-down dialog provides the link.
+    const c = renderCard(provider, [], () => {});
+    expect(c.querySelector("a")).toBeNull();
+    expect(c.textContent).toContain("Edge errors in EU");
+  });
+
+  it("tags the card with its provider id so focus can return to it after the dialog closes", () => {
+    expect(renderCard(provider, [], () => {}).dataset.provider).toBe("cloudflare");
   });
 });
 

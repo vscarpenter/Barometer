@@ -1,22 +1,40 @@
-import type { SummaryProvider, ProviderStatus, UptimeWindows } from "@barometer/types";
+import type { SummaryProvider, ProviderStatus } from "@barometer/types";
 import { isUsRelevant } from "@barometer/types";
 import { el } from "./dom.js";
 import { statusLabel, makeStatusIcon } from "./status.js";
 import { renderSparkline } from "./sparkline.js";
-
-function formatUptime(value: number | null): string {
-  return value === null ? "—" : `${+value.toFixed(2)}%`;
-}
-
-/** Only http(s) URLs are safe to put in an href (blocks javascript:, data:, etc.). */
-function isSafeHttpUrl(url: string): boolean {
-  return /^https?:\/\//i.test(url);
-}
+import { incidentTitle, regionTag } from "./incident.js";
+import { renderUptimeWindows } from "./uptimeWindows.js";
 
 /** One provider instrument tile (SPEC §8): LED + name + status pill, incident, sparkline, uptime. */
-export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]): HTMLElement {
+export function renderCard(
+  provider: SummaryProvider,
+  recent: ProviderStatus[],
+  onOpen?: (provider: SummaryProvider) => void,
+): HTMLElement {
+  const interactive = Boolean(onOpen);
   const card = el("article", "card");
+  card.dataset.provider = provider.id; // lets focus return to this tile after the dialog closes
   card.style.setProperty("--c", `var(--status-${provider.status})`);
+
+  // When a drill-down handler is supplied, the whole tile becomes a button that
+  // opens the provider dialog (keyboard + pointer). Its label stays non-
+  // interactive (no nested link — invalid ARIA, and Enter/Space would hijack it);
+  // the dialog is where the clickable incident link lives.
+  if (onOpen) {
+    card.classList.add("card--interactive");
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-haspopup", "dialog");
+    card.setAttribute("aria-label", `${provider.displayName}: ${statusLabel(provider.status)} — open details`);
+    card.addEventListener("click", () => onOpen(provider));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onOpen(provider);
+      }
+    });
+  }
 
   const head = el("div", "card__head");
   const led = el("span", "card__led");
@@ -37,24 +55,13 @@ export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]):
   if (incident) {
     const counted = isUsRelevant(incident);
     const para = el("p", counted ? "card__incident" : "card__incident card__incident--muted");
-    // incident.url comes from a third-party status feed. Only link http(s) —
-    // a hostile/compromised feed could otherwise inject javascript: and run
-    // script in our origin. Allowlist (not denylist); fall back to plain text.
-    if (isSafeHttpUrl(incident.url)) {
-      const link = el("a");
-      link.href = incident.url;
-      link.target = "_blank";
-      link.rel = "noreferrer";
-      link.textContent = incident.title;
-      para.appendChild(link);
-    } else {
-      para.textContent = incident.title;
-    }
-    if (incident.regions && incident.regions.length > 0) {
-      const tag = el("span", "card__regions");
-      tag.textContent = counted
-        ? incident.regions.join(", ")
-        : `${incident.regions.join(", ")} — outside US, not counted`;
+    // A link inside a role=button is invalid ARIA, so only the inert (non-button)
+    // card links the incident; the interactive card shows the title as text.
+    para.appendChild(
+      interactive ? document.createTextNode(incident.title) : incidentTitle(incident.title, incident.url),
+    );
+    const tag = regionTag(incident.regions, counted);
+    if (tag) {
       para.appendChild(document.createTextNode(" "));
       para.appendChild(tag);
     }
@@ -62,18 +69,7 @@ export function renderCard(provider: SummaryProvider, recent: ProviderStatus[]):
   }
 
   card.appendChild(renderSparkline(recent));
-
-  const dl = el("dl", "card__uptime");
-  (["24h", "7d", "30d", "90d"] as const).forEach((window: keyof UptimeWindows) => {
-    const cell = el("div");
-    const dt = el("dt");
-    dt.textContent = window;
-    const dd = el("dd");
-    dd.textContent = formatUptime(provider.uptime[window]);
-    cell.append(dt, dd);
-    dl.appendChild(cell);
-  });
-  card.appendChild(dl);
+  card.appendChild(renderUptimeWindows(provider.uptime));
 
   return card;
 }

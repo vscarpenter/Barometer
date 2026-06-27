@@ -140,7 +140,7 @@ a {
   color: var(--text);
 }
 .reading__sub {
-  margin: var(--space-3) 0 var(--space-5);
+  margin: var(--space-3) 0 var(--space-2);
   color: var(--text-muted);
   font-size: 0.95rem;
 }
@@ -149,37 +149,27 @@ a {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-.reading__scale {
-  position: relative;
-  block-size: 9px;
+.reading__offenders {
+  margin: 0 0 var(--space-5);
+  color: var(--c);
+  font-size: 0.9rem;
+  font-weight: 600;
 }
-.reading__scale-track {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--radius-pill);
-  background: linear-gradient(
-    90deg,
-    var(--status-major_outage),
-    var(--status-partial_outage) 34%,
-    var(--status-degraded) 62%,
-    var(--status-operational)
-  );
+.reading__dial {
+  display: block;
+  inline-size: min(100%, 22rem);
+  margin-inline: auto;
 }
-.reading__marker {
-  position: absolute;
-  top: -4px;
-  transform: translateX(-50%);
-  inline-size: 3px;
-  block-size: 17px;
-  border-radius: 3px;
-  background: var(--text);
-  box-shadow: 0 0 0 2.5px var(--surface);
-  /* left is set inline by headline.ts */
+/* The needle eases to the live reading; reduced-motion (global reset) snaps it. */
+.dial__needle,
+.masthead__needle {
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reading__scale-labels {
   display: flex;
   justify-content: space-between;
-  margin-block-start: 9px;
+  inline-size: min(100%, 22rem);
+  margin: 2px auto 0;
   font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.07em;
@@ -362,6 +352,139 @@ footer a {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+/* ── Interactive cards (open the drill-down) ────────────────── */
+.card--interactive {
+  cursor: pointer;
+}
+.card--interactive:focus-visible {
+  outline: 2px solid var(--c, var(--brand));
+  outline-offset: 2px;
+}
+
+/* ── Uptime bar (90-day) ────────────────────────────────────── */
+.uptimebar__track {
+  display: flex;
+  gap: 2px;
+  align-items: stretch;
+}
+.uptimebar__cell {
+  flex: 1 1 0;
+  min-inline-size: 2px;
+  block-size: 30px;
+  border-radius: 2px;
+}
+.uptimebar__empty {
+  display: block;
+  margin-block-start: var(--space-2);
+  color: var(--text-faint);
+  font-size: 0.8rem;
+}
+
+/* ── Provider drill-down dialog ─────────────────────────────── */
+.provider-dialog {
+  inline-size: min(40rem, calc(100vw - 2rem));
+  max-block-size: min(85vh, 48rem);
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  /* No padding on the <dialog> itself — it lives on .dlg__body so a click only
+     reaches the dialog element from the true backdrop (see dialog.ts). */
+  padding: 0;
+  box-shadow: var(--shadow-1);
+}
+.dlg__body {
+  padding: var(--space-5);
+}
+.provider-dialog::backdrop {
+  background: rgba(8, 12, 20, 0.55);
+}
+.dlg__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  border-block-end: 1px solid var(--border);
+  padding-block-end: var(--space-3);
+}
+.dlg__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+}
+.dlg__close {
+  margin-inline-start: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  color: var(--text);
+  padding: 0.35rem 0.8rem;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+.dlg__close:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+.dlg__section {
+  margin-block-start: var(--space-4);
+}
+.dlg__h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.dlg-incident,
+.dlg-resolved {
+  padding: var(--space-2) 0;
+  border-block-start: 1px solid var(--border);
+}
+.dlg-incident--muted {
+  opacity: 0.6;
+}
+.dlg-incident__head,
+.dlg-resolved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.dlg-incident__meta {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+.dlg-resolved__when {
+  margin-inline-start: auto;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.dlg-incident__impact {
+  inline-size: 9px;
+  block-size: 9px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  /* Neutral by default so impact "none" (a valid, non-severe impact) never reads
+     as operational green. minor/major/critical tint up from here. */
+  background: var(--text-faint);
+}
+.dlg-incident__impact[data-impact="minor"] {
+  background: var(--status-degraded);
+}
+.dlg-incident__impact[data-impact="major"] {
+  background: var(--status-partial_outage);
+}
+.dlg-incident__impact[data-impact="critical"] {
+  background: var(--status-major_outage);
+}
+.dlg__uptime {
+  margin-block-start: var(--space-4);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,3690 @@
+{
+  "days": [
+    {
+      "date": "2026-03-29",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 275,
+          "down": 13
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 243,
+          "down": 45
+        }
+      }
+    },
+    {
+      "date": "2026-03-30",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 248,
+          "down": 40
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-03-31",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 276,
+          "down": 12
+        },
+        "openai": {
+          "up": 276,
+          "down": 12
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 276,
+          "down": 12
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-01",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 253,
+          "down": 35
+        },
+        "openai": {
+          "up": 253,
+          "down": 35
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 253,
+          "down": 35
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-02",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-03",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-04",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-05",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-06",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 279,
+          "down": 9
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-07",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-08",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 280,
+          "down": 8
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-09",
+      "providers": {
+        "aws": {
+          "up": 243,
+          "down": 45
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 243,
+          "down": 45
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-10",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-11",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 275,
+          "down": 13
+        }
+      }
+    },
+    {
+      "date": "2026-04-12",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 276,
+          "down": 12
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 248,
+          "down": 40
+        }
+      }
+    },
+    {
+      "date": "2026-04-13",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 253,
+          "down": 35
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-14",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 277,
+          "down": 11
+        },
+        "openai": {
+          "up": 277,
+          "down": 11
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 277,
+          "down": 11
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-15",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 258,
+          "down": 30
+        },
+        "openai": {
+          "up": 258,
+          "down": 30
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 258,
+          "down": 30
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-16",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-17",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-18",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-19",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-20",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 280,
+          "down": 8
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-21",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-22",
+      "providers": {
+        "aws": {
+          "up": 275,
+          "down": 13
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 275,
+          "down": 13
+        },
+        "cloudflare": {
+          "up": 243,
+          "down": 45
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-23",
+      "providers": {
+        "aws": {
+          "up": 248,
+          "down": 40
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 248,
+          "down": 40
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-24",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-25",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 276,
+          "down": 12
+        }
+      }
+    },
+    {
+      "date": "2026-04-26",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 277,
+          "down": 11
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 253,
+          "down": 35
+        }
+      }
+    },
+    {
+      "date": "2026-04-27",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 258,
+          "down": 30
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-28",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 278,
+          "down": 10
+        },
+        "openai": {
+          "up": 278,
+          "down": 10
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 278,
+          "down": 10
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-29",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-04-30",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-01",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-02",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-03",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-04",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 243,
+          "down": 45
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-05",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 275,
+          "down": 13
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-06",
+      "providers": {
+        "aws": {
+          "up": 276,
+          "down": 12
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 276,
+          "down": 12
+        },
+        "cloudflare": {
+          "up": 248,
+          "down": 40
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-07",
+      "providers": {
+        "aws": {
+          "up": 253,
+          "down": 35
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 253,
+          "down": 35
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-08",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-09",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 277,
+          "down": 11
+        }
+      }
+    },
+    {
+      "date": "2026-05-10",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 278,
+          "down": 10
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 258,
+          "down": 30
+        }
+      }
+    },
+    {
+      "date": "2026-05-11",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-12",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 279,
+          "down": 9
+        },
+        "openai": {
+          "up": 279,
+          "down": 9
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 279,
+          "down": 9
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-13",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-14",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-15",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-16",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-17",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 275,
+          "down": 13
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-18",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 248,
+          "down": 40
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-19",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 276,
+          "down": 12
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-20",
+      "providers": {
+        "aws": {
+          "up": 277,
+          "down": 11
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 277,
+          "down": 11
+        },
+        "cloudflare": {
+          "up": 253,
+          "down": 35
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-21",
+      "providers": {
+        "aws": {
+          "up": 258,
+          "down": 30
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 258,
+          "down": 30
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-22",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-23",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 278,
+          "down": 10
+        }
+      }
+    },
+    {
+      "date": "2026-05-24",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 279,
+          "down": 9
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-25",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-26",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 280,
+          "down": 8
+        },
+        "openai": {
+          "up": 280,
+          "down": 8
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 280,
+          "down": 8
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-27",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-28",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-29",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-30",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-05-31",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 276,
+          "down": 12
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-01",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 253,
+          "down": 35
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-02",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 277,
+          "down": 11
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-03",
+      "providers": {
+        "aws": {
+          "up": 278,
+          "down": 10
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 278,
+          "down": 10
+        },
+        "cloudflare": {
+          "up": 258,
+          "down": 30
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-04",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-05",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-06",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 279,
+          "down": 9
+        }
+      }
+    },
+    {
+      "date": "2026-06-07",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 280,
+          "down": 8
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-08",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-09",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 243,
+          "down": 45
+        },
+        "openai": {
+          "up": 243,
+          "down": 45
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 243,
+          "down": 45
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-10",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-11",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-12",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-13",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-14",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 277,
+          "down": 11
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-15",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 258,
+          "down": 30
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-16",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 278,
+          "down": 10
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-17",
+      "providers": {
+        "aws": {
+          "up": 279,
+          "down": 9
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 279,
+          "down": 9
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-18",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-19",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-20",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 280,
+          "down": 8
+        }
+      }
+    },
+    {
+      "date": "2026-06-21",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 243,
+          "down": 45
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-22",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 275,
+          "down": 13
+        },
+        "openai": {
+          "up": 275,
+          "down": 13
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 275,
+          "down": 13
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-23",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 248,
+          "down": 40
+        },
+        "openai": {
+          "up": 248,
+          "down": 40
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 248,
+          "down": 40
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-24",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-25",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    },
+    {
+      "date": "2026-06-26",
+      "providers": {
+        "aws": {
+          "up": 288,
+          "down": 0
+        },
+        "azure": {
+          "up": 288,
+          "down": 0
+        },
+        "gcp": {
+          "up": 288,
+          "down": 0
+        },
+        "cloudflare": {
+          "up": 288,
+          "down": 0
+        },
+        "github": {
+          "up": 288,
+          "down": 0
+        },
+        "openai": {
+          "up": 288,
+          "down": 0
+        },
+        "anthropic": {
+          "up": 288,
+          "down": 0
+        },
+        "vercel": {
+          "up": 288,
+          "down": 0
+        },
+        "digitalocean": {
+          "up": 288,
+          "down": 0
+        }
+      }
+    }
+  ]
+}

@@ -11,23 +11,39 @@ import "./styles.css";
 import {
   SummaryFileSchema,
   RecentFileSchema,
+  RollupsFileSchema,
+  IncidentsFileSchema,
   type SummaryFile,
   type RecentFile,
+  type RollupsFile,
+  type IncidentsFile,
   type ProviderStatus,
 } from "@barometer/types";
 import { createPoller, isStale, secondsAgo, formatAgo } from "./poll.js";
 import { el, svgEl } from "./render/dom.js";
-import { renderHeadline } from "./render/headline.js";
+import { createHeadline } from "./render/headline.js";
 import { renderCard } from "./render/card.js";
 import { createBannerRegion, updateBannerRegion } from "./render/banner.js";
+import { sortProvidersBySeverity, offenders } from "./render/order.js";
+import { needleAngleFor } from "./render/dial.js";
+import { openProviderDialog, resolvedFor } from "./render/dialog.js";
 
 const SUMMARY_URL = "/status/summary.json";
 const RECENT_URL = "/history/recent.json";
+const ROLLUPS_URL = "/history/rollups.json";
+const INCIDENTS_URL = "/history/incidents.json";
 const POLL_MS = 60_000;
+// The drill-down history feeds (rollups ~64 KB, incidents) change at most ~once
+// a day and are only read when a dialog opens — no need to re-pull them every
+// 60s like the live status. Hourly keeps a long-lived tab fresh for ~1/60th the
+// bandwidth.
+const HISTORY_POLL_MS = 3_600_000;
 const SPARK_SAMPLES = 40;
 
 let summary: SummaryFile | null = null;
 let recent: RecentFile | null = null;
+let rollups: RollupsFile | null = null;
+let incidents: IncidentsFile | null = null;
 let failed = false;
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
@@ -39,11 +55,23 @@ const gridSlot = el("div", "grid");
 const updatedText = el("span", "");
 const statusDot = el("span", "masthead__dot");
 statusDot.setAttribute("aria-hidden", "true");
+
+// The masthead mini-dial needle, swung to the live reading (no longer hardcoded).
+// Declared BEFORE buildMasthead() runs: buildMasthead assigns it, so the binding
+// must be initialized first or the write lands in its Temporal Dead Zone and the
+// whole module throws on load (blank page).
+let mastheadNeedle: SVGElement | null = null;
+
 app.append(buildMasthead(statusDot, updatedText), bannerSlot, readingSlot, gridSlot, buildFooter());
 
-/** Tint the masthead dot to the overall status (decorative; status is also in text). */
+// The reading band is built once and updated in place each poll so the dial
+// needle can animate its sweep (a freshly-built needle would just snap).
+const headline = createHeadline();
+
+/** Tint the masthead dot + swing the mini-needle to the overall status. */
 function setMastheadStatus(status: ProviderStatus): void {
   statusDot.style.background = `var(--status-${status})`;
+  if (mastheadNeedle) mastheadNeedle.style.transform = `rotate(${needleAngleFor(status)}deg)`;
 }
 
 function recentFor(id: string): ProviderStatus[] {
@@ -71,10 +99,12 @@ function render(): void {
     const nowMs = Date.now();
     setMastheadStatus(summary.overall.status);
     updateBannerRegion(bannerSlot, summary.generatedAt, nowMs, isStale(summary.generatedAt, nowMs));
-    readingSlot.replaceChildren(renderHeadline(summary.overall));
+    headline.update(summary.overall, offenders(summary.providers));
+    if (headline.element.parentNode !== readingSlot) readingSlot.replaceChildren(headline.element);
+    const ordered = sortProvidersBySeverity(summary.providers);
     gridSlot.replaceChildren(
-      ...(summary.providers.length
-        ? summary.providers.map((p) => renderCard(p, recentFor(p.id)))
+      ...(ordered.length
+        ? ordered.map((p) => renderCard(p, recentFor(p.id), openDialogFor))
         : [stateMessage("No providers configured.")]),
     );
     updateAgo();
@@ -85,6 +115,21 @@ function render(): void {
     gridSlot.replaceChildren();
     readingSlot.replaceChildren(stateMessage("Something went wrong rendering the dashboard."));
   }
+}
+
+function openDialogFor(provider: SummaryFile["providers"][number]): void {
+  const dialog = openProviderDialog({
+    provider,
+    rollups,
+    resolvedIncidents: resolvedFor(incidents, provider.id),
+  });
+  // Return focus to the provider's CURRENT card on close — by id, so it still
+  // works if a poll re-rendered the grid and replaced the tile that opened it.
+  dialog.addEventListener(
+    "close",
+    () => gridSlot.querySelector<HTMLElement>(`[data-provider="${CSS.escape(provider.id)}"]`)?.focus(),
+    { once: true },
+  );
 }
 
 function updateAgo(): void {
@@ -129,11 +174,19 @@ function buildMasthead(dot: HTMLElement, updated: HTMLElement): HTMLElement {
     mark.appendChild(tick);
   }
 
+  // Needle drawn pointing straight up, rotated to the reading by setMastheadStatus
+  // (CSS transition on transform animates the swing; reduced-motion disables it).
   const needle = svgEl("path");
-  needle.setAttribute("d", "M12 12L16.8 7.6");
+  needle.classList.add("masthead__needle");
+  needle.setAttribute("d", "M12 12L12 4.8");
   needle.setAttribute("stroke", "var(--accent)");
   needle.setAttribute("stroke-width", "1.9");
+  needle.style.transformOrigin = "12px 12px";
+  // Start centered (unknown) — render() swings it to the live reading on first
+  // data. Derived from the single angle table so it can't drift from the dial.
+  needle.style.transform = `rotate(${needleAngleFor("unknown")}deg)`;
   mark.appendChild(needle);
+  mastheadNeedle = needle;
 
   const hub = svgEl("circle");
   hub.setAttribute("cx", "12");
@@ -323,7 +376,31 @@ const recentPoller = createPoller<RecentFile>({
   },
 });
 
+// History feeds for the provider drill-down (90-day bars + resolved incidents).
+// Non-critical: a failure just leaves the dialog without that section.
+const rollupsPoller = createPoller<RollupsFile>({
+  url: ROLLUPS_URL,
+  intervalMs: HISTORY_POLL_MS,
+  schema: RollupsFileSchema,
+  onData: (data) => {
+    rollups = data;
+  },
+  onError: () => {},
+});
+
+const incidentsPoller = createPoller<IncidentsFile>({
+  url: INCIDENTS_URL,
+  intervalMs: HISTORY_POLL_MS,
+  schema: IncidentsFileSchema,
+  onData: (data) => {
+    incidents = data;
+  },
+  onError: () => {},
+});
+
 render();
 summaryPoller.start();
 recentPoller.start();
+rollupsPoller.start();
+incidentsPoller.start();
 setInterval(updateAgo, 1000);
