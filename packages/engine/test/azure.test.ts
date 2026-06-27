@@ -85,6 +85,33 @@ describe("AzureAdapter", () => {
     expect(ProviderSnapshotSchema.safeParse(non200).success).toBe(true);
   });
 
+  it("attaches extracted regions to incidents", async () => {
+    const snap = await new AzureAdapter(config, deps(fixture("azure-incident.xml"))).fetchSnapshot();
+    // "East US" → us-detected; "West Europe" → eu-detected.
+    expect(snap.activeIncidents[0]!.regions).toEqual(expect.arrayContaining(["us-detected"]));
+    expect(snap.activeIncidents[1]!.regions).toEqual(expect.arrayContaining(["eu-detected"]));
+  });
+
+  it("reads operational when every active item is non-US, but still lists the incidents", async () => {
+    const euOnly = `<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Azure Status</title>
+    <item>
+      <title><![CDATA[Azure App Service – Outage in West Europe]]></title>
+      <description><![CDATA[<p>An outage is affecting West Europe only.</p>]]></description>
+      <pubDate>Wed, 25 Jun 2026 12:30:00 Z</pubDate>
+      <link>https://azure.status.microsoft/en-us/status/</link>
+      <guid>eu-only-1</guid>
+    </item>
+  </channel>
+</rss>`;
+    const snap = await new AzureAdapter(config, deps(euOnly)).fetchSnapshot();
+    expect(snap.status).toBe("operational");
+    expect(snap.activeIncidents).toHaveLength(1);
+    expect(snap.activeIncidents[0]!.regions).toEqual(expect.arrayContaining(["eu-detected"]));
+  });
+
   it("uses deps.now() as fallback startedAt when pubDate is missing or invalid", async () => {
     const badDateXml = `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">

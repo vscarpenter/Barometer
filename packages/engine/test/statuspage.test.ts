@@ -61,6 +61,44 @@ describe("StatuspageAdapter", () => {
     expect(snap.status).toBe("partial_outage");
   });
 
+  it("reads operational when an elevated page's only incidents are non-US, but still lists them", async () => {
+    const euOnly = JSON.stringify({
+      status: { indicator: "major" },
+      incidents: [
+        {
+          id: "eu1",
+          name: "Elevated error rates in Europe (eu-west-1)",
+          impact: "major",
+          status: "investigating",
+          started_at: "2026-06-25T14:02:19.230Z",
+          shortlink: "https://stspg.io/eu1",
+        },
+      ],
+    });
+    const snap = await new StatuspageAdapter(config, deps(euOnly)).fetchSnapshot();
+    expect(snap.status).toBe("operational");
+    expect(snap.activeIncidents).toHaveLength(1);
+    expect(snap.activeIncidents[0]!.regions).toEqual(expect.arrayContaining(["eu-west-1"]));
+  });
+
+  it("keeps the elevated reading when at least one incident is US-relevant", async () => {
+    const mixed = JSON.stringify({
+      status: { indicator: "major" },
+      incidents: [
+        { id: "eu1", name: "Errors in Europe", impact: "minor", status: "investigating" },
+        { id: "us1", name: "Errors in us-east-1", impact: "major", status: "investigating" },
+      ],
+    });
+    const snap = await new StatuspageAdapter(config, deps(mixed)).fetchSnapshot();
+    expect(snap.status).toBe("partial_outage");
+  });
+
+  it("trusts the vendor indicator when no incidents are listed", async () => {
+    const noIncidents = JSON.stringify({ status: { indicator: "major" }, incidents: [] });
+    const snap = await new StatuspageAdapter(config, deps(noIncidents)).fetchSnapshot();
+    expect(snap.status).toBe("partial_outage");
+  });
+
   it("degrades to unknown on a malformed body without throwing", async () => {
     const snap = await new StatuspageAdapter(config, deps("not json {{{")).fetchSnapshot();
     expect(snap.status).toBe("unknown");

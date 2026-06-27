@@ -1,4 +1,11 @@
-import { overallStatus, type ProviderSnapshot, type ProviderStatus, type Incident } from "@barometer/types";
+import {
+  overallStatus,
+  extractRegions,
+  regionsAreUsRelevant,
+  type ProviderSnapshot,
+  type ProviderStatus,
+  type Incident,
+} from "@barometer/types";
 import { fetchConditionally } from "./conditional.js";
 import type { ProviderAdapter, AdapterDeps, ProviderConfig, SnapshotFetchContext } from "./types.js";
 
@@ -71,8 +78,14 @@ export class AzureAdapter implements ProviderAdapter {
       }
 
       const parsed = this.parseItems(body);
+      // US-region scope: derive status only from items whose extracted regions are
+      // US-relevant (fail-open when none extracted). All items still surface as
+      // incidents; a non-US-only feed reads operational.
+      const usItems = parsed.filter((p) => regionsAreUsRelevant(p.incident.regions));
       const status: ProviderStatus =
-        parsed.length === 0 ? "operational" : overallStatus(parsed.map((p) => p.itemStatus));
+        parsed.length === 0 || usItems.length === 0
+          ? "operational"
+          : overallStatus(usItems.map((p) => p.itemStatus));
 
       return {
         id: this.config.id,
@@ -104,6 +117,8 @@ export class AzureAdapter implements ProviderAdapter {
       const startedAt =
         pubDate && !isNaN(dateObj.getTime()) ? dateObj.toISOString() : this.deps.now();
 
+      const regions = extractRegions(`${title} ${description}`);
+
       results.push({
         incident: {
           id: guid || link,
@@ -112,6 +127,7 @@ export class AzureAdapter implements ProviderAdapter {
           status: "active",
           startedAt,
           url: link,
+          ...(regions.length > 0 ? { regions } : {}),
         },
         itemStatus: inferItemStatus(title, description),
       });

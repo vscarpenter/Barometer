@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { overallStatus, type ProviderSnapshot, type ProviderStatus, type Incident } from "@barometer/types";
+import {
+  overallStatus,
+  extractRegions,
+  isUsRelevant,
+  type ProviderSnapshot,
+  type ProviderStatus,
+  type Incident,
+} from "@barometer/types";
 import { fetchConditionally } from "./conditional.js";
 import type { ProviderAdapter, AdapterDeps, ProviderConfig, SnapshotFetchContext } from "./types.js";
 
@@ -74,19 +81,23 @@ export class StatuspageAdapter implements ProviderAdapter {
 
       const activeIncidents: Incident[] = (data.incidents ?? [])
         .filter((i) => i.resolved_at == null)
-        .map((i) => ({
-          id: i.id,
-          title: i.name,
-          impact: normalizeImpact(i.impact),
-          status: i.status,
-          startedAt: i.started_at ?? i.created_at ?? this.deps.now(),
-          url: i.shortlink ?? `${this.config.url}/incidents/${i.id}`,
-        }));
+        .map((i) => {
+          const regions = extractRegions(i.name);
+          return {
+            id: i.id,
+            title: i.name,
+            impact: normalizeImpact(i.impact),
+            status: i.status,
+            startedAt: i.started_at ?? i.created_at ?? this.deps.now(),
+            url: i.shortlink ?? `${this.config.url}/incidents/${i.id}`,
+            ...(regions.length > 0 ? { regions } : {}),
+          };
+        });
 
       return {
         id: this.config.id,
         displayName: this.config.displayName,
-        status: this.deriveStatus(data),
+        status: this.deriveStatus(data, activeIncidents),
         activeIncidents,
         checkedAt: this.deps.now(),
         sourceUrl: this.sourceUrl,
@@ -96,7 +107,7 @@ export class StatuspageAdapter implements ProviderAdapter {
     }
   }
 
-  private deriveStatus(data: z.infer<typeof SummarySchema>): ProviderStatus {
+  private deriveStatus(data: z.infer<typeof SummarySchema>, activeIncidents: Incident[]): ProviderStatus {
     const filtered = this.statusFromComponents(data.components ?? []);
     if (filtered) return filtered;
 
@@ -104,6 +115,18 @@ export class StatuspageAdapter implements ProviderAdapter {
     const maintenanceInProgress = (data.scheduled_maintenances ?? []).some(
       (m) => m.status === "in_progress",
     );
+
+    // US-region scope (conservative): if the page is elevated but every active
+    // incident is non-US-only, the elevated indicator is attributable to those
+    // non-US incidents — don't let them flip the US reading. Fail-open: when an
+    // incident has no extractable region, isUsRelevant is true, so this only
+    // fires when we positively identified ALL incidents as non-US. With no
+    // incidents listed we trust the vendor indicator unchanged (v1 behavior).
+    const isDown = status === "degraded" || status === "partial_outage" || status === "major_outage";
+    if (isDown && activeIncidents.length > 0 && !activeIncidents.some(isUsRelevant)) {
+      status = "operational";
+    }
+
     if (status === "operational" && maintenanceInProgress) status = "maintenance";
     return status;
   }
