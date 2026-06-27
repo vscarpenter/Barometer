@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@barometer/types": "*",
-    "@fontsource/hanken-grotesk": "^5.0.0",
-    "@fontsource/jetbrains-mono": "^5.0.0",
-    "@fontsource/space-grotesk": "^5.0.0"
+    "@fontsource/hanken-grotesk": "5.2.8",
+    "@fontsource/jetbrains-mono": "5.2.8",
+    "@fontsource/space-grotesk": "5.2.10"
   },
   "devDependencies": {
-    "jsdom": "^25.0.0",
-    "vite": "^5.4.0"
+    "jsdom": "25.0.1",
+    "vite": "8.1.0"
   }
 }

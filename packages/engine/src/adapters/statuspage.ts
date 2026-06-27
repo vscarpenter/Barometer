@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { overallStatus, type ProviderSnapshot, type ProviderStatus, type Incident } from "@barometer/types";
-import type { ProviderAdapter, AdapterDeps, ProviderConfig } from "./types.js";
+import { fetchConditionally } from "./conditional.js";
+import type { ProviderAdapter, AdapterDeps, ProviderConfig, SnapshotFetchContext } from "./types.js";
 
 /**
  * One parametrized adapter for every Atlassian Statuspage provider (Cloudflare,
- * GitHub, Fastly, Anthropic, OpenAI, GitLab). Reads /api/v2/summary.json:
+ * GitHub, OpenAI, Anthropic, Vercel, DigitalOcean). Reads /api/v2/summary.json:
  * overall indicator + components + incidents + scheduled maintenances. SPEC §5.1.
  */
 
@@ -63,12 +64,13 @@ export class StatuspageAdapter implements ProviderAdapter {
     this.sourceUrl = `${config.url}/api/v2/summary.json`;
   }
 
-  async fetchSnapshot(): Promise<ProviderSnapshot> {
+  async fetchSnapshot(context?: SnapshotFetchContext): Promise<ProviderSnapshot> {
     try {
-      const res = await this.deps.fetch(this.sourceUrl);
-      if (res.status !== 200) return this.unknown();
+      const fetched = await fetchConditionally(this.deps, this.sourceUrl, this.config, context);
+      if (fetched.kind === "snapshot") return fetched.snapshot;
+      if (fetched.kind === "unavailable") return this.unknown();
 
-      const data = SummarySchema.parse(JSON.parse(res.body));
+      const data = SummarySchema.parse(JSON.parse(fetched.body));
 
       const activeIncidents: Incident[] = (data.incidents ?? [])
         .filter((i) => i.resolved_at == null)

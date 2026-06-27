@@ -11,6 +11,9 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
+source scripts/lib/terraform.sh
+require_native_terraform
+require_aws_dns
 
 # Terraform zips packages/engine/dist into the Lambda artifact and reads that
 # directory while planning, so the bundle must exist and be current first.
@@ -21,7 +24,7 @@ bun run --filter '@barometer/engine' build
 # Ensure providers are installed. deploy.sh does NOT init, so after a provider
 # version change this step is what pulls it. Idempotent — safe to run every time.
 echo "==> terraform init"
-terraform -chdir=infra init -input=false
+terraform_infra init -input=false
 
 # Always clean up the saved plan, however the script exits.
 trap 'rm -f infra/tfplan' EXIT
@@ -29,7 +32,7 @@ trap 'rm -f infra/tfplan' EXIT
 echo "==> terraform plan"
 # -detailed-exitcode: 0 = no changes, 2 = changes present, 1 = error.
 set +e
-terraform -chdir=infra plan -out=tfplan -detailed-exitcode "$@"
+terraform_infra plan -out=tfplan -detailed-exitcode "$@"
 plan_status=$?
 set -e
 
@@ -47,7 +50,7 @@ if [[ ! "${reply}" =~ ^[Yy]$ ]]; then
 fi
 
 echo "==> terraform apply"
-terraform -chdir=infra apply tfplan
+terraform_infra apply tfplan
 
 echo "==> Done."
 echo "    Optional: run scripts/seed.sh to refresh the dashboard data immediately"

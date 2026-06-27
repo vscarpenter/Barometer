@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { ProviderSnapshotSchema } from "@barometer/types";
+import { ProviderSnapshotSchema, type ProviderSnapshot } from "@barometer/types";
 import { StatuspageAdapter } from "../src/adapters/statuspage.js";
 import type { AdapterDeps, ProviderConfig } from "../src/adapters/types.js";
 import type { FetchResult } from "../src/http.js";
@@ -70,6 +70,37 @@ describe("StatuspageAdapter", () => {
   it("degrades to unknown on a non-200 response", async () => {
     const snap = await new StatuspageAdapter(config, deps("", 500)).fetchSnapshot();
     expect(snap.status).toBe("unknown");
+  });
+
+  it("reuses the previous snapshot on 304 and records the new ETag", async () => {
+    let seenEtag: string | null | undefined;
+    let recordedEtag: string | null | undefined;
+    const fetch: AdapterDeps["fetch"] = async (_url, opts) => {
+      seenEtag = opts?.etag;
+      return { status: 304, body: "", etag: "\"new\"" };
+    };
+    const previous: ProviderSnapshot = {
+      id: "cloudflare",
+      displayName: "Cloudflare",
+      status: "partial_outage",
+      activeIncidents: [],
+      checkedAt: "2026-06-24T00:00:00.000Z",
+      sourceUrl: "https://old",
+    };
+
+    const snap = await new StatuspageAdapter(config, { fetch, now: () => NOW }).fetchSnapshot({
+      etag: "\"old\"",
+      previousSnapshot: previous,
+      recordEtag: (etag) => {
+        recordedEtag = etag;
+      },
+    });
+
+    expect(seenEtag).toBe("\"old\"");
+    expect(recordedEtag).toBe("\"new\"");
+    expect(snap.status).toBe("partial_outage");
+    expect(snap.checkedAt).toBe(NOW);
+    expect(snap.sourceUrl).toBe("https://www.cloudflarestatus.com/api/v2/summary.json");
   });
 
   it("always emits a schema-valid snapshot", async () => {

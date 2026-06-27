@@ -1,7 +1,8 @@
 /**
  * Local dry-run (SPEC §7, §11). Runs the full fetch + normalize against live
  * provider APIs and prints the resulting summary.json to stdout — no S3 writes,
- * no real alerts (MemoryStore + ConsoleNotifier). Run with: npm run dryrun
+ * no real alerts, and no synthetic uptime windows from a one-sample in-memory
+ * history. Run with: bun run dryrun
  */
 import { fetchWithRetry } from "./http.js";
 import { buildAdapters } from "./adapters/factory.js";
@@ -20,6 +21,7 @@ const summary = await runOnce({
   store: new MemoryStore(),
   notifier: new ConsoleNotifier(),
   now: () => new Date(),
+  historyMode: "current-only",
 });
 
 process.stdout.write(JSON.stringify(summary, null, 2) + "\n");

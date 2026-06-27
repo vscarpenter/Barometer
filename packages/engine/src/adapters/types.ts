@@ -21,8 +21,14 @@ export interface AdapterDeps {
   now: () => string; // ISO 8601 timestamp for checkedAt
 }
 
+export interface SnapshotFetchContext {
+  etag?: string | null;
+  previousSnapshot?: ProviderSnapshot | null;
+  recordEtag?: (etag: string | null) => void;
+}
+
 export interface ProviderAdapter {
   id: string;
   /** Never throws. Returns a snapshot with status "unknown" on any failure. */
-  fetchSnapshot(): Promise<ProviderSnapshot>;
+  fetchSnapshot(context?: SnapshotFetchContext): Promise<ProviderSnapshot>;
 }

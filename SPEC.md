@@ -17,7 +17,7 @@ spec → plan → implementation in a continuous pass (TDD, frequent commits), p
 | Frontend | Vanilla TS + Vite. No framework runtime. Small render modules + a poll loop. |
 | Alerts | Amazon SNS email only. Delivery sits behind a `Notifier` interface; Telegram is a future `Notifier` impl, not built in v1. |
 | Domain | Custom domain `barometer.vinny.dev`. ACM cert in `us-east-1` + Route53 alias. Assumes the hosted zone already exists. |
-| Providers (9) | AWS, Azure, GCP, Cloudflare, GitHub, Fastly, Anthropic, OpenAI, GitLab. |
+| Providers (9) | AWS, Azure, GCP, Cloudflare, GitHub, OpenAI, Anthropic, Vercel, DigitalOcean. |
 | Check interval | 5 minutes (Terraform variable). |
 | Retention | 48h high-resolution samples; 90 daily rollup buckets (Terraform variables). |
 | Availability rule | `operational` = up. `degraded`/`partial_outage`/`major_outage` = down. `maintenance`/`unknown` excluded from the denominator. (Config knob.) |
@@ -155,15 +155,17 @@ interface ProviderConfig {
 }
 ```
 
-Canonical provider list is a **typed file** in the engine (`providers.config.ts`), type-checked and compiled
+Canonical provider list is a **typed file** in the engine (`packages/engine/src/config/providers.ts`), type-checked and compiled
 into the bundle. An optional `BAROMETER_PROVIDERS_JSON` env var can override it at runtime (the Terraform
 "provider list source" knob); default is the compiled-in list.
 
 ### 5.1 Statuspage adapter (one adapter, 6 providers)
 
-Cloudflare, GitHub, Fastly, Anthropic, OpenAI, GitLab all run on Atlassian Statuspage. One parametrized
+Cloudflare, GitHub, OpenAI, Anthropic, Vercel, and DigitalOcean all run on Atlassian Statuspage. One parametrized
 `StatuspageAdapter` reads `https://<status-domain>/api/v2/summary.json` (overall indicator + components +
 active incidents) for all of them, fed base URLs from config.
+The original brief listed Fastly and GitLab; Fastly bot-blocks automated polling and GitLab runs on Status.io,
+so the deployed provider set uses Vercel and DigitalOcean instead.
 
 Indicator → status mapping: `none`→`operational`, `minor`→`degraded`, `major`→`partial_outage`,
 `critical`→`major_outage`. Refine with component states when `componentFilter` is set. Statuspage
@@ -409,7 +411,7 @@ are the thin I/O edges.
 
 1. **Spec** — this document. ← approval gate
 2. **Types & config** — zod schemas, inferred types, availability rule, typed provider config (9 providers).
-3. **Statuspage adapter + http client** — fixtures + tests; prove the pattern on Cloudflare/GitHub/Fastly.
+3. **Statuspage adapter + http client** — fixtures + tests; prove the pattern on Cloudflare/GitHub/Vercel.
 4. **Bespoke adapters** — verify AWS/Azure/GCP endpoints by web search, then build each with fixtures + tests.
 5. **Engine assembly** — concurrency, current snapshot, history tiers, summary computation, store, dry-run.
 6. **Alerting** — state machine + debounce + `SnsNotifier`.

@@ -1,9 +1,12 @@
 import {
   buildOverallReading,
+  CurrentFileSchema,
   StateFileSchema,
   RecentFileSchema,
   RollupsFileSchema,
   type ProviderSnapshot,
+  type RecentFile,
+  type RollupsFile,
   type SummaryFile,
   type StateFile,
 } from "@barometer/types";
@@ -12,7 +15,7 @@ import type { Store } from "./store/types.js";
 import type { Notifier } from "./alerting/notifier.js";
 import { appendRecent, updateRollups } from "./history.js";
 import { buildSummary } from "./summary.js";
-import { stepAlerts } from "./alerting/machine.js";
+import { stepAlerts, type Notification } from "./alerting/machine.js";
 
 const KEYS = {
   current: "status/current.json",
@@ -32,6 +35,7 @@ export interface RunDeps {
   concurrency?: number;
   retentionHours?: number;
   retentionDays?: number;
+  historyMode?: "persist" | "current-only";
 }
 
 /**
@@ -41,57 +45,130 @@ export interface RunDeps {
  * contract-violating throw is caught here as a safety net.
  */
 export async function runOnce(deps: RunDeps): Promise<SummaryFile> {
-  const {
-    store,
-    notifier,
-    // Default fetches the 9 providers in a single wave. They are independent
-    // hosts with no shared rate limit, so capping lower only adds tail latency;
-    // the cap exists to bound fan-out if the provider list ever grows large.
-    adapters,
-    concurrency = 10,
-    retentionHours = 48,
-    retentionDays = 90,
-  } = deps;
+  const context = buildRunContext(deps);
+  const inputs = await loadRunInputs(context.store, context.nowIso);
+  const { snapshots, etags } = await fetchAllSnapshots(
+    context.adapters,
+    context.concurrency,
+    context.nowIso,
+    inputs.prevState,
+    inputs.previousSnapshots,
+  );
+
+  await writeCurrent(context.store, snapshots, context.nowIso);
+  const history = updateHistoryForMode(inputs, snapshots, context);
+  await writeHistory(context.store, history);
+
+  const summary = buildSummary(snapshots, history.recent, history.rollups, context.nowMs, context.nowIso);
+  await context.store.writeJson(KEYS.summary, summary, SHORT_CACHE);
+
+  const { state, notifications } = stepAlerts(inputs.prevState, snapshots, context.nowIso);
+  mergeEtagsIntoState(state, etags);
+  await sendNotifications(context.notifier, notifications);
+  await context.store.writeJson(KEYS.state, state, SHORT_CACHE);
+
+  return summary;
+}
+
+interface RunContext {
+  store: Store;
+  notifier: Notifier;
+  adapters: ProviderAdapter[];
+  concurrency: number;
+  retentionHours: number;
+  retentionDays: number;
+  historyMode: NonNullable<RunDeps["historyMode"]>;
+  nowIso: string;
+  nowMs: number;
+  date: string;
+}
+
+function buildRunContext(deps: RunDeps): RunContext {
   const now = deps.now();
   const nowIso = now.toISOString();
-  const nowMs = now.getTime();
-  const date = nowIso.slice(0, 10); // YYYY-MM-DD (UTC)
+  return {
+    store: deps.store,
+    notifier: deps.notifier,
+    adapters: deps.adapters,
+    concurrency: deps.concurrency ?? 10,
+    retentionHours: deps.retentionHours ?? 48,
+    retentionDays: deps.retentionDays ?? 90,
+    historyMode: deps.historyMode ?? "persist",
+    nowIso,
+    nowMs: now.getTime(),
+    date: nowIso.slice(0, 10),
+  };
+}
 
-  // 1. Read prior state + history (fallbacks make the first run work).
-  const [prevState, prevRecent, prevRollups] = await Promise.all([
+interface RunInputs {
+  prevState: StateFile;
+  prevRecent: RecentFile;
+  prevRollups: RollupsFile;
+  previousSnapshots: Map<string, ProviderSnapshot>;
+}
+
+async function loadRunInputs(store: Store, nowIso: string): Promise<RunInputs> {
+  const [prevState, prevRecent, prevRollups, prevCurrent] = await Promise.all([
     store.readJson(KEYS.state, StateFileSchema, { providers: {}, updatedAt: nowIso } as StateFile),
     store.readJson(KEYS.recent, RecentFileSchema, { samples: [] }),
     store.readJson(KEYS.rollups, RollupsFileSchema, { days: [] }),
+    store.readJson(KEYS.current, CurrentFileSchema.nullable(), null),
   ]);
+  return {
+    prevState,
+    prevRecent,
+    prevRollups,
+    previousSnapshots: new Map((prevCurrent?.providers ?? []).map((snapshot) => [snapshot.id, snapshot])),
+  };
+}
 
-  // 2. Fetch all snapshots concurrently (capped).
-  const snapshots = await fetchAllSnapshots(adapters, concurrency, nowIso);
+interface HistoryUpdate {
+  recent: RecentFile;
+  rollups: RollupsFile;
+  shouldWrite: boolean;
+}
 
-  // 3. Current snapshot.
+function updateHistoryForMode(
+  inputs: RunInputs,
+  snapshots: ProviderSnapshot[],
+  context: RunContext,
+): HistoryUpdate {
+  if (context.historyMode === "current-only") {
+    return { recent: inputs.prevRecent, rollups: inputs.prevRollups, shouldWrite: false };
+  }
+
+  return {
+    recent: appendRecent(
+      inputs.prevRecent,
+      { t: context.nowIso, s: Object.fromEntries(snapshots.map((s) => [s.id, s.status])) },
+      context.nowMs,
+      context.retentionHours,
+    ),
+    rollups: updateRollups(inputs.prevRollups, snapshots, context.date, context.retentionDays),
+    shouldWrite: true,
+  };
+}
+
+async function writeCurrent(store: Store, snapshots: ProviderSnapshot[], nowIso: string): Promise<void> {
   const overall = buildOverallReading(snapshots, nowIso);
   await store.writeJson(KEYS.current, { generatedAt: nowIso, overall, providers: snapshots }, SHORT_CACHE);
+}
 
-  // 4. History tiers.
-  const recent = appendRecent(
-    prevRecent,
-    { t: nowIso, s: Object.fromEntries(snapshots.map((s) => [s.id, s.status])) },
-    nowMs,
-    retentionHours,
-  );
-  const rollups = updateRollups(prevRollups, snapshots, date, retentionDays);
-  await store.writeJson(KEYS.recent, recent, SHORT_CACHE);
-  await store.writeJson(KEYS.rollups, rollups, SHORT_CACHE);
+async function writeHistory(store: Store, history: HistoryUpdate): Promise<void> {
+  if (!history.shouldWrite) return;
+  await store.writeJson(KEYS.recent, history.recent, SHORT_CACHE);
+  await store.writeJson(KEYS.rollups, history.rollups, SHORT_CACHE);
+}
 
-  // 5. Summary (uptime windows + overall).
-  const summary = buildSummary(snapshots, recent, rollups, nowMs, nowIso);
-  await store.writeJson(KEYS.summary, summary, SHORT_CACHE);
+function mergeEtagsIntoState(state: StateFile, etags: Record<string, string | null>): void {
+  for (const [providerId, etag] of Object.entries(etags)) {
+    const provider = state.providers[providerId];
+    if (provider) provider.etag = etag;
+  }
+}
 
-  // 6. Alerts (transitions only).
-  const { state, notifications } = stepAlerts(prevState, snapshots, nowIso);
+async function sendNotifications(notifier: Notifier, notifications: Notification[]): Promise<void> {
   for (const note of notifications) await notifier.send(note);
-  await store.writeJson(KEYS.state, state, SHORT_CACHE);
-
-  return summary;
 }
 
 /** Fetch every adapter with a concurrency cap; a thrown adapter degrades to "unknown". */
@@ -99,8 +176,11 @@ async function fetchAllSnapshots(
   adapters: ProviderAdapter[],
   cap: number,
   nowIso: string,
-): Promise<ProviderSnapshot[]> {
+  prevState: StateFile,
+  previousSnapshots: Map<string, ProviderSnapshot>,
+): Promise<{ snapshots: ProviderSnapshot[]; etags: Record<string, string | null> }> {
   const results: ProviderSnapshot[] = new Array(adapters.length);
+  const etags: Record<string, string | null> = {};
   let next = 0;
 
   async function worker(): Promise<void> {
@@ -108,7 +188,13 @@ async function fetchAllSnapshots(
       const index = next++;
       const adapter = adapters[index]!;
       try {
-        results[index] = await adapter.fetchSnapshot();
+        results[index] = await adapter.fetchSnapshot({
+          etag: prevState.providers[adapter.id]?.etag ?? null,
+          previousSnapshot: previousSnapshots.get(adapter.id) ?? null,
+          recordEtag: (etag) => {
+            etags[adapter.id] = etag;
+          },
+        });
       } catch {
         results[index] = {
           id: adapter.id,
@@ -123,5 +209,5 @@ async function fetchAllSnapshots(
   }
 
   await Promise.all(Array.from({ length: Math.min(cap, adapters.length) }, worker));
-  return results;
+  return { snapshots: results, etags };
 }

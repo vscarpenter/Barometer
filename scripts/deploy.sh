@@ -4,6 +4,9 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
+source scripts/lib/terraform.sh
+require_native_terraform
+require_aws_dns
 
 echo "==> Installing dependencies"
 bun install --frozen-lockfile
@@ -13,9 +16,9 @@ bun run --filter '@barometer/web' build
 bun run --filter '@barometer/engine' build
 
 echo "==> terraform apply"
-terraform -chdir=infra apply "$@"
+terraform_infra apply "$@"
 
-BUCKET="$(terraform -chdir=infra output -raw bucket_id)"
+BUCKET="$(terraform_infra output -raw bucket_id)"
 
 echo "==> Uploading frontend to s3://${BUCKET}/app"
 # Hashed assets are immutable and cached for a year. The demo data under
@@ -32,7 +35,7 @@ aws s3 cp packages/web/dist/index.html "s3://${BUCKET}/app/index.html" \
 # immutable (a new build emits new filenames), so only the mutable HTML needs
 # purging: the bare root (default_root_object) and /index.html itself.
 echo "==> Invalidating CloudFront cache for the entry point"
-DISTRIBUTION_ID="$(terraform -chdir=infra output -raw distribution_id)"
+DISTRIBUTION_ID="$(terraform_infra output -raw distribution_id)"
 INVALIDATION_ID="$(aws cloudfront create-invalidation \
   --distribution-id "${DISTRIBUTION_ID}" \
   --paths "/" "/index.html" \
@@ -42,4 +45,4 @@ echo "    Created invalidation ${INVALIDATION_ID} (paths: / /index.html)"
 echo "==> Done."
 echo "    1. Confirm the SNS subscription email sent to your alert_email."
 echo "    2. Run scripts/seed.sh to populate the status data on first deploy."
-echo "    3. Visit: $(terraform -chdir=infra output -raw url)"
+echo "    3. Visit: $(terraform_infra output -raw url)"

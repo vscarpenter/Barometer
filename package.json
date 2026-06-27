@@ -14,11 +14,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p packages/web/tsconfig.json",
-    "dryrun": "bun packages/engine/src/dryrun.ts"
+    "dryrun": "bun packages/engine/src/dryrun.ts",
+    "audit": "bun audit --audit-level high"
   },
   "devDependencies": {
-    "@types/node": "^26.0.1",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "@types/node": "26.0.1",
+    "typescript": "6.0.3",
+    "vitest": "4.1.9"
   }
 }

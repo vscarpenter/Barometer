@@ -4,8 +4,11 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
+source scripts/lib/terraform.sh
+require_native_terraform
+require_aws_dns
 
-FUNCTION="$(terraform -chdir=infra output -raw lambda_function_name)"
+FUNCTION="$(terraform_infra output -raw lambda_function_name)"
 OUT="$(mktemp)"
 
 echo "==> Invoking ${FUNCTION}"

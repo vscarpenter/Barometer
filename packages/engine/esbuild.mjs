@@ -1,8 +1,9 @@
 import { build } from "esbuild";
 
-// Bundle the Lambda handler. @aws-sdk/* is provided by the Node 24 runtime, so
-// it stays external to keep the artifact small; zod and @barometer/types are
-// bundled in. ESM output (.mjs) — Lambda handler = "handler.handler".
+// Bundle the Lambda handler and its runtime dependencies. AWS Lambda's Node
+// runtime includes an AWS SDK, but bundling the @aws-sdk/* clients keeps the
+// deployed artifact on the same versions package.json tests and builds against.
+// ESM output (.mjs) — Lambda handler = "handler.handler".
 // Target is node22 (the local dev/CI floor); a node22 bundle runs unchanged on
 // the node24 runtime, so we compile for the oldest Node we support.
 await build({
@@ -12,7 +13,6 @@ await build({
   target: "node22",
   format: "esm",
   outfile: "dist/handler.mjs",
-  external: ["@aws-sdk/*"],
   banner: {
     js: "import { createRequire as __createRequire } from 'module'; const require = __createRequire(import.meta.url);",
   },

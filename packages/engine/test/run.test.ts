@@ -5,7 +5,9 @@ import {
   StateFileSchema,
   RecentFileSchema,
   RollupsFileSchema,
+  buildOverallReading,
   type ProviderSnapshot,
+  type StateFile,
 } from "@barometer/types";
 import { runOnce, type RunDeps } from "../src/run.js";
 import { MemoryStore } from "../src/store/memory.js";
@@ -83,5 +85,76 @@ describe("runOnce", () => {
     expect(notifier.sent[0]!.kind).toBe("outage");
     expect(notifier.sent[0]!.incidentTitle).toBe("down");
     spy.mockRestore();
+  });
+
+  it("passes prior ETag + current snapshot into adapters and persists the refreshed ETag", async () => {
+    const store = new MemoryStore();
+    const previous: ProviderSnapshot = {
+      id: "a",
+      displayName: "Provider A",
+      status: "partial_outage",
+      activeIncidents: [
+        {
+          id: "i",
+          title: "Existing incident",
+          impact: "major",
+          status: "investigating",
+          startedAt: "2026-06-25T11:00:00.000Z",
+          url: "https://x/i",
+        },
+      ],
+      checkedAt: "2026-06-25T11:55:00.000Z",
+      sourceUrl: "https://a",
+    };
+    const seededState: StateFile = {
+      providers: {
+        a: {
+          alertState: "operational",
+          triggeringStatus: null,
+          pendingStatus: null,
+          consecutiveCount: 0,
+          lastTransitionAt: "2026-06-25T11:55:00.000Z",
+          etag: "\"v1\"",
+        },
+      },
+      updatedAt: "2026-06-25T11:55:00.000Z",
+    };
+    await store.writeJson(
+      "status/current.json",
+      { generatedAt: previous.checkedAt, overall: buildOverallReading([previous], previous.checkedAt), providers: [previous] },
+      "max-age=60",
+    );
+    await store.writeJson("status/state.json", seededState, "max-age=60");
+
+    let seenEtag: string | null | undefined;
+    let seenPrevious: ProviderSnapshot | null | undefined;
+    const adapter: ProviderAdapter = {
+      id: "a",
+      fetchSnapshot: async (context) => {
+        seenEtag = context?.etag;
+        seenPrevious = context?.previousSnapshot;
+        context?.recordEtag?.("\"v2\"");
+        return { ...previous, checkedAt: NOW.toISOString() };
+      },
+    };
+
+    await runOnce(baseDeps([adapter], store));
+
+    expect(seenEtag).toBe("\"v1\"");
+    expect(seenPrevious?.status).toBe("partial_outage");
+    const state = await store.readJson("status/state.json", StateFileSchema, null as never);
+    expect(state.providers["a"]!.etag).toBe("\"v2\"");
+  });
+
+  it("can run current-only without creating synthetic uptime history", async () => {
+    const store = new MemoryStore();
+    const summary = await runOnce({
+      ...baseDeps([okAdapter("a", "major_outage")], store),
+      historyMode: "current-only",
+    });
+
+    expect(summary.providers[0]!.uptime).toEqual({ "24h": null, "7d": null, "30d": null, "90d": null });
+    expect(await store.readJson("history/recent.json", RecentFileSchema, null as never)).toBeNull();
+    expect(await store.readJson("history/rollups.json", RollupsFileSchema, null as never)).toBeNull();
   });
 });
