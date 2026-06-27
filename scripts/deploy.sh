@@ -28,6 +28,17 @@ aws s3 sync packages/web/dist "s3://${BUCKET}/app" --delete \
 aws s3 cp packages/web/dist/index.html "s3://${BUCKET}/app/index.html" \
   --content-type "text/html" --cache-control "no-cache"
 
+# Force the edge to drop the cached entry point right away. Hashed assets are
+# immutable (a new build emits new filenames), so only the mutable HTML needs
+# purging: the bare root (default_root_object) and /index.html itself.
+echo "==> Invalidating CloudFront cache for the entry point"
+DISTRIBUTION_ID="$(terraform -chdir=infra output -raw distribution_id)"
+INVALIDATION_ID="$(aws cloudfront create-invalidation \
+  --distribution-id "${DISTRIBUTION_ID}" \
+  --paths "/" "/index.html" \
+  --query "Invalidation.Id" --output text)"
+echo "    Created invalidation ${INVALIDATION_ID} (paths: / /index.html)"
+
 echo "==> Done."
 echo "    1. Confirm the SNS subscription email sent to your alert_email."
 echo "    2. Run scripts/seed.sh to populate the status data on first deploy."
