@@ -1,0 +1,184 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-27T20:24:55Z",
+  "title": "Design System: Barometer",
+  "extensions": {
+    "colorMeta": {
+      "brand": {
+        "role": "primary",
+        "displayName": "Barometric Cyan",
+        "canonical": "oklch(53.9% 0.099 224.3)",
+        "dark": "#56c7e8",
+        "tonalRamp": ["oklch(20.0% 0.099 224.3)", "oklch(30.0% 0.099 224.3)", "oklch(40.0% 0.099 224.3)", "oklch(52.0% 0.099 224.3)", "oklch(63.0% 0.099 224.3)", "oklch(74.0% 0.099 224.3)", "oklch(85.0% 0.099 224.3)", "oklch(95.0% 0.099 224.3)"]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Ember",
+        "canonical": "oklch(60.3% 0.139 47.7)",
+        "dark": "#ec8b4f",
+        "tonalRamp": ["oklch(20.0% 0.139 47.7)", "oklch(30.0% 0.139 47.7)", "oklch(40.0% 0.139 47.7)", "oklch(52.0% 0.139 47.7)", "oklch(63.0% 0.139 47.7)", "oklch(74.0% 0.139 47.7)", "oklch(85.0% 0.139 47.7)", "oklch(95.0% 0.139 47.7)"]
+      },
+      "status-operational": {
+        "role": "status",
+        "displayName": "Operational Green",
+        "canonical": "oklch(55.6% 0.118 160.9)",
+        "dark": "#2fbf8c",
+        "tonalRamp": ["oklch(20.0% 0.118 160.9)", "oklch(30.0% 0.118 160.9)", "oklch(40.0% 0.118 160.9)", "oklch(52.0% 0.118 160.9)", "oklch(63.0% 0.118 160.9)", "oklch(74.0% 0.118 160.9)", "oklch(85.0% 0.118 160.9)", "oklch(95.0% 0.118 160.9)"]
+      },
+      "status-degraded": {
+        "role": "status",
+        "displayName": "Degraded Amber",
+        "canonical": "oklch(56.5% 0.112 77.6)",
+        "dark": "#e6bd4d",
+        "tonalRamp": ["oklch(20.0% 0.112 77.6)", "oklch(30.0% 0.112 77.6)", "oklch(40.0% 0.112 77.6)", "oklch(52.0% 0.112 77.6)", "oklch(63.0% 0.112 77.6)", "oklch(74.0% 0.112 77.6)", "oklch(85.0% 0.112 77.6)", "oklch(95.0% 0.112 77.6)"]
+      },
+      "status-partial_outage": {
+        "role": "status",
+        "displayName": "Partial-Outage Rust",
+        "canonical": "oklch(55.9% 0.139 46.3)",
+        "dark": "#ef8a4c",
+        "tonalRamp": ["oklch(20.0% 0.139 46.3)", "oklch(30.0% 0.139 46.3)", "oklch(40.0% 0.139 46.3)", "oklch(52.0% 0.139 46.3)", "oklch(63.0% 0.139 46.3)", "oklch(74.0% 0.139 46.3)", "oklch(85.0% 0.139 46.3)", "oklch(95.0% 0.139 46.3)"]
+      },
+      "status-major_outage": {
+        "role": "status",
+        "displayName": "Major-Outage Red",
+        "canonical": "oklch(54.7% 0.167 26.8)",
+        "dark": "#ef716a",
+        "tonalRamp": ["oklch(20.0% 0.167 26.8)", "oklch(30.0% 0.167 26.8)", "oklch(40.0% 0.167 26.8)", "oklch(52.0% 0.167 26.8)", "oklch(63.0% 0.167 26.8)", "oklch(74.0% 0.167 26.8)", "oklch(85.0% 0.167 26.8)", "oklch(95.0% 0.167 26.8)"]
+      },
+      "status-maintenance": {
+        "role": "status",
+        "displayName": "Maintenance Blue",
+        "canonical": "oklch(53.6% 0.134 252.8)",
+        "dark": "#5aa9f0",
+        "tonalRamp": ["oklch(20.0% 0.134 252.8)", "oklch(30.0% 0.134 252.8)", "oklch(40.0% 0.134 252.8)", "oklch(52.0% 0.134 252.8)", "oklch(63.0% 0.134 252.8)", "oklch(74.0% 0.134 252.8)", "oklch(85.0% 0.134 252.8)", "oklch(95.0% 0.134 252.8)"]
+      },
+      "status-unknown": {
+        "role": "status",
+        "displayName": "Unknown Slate",
+        "canonical": "oklch(53.9% 0.033 261.4)",
+        "dark": "#8593a6",
+        "tonalRamp": ["oklch(20.0% 0.033 261.4)", "oklch(30.0% 0.033 261.4)", "oklch(40.0% 0.033 261.4)", "oklch(52.0% 0.033 261.4)", "oklch(63.0% 0.033 261.4)", "oklch(74.0% 0.033 261.4)", "oklch(85.0% 0.033 261.4)", "oklch(95.0% 0.033 261.4)"]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(24.5% 0.028 257.5)",
+        "dark": "#e8eef6",
+        "tonalRamp": ["oklch(20.0% 0.028 257.5)", "oklch(30.0% 0.028 257.5)", "oklch(40.0% 0.028 257.5)", "oklch(52.0% 0.028 257.5)", "oklch(63.0% 0.028 257.5)", "oklch(74.0% 0.028 257.5)", "oklch(85.0% 0.028 257.5)", "oklch(95.0% 0.028 257.5)"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "oklch(100.0% 0.000 90)",
+        "dark": "#121925",
+        "tonalRamp": ["oklch(20.0% 0.000 90)", "oklch(30.0% 0.000 90)", "oklch(40.0% 0.000 90)", "oklch(52.0% 0.000 90)", "oklch(63.0% 0.000 90)", "oklch(74.0% 0.000 90)", "oklch(85.0% 0.000 90)", "oklch(95.0% 0.000 90)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The weather verdict (Fair, Stormy) and the About page title. The single largest element on any screen." },
+      "headline": { "displayName": "Headline", "purpose": "The provider name in the drill-down dialog." },
+      "title": { "displayName": "Title", "purpose": "Masthead wordmark and each provider tile's name." },
+      "body": { "displayName": "Body", "purpose": "The reading sub-line and all prose; capped near 65ch." },
+      "label": { "displayName": "Label", "purpose": "Uppercase tracked micro-labels of four words or fewer: dial scale ends, uptime-window headers, dialog kickers." },
+      "data": { "displayName": "Data / Mono", "purpose": "Every polling number: uptime %, version string, timestamps. Tabular so it never jitters." }
+    },
+    "shadows": [
+      { "name": "hairline", "value": "0 1px 2px rgb(16 24 33 / 0.05)", "valueDark": "0 1px 2px rgb(0 0 0 / 0.35)", "purpose": "Default for cards and the dialog. Barely there." },
+      { "name": "lift", "value": "0 10px 30px -14px rgb(20 40 70 / 0.14)", "valueDark": "0 12px 32px -14px rgb(0 0 0 / 0.6)", "purpose": "The reading band only. Marks the headline as the focal answer." },
+      { "name": "ring", "value": "0 0 0 1px var(--border) inset", "purpose": "Inset hairline where a border can't be used." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "180ms cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Default easing for hover and state transitions." },
+      { "name": "needle-sweep", "value": "0.85s cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "The dial needle easing to the live reading (soft ease-out, no bounce). Reduced-motion snaps it instantly." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Provider Tile",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "A status-aware provider tile. Color comes entirely from the --c custom property set to the live status hue.",
+      "html": "<article class=\"ds-tile\" style=\"--c: var(--status-operational, #15885c)\"><div class=\"ds-tile__head\"><span class=\"ds-tile__led\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><h3 class=\"ds-tile__name\">Cloudflare</h3><span class=\"ds-tile__pill\"><span class=\"ds-tile__dot\"></span>Operational</span></div><dl class=\"ds-tile__uptime\"><div><dt>24H</dt><dd>100%</dd></div><div><dt>7D</dt><dd>99.98%</dd></div><div><dt>30D</dt><dd>99.95%</dd></div><div><dt>90D</dt><dd>99.97%</dd></div></dl></article>",
+      "css": ".ds-tile { display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--border, #e6eaf0); border-radius: 14px; background: var(--surface, #fff); padding: 16px; box-shadow: 0 1px 2px rgb(16 24 33 / 0.05); font-family: 'Hanken Grotesk', system-ui, sans-serif; max-width: 17rem; transition: transform 180ms cubic-bezier(0.4,0,0.2,1), border-color 180ms cubic-bezier(0.4,0,0.2,1); } .ds-tile:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--c) 45%, var(--border, #e6eaf0)); } .ds-tile__head { display: flex; align-items: center; gap: 8px; } .ds-tile__led { color: var(--c); display: grid; place-items: center; } .ds-tile__name { margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--text, #18212e); } .ds-tile__pill { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 5px; font-size: 0.69rem; font-weight: 600; color: var(--c); background: color-mix(in oklab, var(--c) 13%, transparent); padding: 3px 9px; border-radius: 999px; } .ds-tile__dot { width: 6px; height: 6px; border-radius: 999px; background: var(--c); } .ds-tile__uptime { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0; padding-top: 12px; border-top: 1px solid var(--border-soft, #eef1f6); } .ds-tile__uptime div { text-align: center; } .ds-tile__uptime dt { font-size: 0.59rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint, #8a94a6); } .ds-tile__uptime dd { margin: 3px 0 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.81rem; font-weight: 500; color: var(--text, #18212e); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Status Pill",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "A standalone status chip. The tinted fill and text both derive from --c; shown here at major-outage.",
+      "html": "<span class=\"ds-pill\" style=\"--c: var(--status-major_outage, #bf3d37)\"><span class=\"ds-pill__dot\"></span>Major outage</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 5px; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 0.69rem; font-weight: 600; color: var(--c); background: color-mix(in oklab, var(--c) 13%, transparent); padding: 3px 9px; border-radius: 999px; } .ds-pill__dot { width: 6px; height: 6px; border-radius: 999px; background: var(--c); }"
+    },
+    {
+      "name": "Reading Band",
+      "kind": "custom",
+      "refersTo": "reading-band",
+      "description": "The Almanac headline: the weather verdict, a plain sub-line, and the semicircular dial with its swept needle. A tinted glow keys off --c.",
+      "html": "<section class=\"ds-reading\" style=\"--c: var(--status-operational, #15885c)\"><div class=\"ds-reading__top\"><span class=\"ds-reading__icon\"><svg viewBox=\"0 0 24 24\" width=\"34\" height=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"4.5\"/><path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1\"/></svg></span><h2 class=\"ds-reading__weather\">Fair</h2></div><p class=\"ds-reading__sub\"><strong>9 of 9</strong> providers operational.</p><svg class=\"ds-dial\" viewBox=\"0 0 220 120\" width=\"260\"><path d=\"M20 110 A90 90 0 0 1 200 110\" fill=\"none\" stroke=\"var(--border, #e6eaf0)\" stroke-width=\"10\" stroke-linecap=\"round\"/><path d=\"M20 110 A90 90 0 0 1 200 110\" fill=\"none\" stroke=\"var(--c)\" stroke-width=\"10\" stroke-linecap=\"round\" stroke-dasharray=\"255 400\"/><line class=\"ds-dial__needle\" x1=\"110\" y1=\"110\" x2=\"185\" y2=\"68\" stroke=\"var(--accent, #c2632c)\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"110\" r=\"7\" fill=\"var(--accent, #c2632c)\"/></svg><div class=\"ds-dial__scale\"><span>Stormy</span><span>Fair</span></div></section>",
+      "css": ".ds-reading { position: relative; overflow: hidden; border: 1px solid var(--border, #e6eaf0); border-radius: 18px; background: var(--surface, #fff); box-shadow: 0 10px 30px -14px rgb(20 40 70 / 0.14); padding: 32px; font-family: 'Hanken Grotesk', system-ui, sans-serif; max-width: 30rem; } .ds-reading::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(125% 130% at 11% -25%, color-mix(in oklab, var(--c) 13%, transparent), transparent 56%); } .ds-reading__top { position: relative; display: flex; align-items: center; gap: 12px; } .ds-reading__icon { color: var(--c); display: flex; } .ds-reading__weather { margin: 0; font-family: 'Space Grotesk', system-ui, sans-serif; font-weight: 600; font-size: clamp(2rem, 4vw, 2.6rem); letter-spacing: -0.025em; line-height: 1; color: var(--text, #18212e); } .ds-reading__sub { position: relative; margin: 12px 0 8px; color: var(--text-muted, #586478); font-size: 0.95rem; } .ds-reading__sub strong { color: var(--text, #18212e); font-variant-numeric: tabular-nums; } .ds-dial { position: relative; display: block; margin: 8px auto 0; max-width: 100%; } .ds-dial__needle { transform-origin: 110px 110px; transition: transform 0.85s cubic-bezier(0.22,1,0.36,1); } .ds-dial__scale { display: flex; justify-content: space-between; max-width: 260px; margin: 2px auto 0; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-faint, #8a94a6); } @media (prefers-reduced-motion: reduce) { .ds-dial__needle { transition: none; } }"
+    },
+    {
+      "name": "Theme Toggle",
+      "kind": "button",
+      "refersTo": "theme-toggle",
+      "description": "Pill toggle that flips data-theme on <html> and persists to localStorage.",
+      "html": "<button class=\"ds-toggle\" type=\"button\"><svg viewBox=\"0 0 24 24\" width=\"15\" height=\"15\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19\"/></svg>Light</button>",
+      "css": ".ds-toggle { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--text-muted, #586478); background: var(--surface-2, #f6f8fb); border: 1px solid var(--border, #e6eaf0); border-radius: 999px; padding: 6px 12px; transition: color 180ms cubic-bezier(0.4,0,0.2,1); } .ds-toggle:hover { color: var(--text, #18212e); } .ds-toggle:focus-visible { outline: 2px solid var(--brand, #0d7a99); outline-offset: 2px; }"
+    },
+    {
+      "name": "Uptime Bar (90-day)",
+      "kind": "custom",
+      "refersTo": "uptime-bar",
+      "description": "A flat strip of per-day cells colored by that day's status. The signature history viz.",
+      "html": "<div class=\"ds-uptimebar\"><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-degraded,#9a6c12)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-major_outage,#bf3d37)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-partial_outage,#b4551f)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span><span style=\"background:var(--status-operational,#15885c)\"></span></div>",
+      "css": ".ds-uptimebar { display: flex; gap: 2px; align-items: stretch; max-width: 22rem; } .ds-uptimebar span { flex: 1 1 0; min-width: 2px; height: 30px; border-radius: 2px; }"
+    },
+    {
+      "name": "Dialog Close",
+      "kind": "button",
+      "refersTo": "dialog-close",
+      "description": "The pill close control on the provider drill-down dialog.",
+      "html": "<button class=\"ds-close\" type=\"button\">Close</button>",
+      "css": ".ds-close { border: 1px solid var(--border, #e6eaf0); border-radius: 999px; background: var(--bg, #f3f5f8); color: var(--text, #18212e); padding: 0.35rem 0.8rem; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-weight: 500; cursor: pointer; } .ds-close:focus-visible { outline: 2px solid var(--brand, #0d7a99); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Almanac",
+    "overview": "Barometer is a weather instrument for the internet, and the interface is built to be read the way you read a real barometer: one glance, no deciphering. A swept needle on a Stormy-to-Fair dial gives the verdict; everything else (the per-provider tiles, the 90-day uptime bars, the drill-down) is the fine print you consult only when the needle has already told you something is wrong. The system is light-first, cool, and quiet at rest, with one warm note (the ember needle) and one piece of instrument chrome (barometric cyan). It carries a real light/dark pair driven by a manual toggle, not the OS preference.\n\nThe whole system is organized around restraint as information. Healthy is near-monochrome: ink on a faintly blue-tinted off-white, hairline borders, almost no shadow. Color is not decoration here, it is signal, so it is rationed. Each surface that reports a status sets a single --c custom property to the live status hue, and every tint on that surface (a 13% pill fill, a 45% hover-border blend, the faint glow behind the headline) is derived from --c through color-mix(in oklab, ...). Nothing is painted a fixed status color by hand. The payoff: when one provider goes red, it is the only red on the page, and the eye lands on it instantly precisely because the resting field is so calm.",
+    "keyCharacteristics": [
+      "Light-first, cool neutral field with a single warm accent (the ember needle).",
+      "Status color is rationed and derived from one --c variable, never hardcoded per component.",
+      "Numbers are monospace and tabular so live-polling values never jitter.",
+      "Near-flat elevation; only the headline lifts and cards lift 2px on hover.",
+      "A real, designed dark theme (manual toggle, set before first paint), not an inverted afterthought."
+    ],
+    "rules": [
+      { "name": "The --c Rule", "body": "Status color is never a literal in a component. A surface sets --c to its live status hue, and every status-derived tint is color-mix(in oklab, var(--c) <pct>%, ...). Pill fills sit at ~13%, hover borders at ~45%. Hardcoding a status hex anywhere is forbidden; it breaks the single-source signal.", "section": "colors" },
+      { "name": "The One-Warm-Note Rule", "body": "Ember (--accent) appears on the needle and the offenders line, and essentially nowhere else. Its scarcity is what makes the needle the first thing you see. Do not reach for it as a generic highlight.", "section": "colors" },
+      { "name": "The Honest-Neutral Rule", "body": "Unknown is slate and maintenance is blue, both visibly outside the green-to-red severity ramp. A feed we could not read or a planned maintenance window must never borrow operational green or an outage red; the color itself says 'not counted'.", "section": "colors" },
+      { "name": "The Tabular Rule", "body": "Any figure that changes on poll (uptime %, provider counts, 'updated Ns ago') is rendered with font-variant-numeric: tabular-nums, and the reused data values are monospace. Numbers must not reflow or jitter as they refresh.", "section": "typography" },
+      { "name": "The Label-Only-Uppercase Rule", "body": "Uppercase with tracking is reserved for micro-labels of four words or fewer. Headings and section titles are sentence-case display type. Barometer does not put a tracked uppercase eyebrow above every section.", "section": "typography" },
+      { "name": "The Flat-with-One-Lift Rule", "body": "Surfaces are flat at rest on a 1px border. The reading band is the one element that lifts by default because it is the answer; everything else lifts only as a response to state (hover, focus). A drop shadow used for decoration is forbidden.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do drive every status color from the live --c custom property via color-mix(in oklab, ...). Pill fills at ~13%, hover borders at ~45%.",
+      "Do keep the resting state near-monochrome so a single red provider is the only saturated thing on the page.",
+      "Do render every polling number in JetBrains Mono with tabular-nums so it never jitters on refresh.",
+      "Do carry status as color plus a text label plus a distinct icon, always (WCAG: never color alone).",
+      "Do reserve uppercase tracked type for micro-labels of four words or fewer.",
+      "Do keep surfaces flat on a 1px border; let only the reading band lift by default and tiles lift on hover.",
+      "Do treat dark mode as a designed equal: brightened hues, deeper shadow alphas, set before first paint."
+    ],
+    "donts": [
+      "Don't build a generic SaaS dashboard: no gradient cards, no big-hero-metric template, no endless identical icon-heading-text card grids.",
+      "Don't let it become a status-page clone. Barometer normalizes Atlassian-Statuspage-style feeds; it must not look like one of them.",
+      "Don't go alarmist red-everywhere. No red gradients, no sirens, no urgency as the resting mood. Severity is proportionate.",
+      "Don't ship a neon dev-tool dark mode. Light is the designed default; dark is a deliberate variant, not a 'looks technical' costume.",
+      "Don't hardcode a status hex in any component; that breaks the --c single-source signal.",
+      "Don't spend the ember accent as a generic highlight. It belongs to the needle.",
+      "Don't use a border-left/border-right colored stripe as an accent, background-clip: text gradient text, or decorative glassmorphism.",
+      "Don't put a tracked uppercase eyebrow above every section. Uppercase is a functional label, not a kicker."
+    ]
+  }
+}

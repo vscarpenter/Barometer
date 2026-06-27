@@ -8,6 +8,11 @@ JSON to S3, and a vanilla-TS dashboard (CloudFront) answers "is the internet hea
 > full design in [`SPEC.md`](./SPEC.md). This file captures the **decisions, non-obvious insights, operational
 > gotchas, and future work** — the things you can't infer from the code.
 
+> **Design context** (register: **product**). Strategy lives in [`PRODUCT.md`](./PRODUCT.md) (users, purpose,
+> "calm instrument" personality, anti-references, WCAG 2.2 AA). The visual system — the "Almanac" tokens, type
+> pairing, and signature components — lives in [`DESIGN.md`](./DESIGN.md), with a machine-readable sidecar at
+> `.impeccable/design.json`. Read these before design work so new UI and variants stay on-brand.
+
 ---
 
 ## Status: deployed & live
