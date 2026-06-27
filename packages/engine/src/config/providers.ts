@@ -9,15 +9,37 @@ import { ProviderConfigSchema, type ProviderConfig } from "../adapters/types.js"
  * the original brief were replaced with Vercel and DigitalOcean.
  */
 export const PROVIDERS: ProviderConfig[] = [
-  { id: "aws", displayName: "AWS", type: "aws", url: "https://health.aws.amazon.com/public/currentevents" },
+  // Status-page providers. healthProbe = a canonical service endpoint used only
+  // when the status feed itself is unreachable, to confirm a real outage (v2).
+  { id: "aws", displayName: "AWS", type: "aws", url: "https://health.aws.amazon.com/public/currentevents", healthProbe: "https://s3.amazonaws.com" },
   { id: "azure", displayName: "Microsoft Azure", type: "azure", url: "https://azure.status.microsoft/en-us/status/feed/" },
-  { id: "gcp", displayName: "Google Cloud", type: "gcp", url: "https://status.cloud.google.com/incidents.json" },
-  { id: "cloudflare", displayName: "Cloudflare", type: "statuspage", url: "https://www.cloudflarestatus.com" },
-  { id: "github", displayName: "GitHub", type: "statuspage", url: "https://www.githubstatus.com" },
+  { id: "gcp", displayName: "Google Cloud", type: "gcp", url: "https://status.cloud.google.com/incidents.json", healthProbe: "https://storage.googleapis.com" },
+  { id: "cloudflare", displayName: "Cloudflare", type: "statuspage", url: "https://www.cloudflarestatus.com", healthProbe: "https://www.cloudflare.com" },
+  { id: "github", displayName: "GitHub", type: "statuspage", url: "https://www.githubstatus.com", healthProbe: "https://api.github.com" },
   { id: "openai", displayName: "OpenAI", type: "statuspage", url: "https://status.openai.com" },
   { id: "anthropic", displayName: "Anthropic", type: "statuspage", url: "https://status.claude.com" },
   { id: "vercel", displayName: "Vercel", type: "statuspage", url: "https://www.vercel-status.com" },
   { id: "digitalocean", displayName: "DigitalOcean", type: "statuspage", url: "https://status.digitalocean.com" },
+  // Active DNS probes (v2): foundational-layer coverage independent of any
+  // vendor status page, via each resolver's DNS-over-HTTPS JSON endpoint.
+  {
+    id: "cloudflare-dns",
+    displayName: "Cloudflare DNS (1.1.1.1)",
+    type: "probe",
+    url: "https://1.1.1.1/dns-query?name=example.com&type=A",
+    probe: {
+      url: "https://1.1.1.1/dns-query?name=example.com&type=A",
+      headers: { accept: "application/dns-json" },
+      degradedMs: 1500,
+    },
+  },
+  {
+    id: "google-dns",
+    displayName: "Google DNS (8.8.8.8)",
+    type: "probe",
+    url: "https://dns.google/resolve?name=example.com&type=A",
+    probe: { url: "https://dns.google/resolve?name=example.com&type=A", degradedMs: 1500 },
+  },
 ];
 
 const ProvidersArraySchema = z.array(ProviderConfigSchema);

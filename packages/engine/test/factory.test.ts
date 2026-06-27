@@ -5,6 +5,8 @@ import { StatuspageAdapter } from "../src/adapters/statuspage.js";
 import { AwsAdapter } from "../src/adapters/aws.js";
 import { AzureAdapter } from "../src/adapters/azure.js";
 import { GcpAdapter } from "../src/adapters/gcp.js";
+import { ProbeAdapter } from "../src/adapters/probe.js";
+import { ProbeFallbackAdapter } from "../src/adapters/probeFallback.js";
 import type { AdapterDeps } from "../src/adapters/types.js";
 
 const deps: AdapterDeps = {
@@ -13,15 +15,15 @@ const deps: AdapterDeps = {
 };
 
 describe("provider config", () => {
-  it("ships exactly nine providers with unique ids", () => {
-    expect(PROVIDERS).toHaveLength(9);
+  it("ships eleven providers with unique ids (9 status-page + 2 DNS probes)", () => {
+    expect(PROVIDERS).toHaveLength(11);
     const ids = PROVIDERS.map((p) => p.id);
-    expect(new Set(ids).size).toBe(9);
+    expect(new Set(ids).size).toBe(11);
   });
 
   it("includes the expected providers and types", () => {
     const byId = Object.fromEntries(PROVIDERS.map((p) => [p.id, p]));
-    for (const id of ["aws", "azure", "gcp", "cloudflare", "github", "openai", "anthropic", "vercel", "digitalocean"]) {
+    for (const id of ["aws", "azure", "gcp", "cloudflare", "github", "openai", "anthropic", "vercel", "digitalocean", "cloudflare-dns", "google-dns"]) {
       expect(byId[id], `missing provider ${id}`).toBeDefined();
     }
     expect(byId["aws"]!.type).toBe("aws");
@@ -29,6 +31,8 @@ describe("provider config", () => {
     expect(byId["gcp"]!.type).toBe("gcp");
     expect(byId["cloudflare"]!.type).toBe("statuspage");
     expect(byId["anthropic"]!.url).toContain("status.claude.com");
+    expect(byId["cloudflare-dns"]!.type).toBe("probe");
+    expect(byId["google-dns"]!.type).toBe("probe");
   });
 
   it("every provider url is https", () => {
@@ -80,8 +84,25 @@ describe("buildAdapters", () => {
     expect(adapter).toBeInstanceOf(StatuspageAdapter);
   });
 
+  it("builds a ProbeAdapter for the probe type", () => {
+    const [adapter] = buildAdapters(
+      [{ id: "p", displayName: "P", type: "probe", url: "https://p.example.com" }],
+      deps,
+    );
+    expect(adapter).toBeInstanceOf(ProbeAdapter);
+  });
+
+  it("wraps a provider with a healthProbe in the fallback decorator", () => {
+    const [adapter] = buildAdapters(
+      [{ id: "gh", displayName: "GitHub", type: "statuspage", url: "https://x", healthProbe: "https://api.github.com" }],
+      deps,
+    );
+    expect(adapter).toBeInstanceOf(ProbeFallbackAdapter);
+    expect(adapter!.id).toBe("gh");
+  });
+
   it("builds an adapter for every shipped provider", () => {
     const adapters = buildAdapters(PROVIDERS, deps);
-    expect(adapters).toHaveLength(9);
+    expect(adapters).toHaveLength(11);
   });
 });

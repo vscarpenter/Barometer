@@ -18,6 +18,8 @@ export * from "./http.js";
 export * from "./config/providers.js";
 export * from "./adapters/factory.js";
 export * from "./adapters/types.js";
+export * from "./adapters/probe.js";
+export * from "./adapters/probeFallback.js";
 
 // Normalization, history, summary, metrics
 export * from "./summary.js";

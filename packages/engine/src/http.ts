@@ -17,6 +17,7 @@ export interface FetchOptions {
   etag?: string | null;
   timeoutMs?: number;
   retries?: number;
+  headers?: Record<string, string>; // extra request headers (e.g. DoH "accept")
   fetchImpl?: typeof fetch;
   sleep?: (ms: number) => Promise<void>;
 }
@@ -51,11 +52,12 @@ export async function fetchWithRetry(url: string, opts: FetchOptions = {}): Prom
     etag = null,
     timeoutMs = 5000,
     retries = 2,
+    headers: extraHeaders,
     fetchImpl = fetch,
     sleep = realSleep,
   } = opts;
 
-  const headers: Record<string, string> = { "user-agent": USER_AGENT };
+  const headers: Record<string, string> = { ...extraHeaders, "user-agent": USER_AGENT };
   if (etag) headers["if-none-match"] = etag;
 
   let lastError: unknown;
