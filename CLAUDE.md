@@ -153,3 +153,7 @@ validate adapter changes (it caught the AWS UTF-16BE decode bug that unit tests 
 approved once, then spec→plan→implementation in one continuous pass (TDD throughout, frequent commits,
 no separate plan-review gate). Monorepo: `packages/{types,engine,web}` + `infra/` Terraform modules.
 Commit trailer in use: `Claude-Session: <url>`, author `Vinny Carpenter <vscarpenter@gmail.com>`.
+
+**Git workflow:** Commit directly to `main` — this is a solo project whose entire history is
+direct-to-main, so do **not** branch before committing (this overrides the standing "branch before
+committing on the default branch" default). Push only when explicitly asked.
