@@ -27,85 +27,164 @@ body {
   padding: var(--space-6) var(--space-4) var(--space-8);
 }
 
+a {
+  color: var(--text);
+}
+
 /* ── Masthead ───────────────────────────────────────────────── */
 .masthead {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   margin-block-end: var(--space-5);
 }
 .masthead__mark {
-  inline-size: 40px;
-  block-size: 40px;
-  color: var(--brand);
+  inline-size: 30px;
+  block-size: 30px;
   flex: none;
+  color: var(--brand);
 }
 .masthead__titles h1 {
   margin: 0;
-  font-size: 1.4rem;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 .masthead__titles p {
   margin: 0;
   color: var(--text-faint);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+}
+.masthead__right {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
 }
 .masthead__status {
-  margin-inline-start: auto;
-  text-align: end;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .masthead__dot {
-  display: inline-block;
   inline-size: 7px;
   block-size: 7px;
+  flex: none;
   border-radius: var(--radius-pill);
   background: var(--status-operational);
-  margin-inline-end: 6px;
-  vertical-align: middle;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--status-operational) 20%, transparent);
 }
 
-/* ── Reading band (the barometer face) ──────────────────────── */
+/* New — light/dark theme toggle */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+}
+.theme-toggle:hover {
+  color: var(--text);
+}
+
+/* ── Reading band (the Almanac headline) ────────────────────── */
 .reading {
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background:
-    linear-gradient(180deg, color-mix(in oklab, var(--c) 16%, transparent), transparent 70%),
-    var(--surface);
+  background: var(--surface);
   box-shadow: var(--shadow-2);
   padding: var(--space-6);
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-5);
-  align-items: center;
   margin-block-end: var(--space-6);
 }
-.reading__gauge {
-  inline-size: 96px;
-  block-size: 96px;
-  color: var(--c);
-  flex: none;
+.reading::before {
+  /* faint weather glow tinted by the current reading (--c) */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(125% 130% at 11% -25%, color-mix(in oklab, var(--c) 13%, transparent), transparent 56%);
 }
-.reading__label {
+.reading__inner {
+  position: relative;
+}
+.reading__top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.reading__icon {
+  color: var(--c);
+  display: flex;
+}
+.reading__weather {
   margin: 0;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: var(--text);
 }
 .reading__sub {
-  margin: var(--space-2) 0 0;
+  margin: var(--space-3) 0 var(--space-5);
   color: var(--text-muted);
+  font-size: 0.95rem;
 }
 .reading__count {
-  font-variant-numeric: tabular-nums;
   color: var(--text);
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.reading__scale {
+  position: relative;
+  block-size: 9px;
+}
+.reading__scale-track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(
+    90deg,
+    var(--status-major_outage),
+    var(--status-partial_outage) 34%,
+    var(--status-degraded) 62%,
+    var(--status-operational)
+  );
+}
+.reading__marker {
+  position: absolute;
+  top: -4px;
+  transform: translateX(-50%);
+  inline-size: 3px;
+  block-size: 17px;
+  border-radius: 3px;
+  background: var(--text);
+  box-shadow: 0 0 0 2.5px var(--surface);
+  /* left is set inline by headline.ts */
+}
+.reading__scale-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-block-start: 9px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-faint);
 }
 
 /* ── Provider grid ──────────────────────────────────────────── */
@@ -116,28 +195,28 @@ body {
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface);
   padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
   box-shadow: var(--shadow-1);
   transition: transform var(--transition), border-color var(--transition);
 }
 .card:hover {
   transform: translateY(-2px);
-  border-color: color-mix(in oklab, var(--c) 50%, var(--border));
+  border-color: color-mix(in oklab, var(--c) 45%, var(--border));
 }
 .card__head {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 .card__led {
-  inline-size: 28px;
-  block-size: 28px;
+  inline-size: 24px;
+  block-size: 24px;
   flex: none;
   color: var(--c);
   display: grid;
@@ -145,24 +224,26 @@ body {
 }
 .card__name {
   margin: 0;
-  font-size: 1rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
   font-weight: 600;
 }
 .card__status {
+  margin-inline-start: auto;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.78rem;
+  gap: 5px;
+  font-size: 0.69rem;
   font-weight: 600;
   color: var(--c);
-  padding: 2px 8px;
+  background: color-mix(in oklab, var(--c) 13%, transparent);
+  padding: 3px 9px;
   border-radius: var(--radius-pill);
-  background: color-mix(in oklab, var(--c) 14%, transparent);
-  margin-inline-start: auto;
 }
 .card__incident {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
   color: var(--text-muted);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -172,17 +253,24 @@ body {
 .card__incident a {
   color: var(--text);
 }
-.card__incident--muted { opacity: 0.6; }
-.card__regions { font-size: 0.75em; opacity: 0.7; white-space: nowrap; }
+.card__incident--muted {
+  opacity: 0.6;
+}
+.card__regions {
+  font-size: 0.75em;
+  opacity: 0.7;
+  white-space: nowrap;
+}
 .card__spark {
   display: block;
   inline-size: 100%;
-  block-size: 28px;
+  block-size: 30px;
 }
 .card__uptime {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-2);
+  margin: 0;
   margin-block-start: auto;
   padding-block-start: var(--space-3);
   border-block-start: 1px solid var(--border-soft);
@@ -191,17 +279,19 @@ body {
   text-align: center;
 }
 .card__uptime dt {
-  font-size: 0.68rem;
-  color: var(--text-faint);
+  font-size: 0.59rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--text-faint);
 }
 .card__uptime dd {
-  margin: 2px 0 0;
-  font-size: 0.86rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+  margin: 3px 0 0;
   font-family: var(--font-mono);
+  font-size: 0.81rem;
+  font-weight: 500;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Stale banner (live region) ─────────────────────────────── */
@@ -233,7 +323,7 @@ footer {
   margin-block-start: var(--space-8);
   text-align: center;
   color: var(--text-faint);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 footer a {
   color: var(--text-muted);

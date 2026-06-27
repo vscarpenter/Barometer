@@ -4,11 +4,11 @@ import { svgEl } from "./dom.js";
 // Bar height encodes severity (a calm baseline that "spikes" during outages —
 // the barometric-pressure metaphor); color encodes status.
 const HEIGHT: Record<ProviderStatus, number> = {
-  operational: 0.28,
-  maintenance: 0.42,
-  unknown: 0.34,
-  degraded: 0.56,
-  partial_outage: 0.76,
+  operational: 0.2,
+  maintenance: 0.36,
+  unknown: 0.3,
+  degraded: 0.55,
+  partial_outage: 0.78,
   major_outage: 1,
 };
 
@@ -30,8 +30,8 @@ export function renderSparkline(statuses: ProviderStatus[]): SVGElement {
   statuses.forEach((status, i) => {
     const h = HEIGHT[status];
     const rect = svgEl("rect");
-    rect.setAttribute("x", String(i + 0.08));
-    rect.setAttribute("width", "0.84");
+    rect.setAttribute("x", String(i + 0.2));
+    rect.setAttribute("width", "0.6");
     rect.setAttribute("y", String(1 - h));
     rect.setAttribute("height", String(h));
     rect.setAttribute("rx", "0.07");

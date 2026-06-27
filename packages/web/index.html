@@ -3,15 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--
+      Theme bootstrap: set data-theme BEFORE first paint so there's no flash of
+      the wrong theme. External (not inline) because the site's CSP is
+      script-src 'self' — inline scripts are blocked. Must stay render-blocking
+      (no defer/async/module) and ahead of the stylesheet.
+    -->
+    <script src="/theme-init.js"></script>
     <title>Barometer — Internet Health</title>
     <meta
       name="description"
       content="A weather station for the internet — live status of major cloud, network, and AI providers."
     />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="light dark" />
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2356c7e8' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 12l4-3'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.4' stroke='%231593b8' stroke-width='1.7'/%3E%3Cpath d='M12 12L16.8 7.6' stroke='%23d27a3f' stroke-width='1.9'/%3E%3Ccircle cx='12' cy='12' r='1.6' fill='%231593b8'/%3E%3C/svg%3E"
     />
   </head>
   <body>

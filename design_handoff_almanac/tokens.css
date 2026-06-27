@@ -1,16 +1,16 @@
 /*
  * Barometer design tokens — DIRECTION A "ALMANAC"
+ * Drop-in replacement for packages/web/src/tokens.css
  *
- * Two layers, same as before: primitive ramps, then semantic tokens that
+ * Two layers, same as the original: primitive ramps, then semantic tokens that
  * reference them. Components consume ONLY semantic tokens. The redesign keeps
- * the original token NAMES (so styles.css keeps working) and adds two:
- *   --font-display and --accent (the existing --font-mono is now actually used).
+ * the original token NAMES (so styles.css keeps working) and adds three:
+ *   --font-display, --accent, and the existing --font-mono is reused.
  *
  * Theme model change: the Almanac direction is LIGHT-first with a manual
  * light/dark toggle. We drive the theme from a [data-theme] attribute on <html>
- * (set by public/theme-init.js before first paint, then flipped by main.ts and
- * persisted to localStorage). The two blocks below are the only place colors
- * are defined.
+ * (set by main.ts from localStorage, falling back to prefers-color-scheme).
+ * The two blocks below are the only place colors are defined.
  */
 
 :root {
@@ -98,33 +98,8 @@
 }
 
 /*
- * Fallback before JS runs: public/theme-init.js sets data-theme from
- * localStorage / prefers-color-scheme before first paint, so a visitor never
- * sees the wrong theme. This @media block mirrors the dark palette for the
- * brief window where a dark-preferring visitor's JS hasn't run yet (and for the
- * no-JS case), keyed off :root:not([data-theme]) so it never fights the toggle.
+ * Optional: if a visitor has NOT chosen a theme yet, main.ts sets data-theme
+ * from prefers-color-scheme, so no @media block is required. If you prefer a
+ * pure-CSS fallback before JS runs, you may additionally mirror the dark block
+ * under @media (prefers-color-scheme: dark) :root:not([data-theme]) { … }.
  */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    color-scheme: dark;
-    --bg: #0a0e15;
-    --bg-grad: radial-gradient(125% 70% at 50% -15%, color-mix(in oklab, var(--brand) 8%, transparent), transparent 60%);
-    --surface: #121925;
-    --surface-2: #0e1521;
-    --border: #243042;
-    --border-soft: #1b2533;
-    --text: #e8eef6;
-    --text-muted: #9aa7b9;
-    --text-faint: #647184;
-    --brand: #56c7e8;
-    --accent: #ec8b4f;
-    --status-operational: #2fbf8c;
-    --status-degraded: #e6bd4d;
-    --status-partial_outage: #ef8a4c;
-    --status-major_outage: #ef716a;
-    --status-maintenance: #5aa9f0;
-    --status-unknown: #8593a6;
-    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.35);
-    --shadow-2: 0 12px 32px -14px rgb(0 0 0 / 0.6);
-  }
-}

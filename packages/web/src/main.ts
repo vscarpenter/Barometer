@@ -1,3 +1,12 @@
+// Self-hosted fonts (Vite hashes + bundles these under the immutable /app
+// prefix). Self-hosting — not the Google Fonts CDN — because the site's CSP is
+// font-src 'self' / style-src 'self', and it keeps the page request-private.
+// Only the weights the design actually uses are imported.
+import "@fontsource/space-grotesk/600.css"; // display: wordmark, weather word, card names
+import "@fontsource/hanken-grotesk/400.css"; // body default
+import "@fontsource/hanken-grotesk/500.css"; // toggle, labels
+import "@fontsource/hanken-grotesk/600.css"; // counts, status pills
+import "@fontsource/jetbrains-mono/500.css"; // uptime figures
 import "./styles.css";
 import {
   SummaryFileSchema,
@@ -92,19 +101,46 @@ function stateMessage(text: string): HTMLElement {
 function buildMasthead(dot: HTMLElement, updated: HTMLElement): HTMLElement {
   const header = el("header", "masthead");
 
+  // Barometer dial: cyan instrument (ring + ticks inherit currentColor ←
+  // --brand) with an ember --accent needle swung up-right toward "fair". The
+  // needle uses var(--accent) so it re-tints with the theme without a re-render.
   const mark = svgEl("svg");
   mark.classList.add("masthead__mark");
   mark.setAttribute("viewBox", "0 0 24 24");
   mark.setAttribute("fill", "none");
-  mark.setAttribute("stroke", "currentColor");
-  mark.setAttribute("stroke-width", "2");
   mark.setAttribute("stroke-linecap", "round");
+  mark.setAttribute("stroke-linejoin", "round");
   mark.setAttribute("aria-hidden", "true");
-  for (const d of ["M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z", "M12 12l4-3"]) {
-    const path = svgEl("path");
-    path.setAttribute("d", d);
-    mark.appendChild(path);
+
+  const ring = svgEl("circle");
+  ring.setAttribute("cx", "12");
+  ring.setAttribute("cy", "12");
+  ring.setAttribute("r", "8.4");
+  ring.setAttribute("stroke", "currentColor");
+  ring.setAttribute("stroke-width", "1.7");
+  mark.appendChild(ring);
+
+  for (const d of ["M12 3.2V4.6", "M20.5 12H19.1", "M3.5 12H4.9"]) {
+    const tick = svgEl("path");
+    tick.setAttribute("d", d);
+    tick.setAttribute("stroke", "currentColor");
+    tick.setAttribute("stroke-width", "1.4");
+    tick.setAttribute("opacity", "0.5");
+    mark.appendChild(tick);
   }
+
+  const needle = svgEl("path");
+  needle.setAttribute("d", "M12 12L16.8 7.6");
+  needle.setAttribute("stroke", "var(--accent)");
+  needle.setAttribute("stroke-width", "1.9");
+  mark.appendChild(needle);
+
+  const hub = svgEl("circle");
+  hub.setAttribute("cx", "12");
+  hub.setAttribute("cy", "12");
+  hub.setAttribute("r", "1.55");
+  hub.setAttribute("fill", "currentColor");
+  mark.appendChild(hub);
 
   const titles = el("div", "masthead__titles");
   const h1 = el("h1");
@@ -113,11 +149,99 @@ function buildMasthead(dot: HTMLElement, updated: HTMLElement): HTMLElement {
   tagline.textContent = "A weather station for the internet";
   titles.append(h1, tagline);
 
+  const right = el("div", "masthead__right");
   const status = el("div", "masthead__status");
   status.append(dot, updated);
+  right.append(status, buildThemeToggle());
 
-  header.append(mark, titles, status);
+  header.append(mark, titles, right);
   return header;
+}
+
+// ── Theme: light-first, manual toggle, persisted ──────────────────────────
+// data-theme is set pre-paint by public/theme-init.js; this code only flips and
+// persists it. Every color is a CSS variable, so swapping the attribute restyles
+// the whole page instantly — no re-render needed.
+const THEME_KEY = "barometer-theme";
+type Theme = "light" | "dark";
+
+function currentTheme(): Theme {
+  return document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+}
+
+function applyTheme(next: Theme): void {
+  document.documentElement.setAttribute("data-theme", next);
+  try {
+    localStorage.setItem(THEME_KEY, next);
+  } catch {
+    /* private mode / storage disabled: just don't persist */
+  }
+}
+
+/** Sun (light) / moon (dark) glyph for the toggle — decorative; the label carries meaning. */
+function themeGlyph(theme: Theme): SVGElement {
+  const svg = svgEl("svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("width", "15");
+  svg.setAttribute("height", "15");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", "2");
+  svg.setAttribute("stroke-linecap", "round");
+  svg.setAttribute("stroke-linejoin", "round");
+  svg.setAttribute("aria-hidden", "true");
+  const paths =
+    theme === "dark"
+      ? ["M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"] // moon
+      : ["M12 2v2", "M12 20v2", "M2 12h2", "M20 12h2", "M4.9 4.9l1.4 1.4",
+         "M17.7 17.7l1.4 1.4", "M19.1 4.9l-1.4 1.4", "M6.3 17.7l-1.4 1.4"]; // sun rays
+  if (theme !== "dark") {
+    const c = svgEl("circle");
+    c.setAttribute("cx", "12");
+    c.setAttribute("cy", "12");
+    c.setAttribute("r", "4");
+    svg.appendChild(c);
+  }
+  for (const d of paths) {
+    const p = svgEl("path");
+    p.setAttribute("d", d);
+    svg.appendChild(p);
+  }
+  return svg;
+}
+
+function buildThemeToggle(): HTMLButtonElement {
+  const btn = document.createElement("button");
+  btn.className = "theme-toggle";
+  btn.type = "button";
+  const label = el("span");
+  const sync = (): void => {
+    const t = currentTheme();
+    btn.setAttribute("aria-label", `Switch to ${t === "dark" ? "light" : "dark"} theme`);
+    btn.replaceChildren(themeGlyph(t), label);
+    label.textContent = t === "dark" ? "Dark" : "Light";
+  };
+  btn.addEventListener("click", () => {
+    applyTheme(currentTheme() === "dark" ? "light" : "dark");
+    sync();
+  });
+
+  // Until the visitor makes an explicit choice, keep open tabs in sync with the
+  // OS theme as it changes (no-op once they've toggled, since that persists).
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    let chosen: string | null = null;
+    try {
+      chosen = localStorage.getItem(THEME_KEY);
+    } catch {
+      /* ignore */
+    }
+    if (chosen === "light" || chosen === "dark") return;
+    document.documentElement.setAttribute("data-theme", e.matches ? "dark" : "light");
+    sync();
+  });
+
+  sync();
+  return btn;
 }
 
 function buildFooter(): HTMLElement {

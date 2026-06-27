@@ -35,6 +35,12 @@ describe("renderHeadline", () => {
     expect(el.textContent).toContain("7");
     expect(el.textContent).toContain("9");
   });
+  it("renders the pressure scale with the marker at the reading position", () => {
+    expect(el.querySelector(".reading__scale-track")).not.toBeNull();
+    const marker = el.querySelector<HTMLElement>(".reading__marker");
+    expect(marker).not.toBeNull();
+    expect(marker!.style.left).toBe("34%"); // partial_outage sits at 34% on Stormy→Fair
+  });
 });
 
 describe("renderCard", () => {

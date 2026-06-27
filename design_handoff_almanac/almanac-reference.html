@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Barometer — Almanac (design reference)</title>
+<meta name="color-scheme" content="light dark" />
+<!--
+  ============================================================================
+  BAROMETER — DIRECTION A "ALMANAC"  ·  STANDALONE DESIGN REFERENCE
+  ----------------------------------------------------------------------------
+  This single file is the visual source of truth for the redesign. It is NOT
+  meant to ship as-is — recreate it inside packages/web using the existing
+  vanilla-TS render modules + tokens.css/styles.css. The CSS below maps 1:1 to
+  styles.css class names; the :root blocks map 1:1 to tokens.css.
+  Open it, click the Light/Dark toggle (top-right) to see both themes.
+  ============================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8.4' stroke='%231593b8' stroke-width='1.7'/%3E%3Cpath d='M12 12L16.8 7.6' stroke='%23d27a3f' stroke-width='1.9'/%3E%3Ccircle cx='12' cy='12' r='1.6' fill='%231593b8'/%3E%3C/svg%3E" />
+<style>
+/* ════════════════════════  TOKENS  (→ tokens.css)  ════════════════════════ */
+:root {
+  /* type */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* scale */
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem;
+  --space-5: 1.5rem; --space-6: 2rem; --space-8: 3rem;
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 18px; --radius-pill: 999px;
+  --transition: 180ms cubic-bezier(.4,0,.2,1);
+
+  /* ── semantic · LIGHT (default for Almanac) ── */
+  --bg: #f3f5f8;
+  --bg-grad: radial-gradient(125% 70% at 50% -15%, color-mix(in oklab, var(--brand) 7%, transparent), transparent 60%);
+  --surface: #ffffff;
+  --surface-2: #f6f8fb;
+  --border: #e6eaf0;
+  --border-soft: #eef1f6;
+  --text: #18212e;
+  --text-muted: #586478;
+  --text-faint: #8a94a6;
+  --brand: #0d7a99;   /* barometric cyan (instrument) */
+  --accent: #c2632c;  /* ember (needle) */
+
+  --status-operational: #15885c;
+  --status-degraded: #9a6c12;
+  --status-partial_outage: #b4551f;
+  --status-major_outage: #bf3d37;
+  --status-maintenance: #2a6fb8;
+  --status-unknown: #646f82;
+
+  --shadow-1: 0 1px 2px rgb(16 24 33 / .05);
+  --shadow-2: 0 10px 30px -14px rgb(20 40 70 / .14);
+}
+:root[data-theme="dark"] {
+  --bg: #0a0e15;
+  --bg-grad: radial-gradient(125% 70% at 50% -15%, color-mix(in oklab, var(--brand) 8%, transparent), transparent 60%);
+  --surface: #121925;
+  --surface-2: #0e1521;
+  --border: #243042;
+  --border-soft: #1b2533;
+  --text: #e8eef6;
+  --text-muted: #9aa7b9;
+  --text-faint: #647184;
+  --brand: #56c7e8;
+  --accent: #ec8b4f;
+
+  --status-operational: #2fbf8c;
+  --status-degraded: #e6bd4d;
+  --status-partial_outage: #ef8a4c;
+  --status-major_outage: #ef716a;
+  --status-maintenance: #5aa9f0;
+  --status-unknown: #8593a6;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / .35);
+  --shadow-2: 0 12px 32px -14px rgb(0 0 0 / .6);
+}
+
+/* ════════════════════════  BASE  (→ styles.css)  ════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  min-block-size: 100dvb;
+  background: var(--bg-grad), var(--bg);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.app { max-inline-size: 1100px; margin-inline: auto; padding: var(--space-6) var(--space-4) var(--space-8); }
+a { color: var(--text); }
+
+/* ── Masthead ────────────────────────────────────────────────── */
+.masthead { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); margin-block-end: var(--space-5); }
+.masthead__mark { inline-size: 30px; block-size: 30px; flex: none; color: var(--brand); }
+.masthead__titles h1 {
+  margin: 0; font-family: var(--font-display);
+  font-size: 1.18rem; font-weight: 600; letter-spacing: -.01em;
+}
+.masthead__titles p { margin: 0; color: var(--text-faint); font-size: .8rem; }
+.masthead__right { margin-inline-start: auto; display: flex; align-items: center; gap: var(--space-4); }
+.masthead__status { font-size: .78rem; color: var(--text-muted); font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 8px; }
+.masthead__dot { inline-size: 7px; block-size: 7px; border-radius: var(--radius-pill); background: var(--status-operational); box-shadow: 0 0 0 3px color-mix(in oklab, var(--status-operational) 20%, transparent); }
+.theme-toggle {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  font-family: var(--font-sans); font-size: .75rem; font-weight: 500; color: var(--text-muted);
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 12px;
+}
+.theme-toggle:hover { color: var(--text); }
+
+/* ── Reading band (the Almanac headline) ─────────────────────── */
+.reading {
+  position: relative; overflow: hidden;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--surface); box-shadow: var(--shadow-2);
+  padding: var(--space-6); margin-block-end: var(--space-6);
+}
+.reading::before { /* faint weather glow tinted by the current reading */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(125% 130% at 11% -25%, color-mix(in oklab, var(--c) 13%, transparent), transparent 56%);
+}
+.reading__inner { position: relative; }
+.reading__top { display: flex; align-items: center; gap: var(--space-3); }
+.reading__icon { color: var(--c); display: flex; }
+.reading__weather {
+  margin: 0; font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.6rem); letter-spacing: -.025em; line-height: 1; color: var(--text);
+}
+.reading__sub { margin: var(--space-3) 0 var(--space-5); color: var(--text-muted); font-size: .95rem; }
+.reading__count { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.reading__scale { position: relative; block-size: 9px; }
+.reading__scale-track {
+  position: absolute; inset: 0; border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--status-major_outage), var(--status-partial_outage) 34%, var(--status-degraded) 62%, var(--status-operational));
+}
+.reading__marker {
+  position: absolute; top: -4px; transform: translateX(-50%);
+  inline-size: 3px; block-size: 17px; border-radius: 3px;
+  background: var(--text); box-shadow: 0 0 0 2.5px var(--surface);
+}
+.reading__scale-labels {
+  display: flex; justify-content: space-between; margin-block-start: 9px;
+  font-size: .625rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text-faint);
+}
+
+/* ── Provider grid ───────────────────────────────────────────── */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15.5rem, 1fr)); gap: var(--space-4); }
+.card {
+  display: flex; flex-direction: column; gap: var(--space-3);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  background: var(--surface); padding: var(--space-4);
+  box-shadow: var(--shadow-1); transition: transform var(--transition), border-color var(--transition);
+}
+.card:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--c) 45%, var(--border)); }
+.card__head { display: flex; align-items: center; gap: var(--space-2); }
+.card__led { inline-size: 24px; block-size: 24px; flex: none; color: var(--c); display: grid; place-items: center; }
+.card__name { margin: 0; font-family: var(--font-display); font-size: .95rem; font-weight: 600; }
+.card__status {
+  margin-inline-start: auto; display: inline-flex; align-items: center; gap: 5px;
+  font-size: .69rem; font-weight: 600; color: var(--c);
+  background: color-mix(in oklab, var(--c) 13%, transparent);
+  padding: 3px 9px; border-radius: var(--radius-pill);
+}
+.card__incident { margin: 0; font-size: .78rem; line-height: 1.45; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.card__spark { display: block; inline-size: 100%; block-size: 30px; }
+.card__uptime {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2);
+  margin: 0; margin-block-start: auto; padding-block-start: var(--space-3); border-block-start: 1px solid var(--border-soft);
+}
+.card__uptime div { text-align: center; }
+.card__uptime dt { font-size: .59rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-faint); }
+.card__uptime dd { margin: 3px 0 0; font-family: var(--font-mono); font-size: .81rem; font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+
+footer { margin-block-start: var(--space-8); text-align: center; color: var(--text-faint); font-size: .72rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  .card:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   DATA  — the demo snapshot from packages/web/public (summary.json + recent.json)
+   ════════════════════════════════════════════════════════════════════════ */
+const PROVIDERS = [
+  { id:"aws",          name:"AWS",             status:"operational",    incident:null, uptime:[100,100,100,100] },
+  { id:"azure",        name:"Microsoft Azure", status:"operational",    incident:null, uptime:[100,100,100,100] },
+  { id:"gcp",          name:"Google Cloud",    status:"degraded",       incident:{ title:"Networking latency in europe-west1", url:"https://example.com/incidents/gcp" }, uptime:[98.6,99.5,99.7,99.9] },
+  { id:"cloudflare",   name:"Cloudflare",      status:"operational",    incident:null, uptime:[100,100,100,100] },
+  { id:"github",       name:"GitHub",          status:"partial_outage", incident:{ title:"Elevated errors on Actions and Pages", url:"https://example.com/incidents/github" }, uptime:[96.2,97.1,97.3,97.5] },
+  { id:"openai",       name:"OpenAI",          status:"operational",    incident:null, uptime:[100,100,100,100] },
+  { id:"anthropic",    name:"Anthropic",       status:"operational",    incident:null, uptime:[100,100,100,100] },
+  { id:"vercel",       name:"Vercel",          status:"maintenance",    incident:null, uptime:[null,99.8,99.9,99.95] },
+  { id:"digitalocean", name:"DigitalOcean",    status:"operational",    incident:null, uptime:[100,100,100,100] },
+];
+const OVERALL = { status:"partial_outage", label:"Unsettled", op:6, total:9 };
+
+/* recent status history, compact (one char per 5-min check): o d p m x u */
+const DEC = { o:"operational", d:"degraded", p:"partial_outage", m:"maintenance", x:"major_outage", u:"unknown" };
+const _base = Array.from({length:48}, (_,i)=> [11,28,45].includes(i+1) ? "d" : "o").join("");
+const RECENT = {
+  aws:_base, azure:_base, cloudflare:_base, openai:_base, anthropic:_base, digitalocean:_base,
+  gcp:    "o".repeat(17) + "d".repeat(31),
+  github: "dp".repeat(20) + "p".repeat(8),
+  vercel: "m".repeat(48),
+};
+
+/* ════════════════════════════════════════════════════════════════════════
+   PRESENTATION CONSTANTS  (mirror render/status.ts, render/sparkline.ts, render/headline.ts)
+   ════════════════════════════════════════════════════════════════════════ */
+const LABEL = { operational:"Operational", degraded:"Degraded", partial_outage:"Partial outage", major_outage:"Major outage", maintenance:"Maintenance", unknown:"Unknown" };
+const ICON = {
+  operational:["M20 6 9 17l-5-5"],
+  degraded:["M17.5 19a4.5 4.5 0 0 0 .5-9 6 6 0 0 0-11.5 2A4 4 0 0 0 6 19z"],
+  partial_outage:["M10.3 4 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0z","M12 9v4","M12 17h.01"],
+  major_outage:["M13 2 4 14h7l-1 8 9-12h-7l1-8z"],
+  maintenance:["M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4l-2.7 2.7-2.3-.4-.4-2.3 2.4-2.7z"],
+  unknown:["M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z","M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3","M12 17h.01"],
+};
+/* sparkline bar height by severity (calm baseline that spikes during outages) */
+const SEV = { operational:0.2, maintenance:0.36, unknown:0.3, degraded:0.55, partial_outage:0.78, major_outage:1 };
+/* where the needle sits on the Stormy→Fair pressure scale, as % from the left */
+const SCALE_POS = { major_outage:8, partial_outage:34, degraded:62, operational:90, maintenance:90, unknown:50 };
+
+const SVGNS = "http://www.w3.org/2000/svg";
+function svg(tag, attrs={}, kids=[]) { const n = document.createElementNS(SVGNS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); kids.forEach(c=>n.appendChild(c)); return n; }
+function el(tag, cls, txt) { const n = document.createElement(tag); if (cls) n.className = cls; if (txt!=null) n.textContent = txt; return n; }
+
+function statusIcon(status, size) {
+  const node = svg("svg", { viewBox:"0 0 24 24", width:size, height:size, fill:"none", stroke:"currentColor", "stroke-width":2, "stroke-linecap":"round", "stroke-linejoin":"round", "aria-hidden":"true" });
+  (ICON[status]||ICON.unknown).forEach(d => node.appendChild(svg("path", { d })));
+  return node;
+}
+/* the barometer mark — dial in currentColor (brand), needle in --accent */
+function brandMark(size) {
+  const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#c2632c";
+  const node = svg("svg", { viewBox:"0 0 24 24", width:size, height:size, fill:"none", "stroke-linecap":"round", "stroke-linejoin":"round", "aria-hidden":"true" });
+  node.appendChild(svg("circle", { cx:12, cy:12, r:8.4, stroke:"currentColor", "stroke-width":1.7 }));
+  ["M12 3.2V4.6","M20.5 12H19.1","M3.5 12H4.9"].forEach(d => node.appendChild(svg("path", { d, stroke:"currentColor", "stroke-width":1.4, opacity:.5 })));
+  node.appendChild(svg("path", { d:"M12 12L16.8 7.6", stroke:accent, "stroke-width":1.9 }));
+  node.appendChild(svg("circle", { cx:12, cy:12, r:1.55, fill:"currentColor" }));
+  return node;
+}
+function sparkline(seq) {
+  const arr = seq.split("").map(c => DEC[c]);
+  const n = arr.length, H = 34, slot = 100/n, w = slot*0.58;
+  const node = svg("svg", { viewBox:`0 0 100 ${H}`, preserveAspectRatio:"none", role:"img", class:"card__spark" });
+  node.appendChild(svg("title", {}, [document.createTextNode(`Recent status across the last ${n} checks`)]));
+  arr.forEach((st,i) => {
+    const hgt = 4 + SEV[st]*26;
+    const r = svg("rect", { x:(i*slot+(slot-w)/2).toFixed(2), y:(H-hgt).toFixed(2), width:w.toFixed(2), height:hgt.toFixed(2), rx:0.8 });
+    r.style.fill = `var(--status-${st})`;
+    node.appendChild(r);
+  });
+  return node;
+}
+const fmtUptime = v => v === null ? "—" : `${+v.toFixed(2)}%`;
+
+/* ════════════════════════════════════════════════════════════════════════
+   RENDER  (mirror render/headline.ts, render/card.ts, render/dom.ts)
+   ════════════════════════════════════════════════════════════════════════ */
+function renderMasthead() {
+  const m = el("header", "masthead");
+  const mark = el("span", "masthead__mark"); mark.appendChild(brandMark(30));
+  const titles = el("div", "masthead__titles");
+  titles.appendChild(el("h1", null, "Barometer"));
+  titles.appendChild(el("p", null, "A weather station for the internet"));
+  const right = el("div", "masthead__right");
+  const status = el("div", "masthead__status");
+  status.appendChild(el("span", "masthead__dot"));
+  status.appendChild(document.createTextNode("updated 4m ago"));
+  const toggle = el("button", "theme-toggle");
+  toggle.type = "button";
+  toggle.addEventListener("click", toggleTheme);
+  right.append(status, toggle);
+  m.append(mark, titles, right);
+  return { node:m, toggle };
+}
+function renderReading() {
+  const s = el("section", "reading");
+  s.style.setProperty("--c", `var(--status-${OVERALL.status})`);
+  const inner = el("div", "reading__inner");
+  const top = el("div", "reading__top");
+  const icon = el("span", "reading__icon"); icon.appendChild(statusIcon(OVERALL.status, 26));
+  top.append(icon, el("h2", "reading__weather", OVERALL.label));
+  const sub = el("p", "reading__sub");
+  const count = el("span", "reading__count", `${OVERALL.op} of ${OVERALL.total}`);
+  sub.append(count, document.createTextNode(` providers operational · ${LABEL[OVERALL.status]}`));
+  const scale = el("div", "reading__scale");
+  scale.appendChild(el("div", "reading__scale-track"));
+  const marker = el("div", "reading__marker"); marker.style.left = `${SCALE_POS[OVERALL.status]}%`; scale.appendChild(marker);
+  const labels = el("div", "reading__scale-labels");
+  ["Stormy","Unsettled","Changeable","Fair"].forEach(t => labels.appendChild(el("span", null, t)));
+  inner.append(top, sub, scale, labels);
+  s.appendChild(inner);
+  return s;
+}
+function renderCard(p) {
+  const card = el("article", "card");
+  card.style.setProperty("--c", `var(--status-${p.status})`);
+  const head = el("div", "card__head");
+  const led = el("span", "card__led"); led.appendChild(statusIcon(p.status, 22));
+  const pill = el("span", "card__status"); pill.appendChild(statusIcon(p.status, 13)); pill.appendChild(el("span", null, LABEL[p.status]));
+  head.append(led, el("h3", "card__name", p.name), pill);
+  card.appendChild(head);
+  if (p.incident) {
+    const para = el("p", "card__incident");
+    const link = el("a", null, p.incident.title); link.href = p.incident.url; link.target = "_blank"; link.rel = "noreferrer";
+    para.appendChild(link); card.appendChild(para);
+  }
+  card.appendChild(sparkline(RECENT[p.id]));
+  const dl = el("dl", "card__uptime");
+  ["24H","7D","30D","90D"].forEach((w,i) => {
+    const cell = el("div");
+    cell.append(el("dt", null, w), el("dd", null, fmtUptime(p.uptime[i])));
+    dl.appendChild(cell);
+  });
+  card.appendChild(dl);
+  return card;
+}
+function render() {
+  const app = document.getElementById("app");
+  app.replaceChildren();
+  const { node:masthead, toggle } = renderMasthead();
+  app.appendChild(masthead);
+  app.appendChild(renderReading());
+  const grid = el("div", "grid");
+  PROVIDERS.forEach(p => grid.appendChild(renderCard(p)));
+  app.appendChild(grid);
+  const f = el("footer", null, "Barometer reads each provider's public status page every 5 minutes. Raw status is normalized; weather labels are presentation only.");
+  app.appendChild(f);
+  syncToggle(toggle);
+}
+
+/* ── theme: default to system, allow manual override (persisted) ── */
+const THEME_KEY = "barometer-theme";
+function currentTheme() { return document.documentElement.getAttribute("data-theme"); }
+function syncToggle(btn) {
+  const dark = currentTheme() === "dark";
+  btn.replaceChildren(dark ? statusIcon("__moon",15) : statusIcon("__sun",15));
+}
+function toggleTheme() {
+  const next = currentTheme() === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  try { localStorage.setItem(THEME_KEY, next); } catch (_) {}
+  render();
+}
+/* sun / moon glyphs reuse the icon helper namespace */
+ICON.__sun = null; ICON.__moon = null;
+const _statusIcon = statusIcon;
+statusIcon = function(status, size) {
+  if (status === "__sun") { const n = svg("svg",{viewBox:"0 0 24 24",width:size,height:size,fill:"none",stroke:"currentColor","stroke-width":2,"stroke-linecap":"round"}); n.appendChild(svg("circle",{cx:12,cy:12,r:4})); ["M12 2v2","M12 20v2","M2 12h2","M20 12h2","M4.9 4.9l1.4 1.4","M17.7 17.7l1.4 1.4","M19.1 4.9l-1.4 1.4","M6.3 17.7l-1.4 1.4"].forEach(d=>n.appendChild(svg("path",{d}))); return n; }
+  if (status === "__moon") { const n = svg("svg",{viewBox:"0 0 24 24",width:size,height:size,fill:"none",stroke:"currentColor","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round"}); n.appendChild(svg("path",{d:"M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"})); return n; }
+  return _statusIcon(status, size);
+};
+
+(function initTheme(){
+  let t = null;
+  try { t = localStorage.getItem(THEME_KEY); } catch (_) {}
+  if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", t);
+})();
+render();
+</script>
+</body>
+</html>
