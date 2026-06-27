@@ -4,9 +4,11 @@ import {
   StateFileSchema,
   RecentFileSchema,
   RollupsFileSchema,
+  IncidentsFileSchema,
   type ProviderSnapshot,
   type RecentFile,
   type RollupsFile,
+  type IncidentsFile,
   type SummaryFile,
   type StateFile,
 } from "@barometer/types";
@@ -14,6 +16,7 @@ import type { ProviderAdapter } from "./adapters/types.js";
 import type { Store } from "./store/types.js";
 import type { Notifier } from "./alerting/notifier.js";
 import { appendRecent, updateRollups } from "./history.js";
+import { updateIncidents } from "./incidents.js";
 import { buildSummary } from "./summary.js";
 import { stepAlerts, type Notification } from "./alerting/machine.js";
 
@@ -23,6 +26,7 @@ const KEYS = {
   state: "status/state.json",
   recent: "history/recent.json",
   rollups: "history/rollups.json",
+  incidents: "history/incidents.json",
 } as const;
 
 const SHORT_CACHE = "max-age=60";
@@ -104,20 +108,23 @@ interface RunInputs {
   prevState: StateFile;
   prevRecent: RecentFile;
   prevRollups: RollupsFile;
+  prevIncidents: IncidentsFile;
   previousSnapshots: Map<string, ProviderSnapshot>;
 }
 
 async function loadRunInputs(store: Store, nowIso: string): Promise<RunInputs> {
-  const [prevState, prevRecent, prevRollups, prevCurrent] = await Promise.all([
+  const [prevState, prevRecent, prevRollups, prevIncidents, prevCurrent] = await Promise.all([
     store.readJson(KEYS.state, StateFileSchema, { providers: {}, updatedAt: nowIso } as StateFile),
     store.readJson(KEYS.recent, RecentFileSchema, { samples: [] }),
     store.readJson(KEYS.rollups, RollupsFileSchema, { days: [] }),
+    store.readJson(KEYS.incidents, IncidentsFileSchema, { incidents: [] }),
     store.readJson(KEYS.current, CurrentFileSchema.nullable(), null),
   ]);
   return {
     prevState,
     prevRecent,
     prevRollups,
+    prevIncidents,
     previousSnapshots: new Map((prevCurrent?.providers ?? []).map((snapshot) => [snapshot.id, snapshot])),
   };
 }
@@ -125,6 +132,7 @@ async function loadRunInputs(store: Store, nowIso: string): Promise<RunInputs> {
 interface HistoryUpdate {
   recent: RecentFile;
   rollups: RollupsFile;
+  incidents: IncidentsFile;
   shouldWrite: boolean;
 }
 
@@ -134,7 +142,12 @@ function updateHistoryForMode(
   context: RunContext,
 ): HistoryUpdate {
   if (context.historyMode === "current-only") {
-    return { recent: inputs.prevRecent, rollups: inputs.prevRollups, shouldWrite: false };
+    return {
+      recent: inputs.prevRecent,
+      rollups: inputs.prevRollups,
+      incidents: inputs.prevIncidents,
+      shouldWrite: false,
+    };
   }
 
   return {
@@ -145,6 +158,7 @@ function updateHistoryForMode(
       context.retentionHours,
     ),
     rollups: updateRollups(inputs.prevRollups, snapshots, context.date, context.retentionDays),
+    incidents: updateIncidents(inputs.prevIncidents, snapshots, context.nowIso),
     shouldWrite: true,
   };
 }
@@ -158,6 +172,7 @@ async function writeHistory(store: Store, history: HistoryUpdate): Promise<void>
   if (!history.shouldWrite) return;
   await store.writeJson(KEYS.recent, history.recent, SHORT_CACHE);
   await store.writeJson(KEYS.rollups, history.rollups, SHORT_CACHE);
+  await store.writeJson(KEYS.incidents, history.incidents, SHORT_CACHE);
 }
 
 function mergeEtagsIntoState(state: StateFile, etags: Record<string, string | null>): void {

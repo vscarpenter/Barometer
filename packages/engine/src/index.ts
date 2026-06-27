@@ -24,6 +24,7 @@ export * from "./adapters/probeFallback.js";
 // Normalization, history, summary, metrics
 export * from "./summary.js";
 export * from "./history.js";
+export * from "./incidents.js";
 export * from "./metrics.js";
 
 // Alerting

@@ -5,6 +5,7 @@ import {
   StateFileSchema,
   RecentFileSchema,
   RollupsFileSchema,
+  IncidentsFileSchema,
   buildOverallReading,
   type ProviderSnapshot,
   type StateFile,
@@ -43,9 +44,10 @@ function baseDeps(adapters: ProviderAdapter[], store = new MemoryStore()): RunDe
 }
 
 describe("runOnce", () => {
-  it("writes all five data files and survives a throwing adapter", async () => {
+  it("writes all six data files and survives a throwing adapter", async () => {
     const store = new MemoryStore();
-    const summary = await runOnce(baseDeps([okAdapter("good", "operational"), throwingAdapter("bad")], store));
+    // "good" is down so there's an active incident to archive.
+    const summary = await runOnce(baseDeps([okAdapter("good", "major_outage"), throwingAdapter("bad")], store));
 
     expect(summary.overall.providersTotal).toBe(2);
     expect(summary.providers.find((p) => p.id === "bad")!.status).toBe("unknown");
@@ -56,6 +58,9 @@ describe("runOnce", () => {
     expect((await store.readJson("history/recent.json", RecentFileSchema, null as never)).samples).toHaveLength(1);
     expect((await store.readJson("history/rollups.json", RollupsFileSchema, null as never)).days).toHaveLength(1);
     expect(await store.readJson("status/state.json", StateFileSchema, null as never)).toBeTruthy();
+    const incidents = await store.readJson("history/incidents.json", IncidentsFileSchema, null as never);
+    expect(incidents.incidents).toHaveLength(1);
+    expect(incidents.incidents[0]).toMatchObject({ key: "good:i", providerId: "good", resolvedAt: null });
   });
 
   it("fetches every adapter even when there are more adapters than the concurrency cap", async () => {
@@ -156,5 +161,6 @@ describe("runOnce", () => {
     expect(summary.providers[0]!.uptime).toEqual({ "24h": null, "7d": null, "30d": null, "90d": null });
     expect(await store.readJson("history/recent.json", RecentFileSchema, null as never)).toBeNull();
     expect(await store.readJson("history/rollups.json", RollupsFileSchema, null as never)).toBeNull();
+    expect(await store.readJson("history/incidents.json", IncidentsFileSchema, null as never)).toBeNull();
   });
 });
