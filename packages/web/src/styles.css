@@ -107,7 +107,7 @@ a {
   border-radius: var(--radius-lg);
   background: var(--surface);
   box-shadow: var(--shadow-2);
-  padding: var(--space-6);
+  padding: var(--space-5) var(--space-6);
   margin-block-end: var(--space-6);
 }
 .reading::before {
@@ -120,6 +120,13 @@ a {
 }
 .reading__inner {
   position: relative;
+  /* Horizontal band: reading text fills the row, the gauge sizes to itself on
+     the right. Halves the stacked height that pushed the provider grid below
+     the fold. Stacks under 44rem (see media query below). */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-6);
 }
 .reading__top {
   display: flex;
@@ -140,7 +147,7 @@ a {
   color: var(--text);
 }
 .reading__sub {
-  margin: var(--space-3) 0 var(--space-2);
+  margin: var(--space-2) 0 0;
   color: var(--text-muted);
   font-size: 0.95rem;
 }
@@ -150,14 +157,14 @@ a {
   font-variant-numeric: tabular-nums;
 }
 .reading__offenders {
-  margin: 0 0 var(--space-5);
+  margin: var(--space-2) 0 0;
   color: var(--c);
   font-size: 0.9rem;
   font-weight: 600;
 }
 .reading__dial {
   display: block;
-  inline-size: min(100%, 22rem);
+  inline-size: 15rem;
   margin-inline: auto;
 }
 /* The needle eases to the live reading; reduced-motion (global reset) snaps it. */
@@ -168,13 +175,25 @@ a {
 .reading__scale-labels {
   display: flex;
   justify-content: space-between;
-  inline-size: min(100%, 22rem);
+  inline-size: 15rem;
   margin: 2px auto 0;
   font-size: 0.625rem;
   font-weight: 600;
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--text-faint);
+}
+
+/* Stack the band on narrow screens: text over a centered gauge. */
+@media (max-width: 44rem) {
+  .reading__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .reading__dial,
+  .reading__scale-labels {
+    inline-size: min(100%, 18rem);
+  }
 }
 
 /* ── Provider grid ──────────────────────────────────────────── */

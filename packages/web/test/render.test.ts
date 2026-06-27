@@ -58,6 +58,22 @@ describe("renderHeadline", () => {
   it("omits the offenders line when there are none", () => {
     expect(renderHeadline(overall).querySelector(".reading__offenders")).toBeNull();
   });
+  it("groups text and gauge so the band can lay out horizontally", () => {
+    const text = el.querySelector(".reading__text");
+    const gauge = el.querySelector(".reading__gauge");
+    expect(text).not.toBeNull();
+    expect(gauge).not.toBeNull();
+    // Weather word + count line live in the text group; dial + scale in the gauge group.
+    expect(text!.querySelector(".reading__weather")).not.toBeNull();
+    expect(text!.querySelector(".reading__sub")).not.toBeNull();
+    expect(gauge!.querySelector(".reading__dial")).not.toBeNull();
+    expect(gauge!.querySelector(".reading__scale-labels")).not.toBeNull();
+  });
+  it("keeps the offenders line inside the text group", () => {
+    const withOffenders = renderHeadline(overall, [{ displayName: "GitHub", status: "major_outage" }]);
+    const text = withOffenders.querySelector(".reading__text");
+    expect(text!.querySelector(".reading__offenders")).not.toBeNull();
+  });
 });
 
 describe("createHeadline", () => {

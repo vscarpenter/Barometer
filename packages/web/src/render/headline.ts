@@ -35,24 +35,30 @@ export function createHeadline(): HeadlineComponent {
 
   const inner = el("div", "reading__inner");
 
+  // Text group (left on wide screens, top when stacked): weather word, count,
+  // and the offenders line that toggles in after the sub.
+  const text = el("div", "reading__text");
   const top = el("div", "reading__top");
   const icon = el("span", "reading__icon");
   icon.setAttribute("aria-hidden", "true");
   const weather = el("h2", "reading__weather");
   top.append(icon, weather);
-
   const sub = el("p", "reading__sub");
+  text.append(top, sub);
 
+  // Gauge group (right on wide screens, below when stacked): the live dial and
+  // its Stormy→Fair scale, sized together so they stay aligned.
+  const gauge = el("div", "reading__gauge");
   const dial = renderDial("unknown"); // persistent; update() swings the needle
-
   const labels = el("div", "reading__scale-labels");
   for (const t of SCALE_LABELS) {
     const span = el("span");
     span.textContent = t;
     labels.appendChild(span);
   }
+  gauge.append(dial, labels);
 
-  inner.append(top, sub, dial, labels);
+  inner.append(text, gauge);
   section.appendChild(inner);
 
   // Toggled in/out between sub and dial as offenders come and go.
