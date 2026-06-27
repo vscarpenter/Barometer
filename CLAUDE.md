@@ -15,15 +15,18 @@ JSON to S3, and a vanilla-TS dashboard (CloudFront) answers "is the internet hea
 Live at **https://barometer.vinny.dev** (deployed 2026-06-26). Runs itself — EventBridge fires the
 engine every 5 min; the dashboard polls every 60s; two CloudWatch alarms page SNS if it breaks.
 
-**Operational facts (AWS account `710603110067`, region `us-east-1`):**
+**Operational facts (AWS account `<ACCOUNT_ID>`, region `us-east-1`):**
+
+> Real IDs are redacted for the public repo. Find the live values in the AWS console, or via
+> `terraform -chdir=infra output`; the alert email lives in `infra/terraform.tfvars` (gitignored).
 
 | Resource | Value |
 |---|---|
-| Route 53 zone (`vinny.dev`) | `Z2ITH380MXRXM` |
-| S3 bucket | `barometer-vinny-data` |
-| CloudFront distribution | `E31AF2TD6M9A45` |
+| Route 53 zone (`vinny.dev`) | `<ZONE_ID>` |
+| S3 bucket | `<BUCKET_NAME>` |
+| CloudFront distribution | `<DISTRIBUTION_ID>` |
 | Lambda | `barometer-engine` |
-| SNS topic | `arn:aws:sns:us-east-1:710603110067:barometer-alerts` (email → vscarpenter@gmail.com, confirmed) |
+| SNS topic | `arn:aws:sns:us-east-1:<ACCOUNT_ID>:barometer-alerts` (email → `<ALERT_EMAIL>`, confirmed) |
 | EventBridge schedule | `barometer-engine-schedule` — `rate(5 minutes)`, ENABLED |
 
 Deploy flow: `scripts/deploy.sh -var-file=terraform.tfvars` → confirm the SNS email → `scripts/seed.sh`.

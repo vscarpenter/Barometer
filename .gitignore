@@ -22,7 +22,11 @@ infra/**/.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 *.tfvars
+*.tfvars.json
 !example.tfvars
+# Saved plan from scripts/plan-apply.sh — round-trips real resource attributes
+tfplan
+*.tfplan
 crash.log
 
 # Env / secrets
@@ -35,3 +39,6 @@ crash.log
 .idea/
 .vscode/
 *.log
+
+# Local agent/tooling state (machine-specific; may contain local paths or permissions)
+.claude/settings.local.json
