@@ -34,16 +34,32 @@ describe("buildSummary", () => {
     days: [{ date: "2026-06-24", providers: { a: { up: 288, down: 0 }, b: { up: 144, down: 144 } } }],
   };
 
-  it("attaches the four uptime windows per provider", () => {
+  it("attaches the 24h window, but hides multi-day windows the history can't yet back", () => {
+    // Only one day of rollups exists, so 7/30/90d would over-claim their span -> null.
     const summary = buildSummary(snapshots, recent, rollups, NOW_MS, GENERATED);
     const a = summary.providers.find((p) => p.id === "a")!;
     const b = summary.providers.find((p) => p.id === "b")!;
 
-    expect(a.uptime["24h"]).toBe(100); // 3/3 operational in the last 24h
+    expect(a.uptime["24h"]).toBe(100); // 3/3 operational in the last 24h (recent, ungated)
     expect(b.uptime["24h"]).toBeCloseTo((1 / 3) * 100, 5); // 1 up of 3 counted
-    expect(a.uptime["7d"]).toBe(100); // 288/288
-    expect(b.uptime["7d"]).toBe(50); // 144/288
-    expect(a.uptime["30d"]).toBe(100);
+    expect(a.uptime["7d"]).toBeNull(); // 1 day of history -> 7d not yet backed
+    expect(a.uptime["30d"]).toBeNull();
+    expect(a.uptime["90d"]).toBeNull();
+  });
+
+  it("fills in a multi-day window once enough days back it", () => {
+    const sevenDays: RollupsFile = {
+      days: Array.from({ length: 7 }, (_unused, i) => ({
+        date: `2026-06-${String(18 + i).padStart(2, "0")}`,
+        providers: { a: { up: 288, down: 0 }, b: { up: 144, down: 144 } },
+      })),
+    };
+    const summary = buildSummary(snapshots, recent, sevenDays, NOW_MS, GENERATED);
+    const a = summary.providers.find((p) => p.id === "a")!;
+    const b = summary.providers.find((p) => p.id === "b")!;
+    expect(a.uptime["7d"]).toBe(100); // 7 days now back the 7d window
+    expect(b.uptime["7d"]).toBe(50);
+    expect(a.uptime["30d"]).toBeNull(); // still not enough days for 30d
   });
 
   it("carries the overall reading and validates against the schema", () => {

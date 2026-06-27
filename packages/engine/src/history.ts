@@ -78,12 +78,21 @@ export function uptimeFromRecent(
   return uptimePercent(up, down);
 }
 
-/** Uptime % for a provider over the last windowDays daily buckets; null if no data. */
+/**
+ * Uptime % for a provider over the last windowDays daily buckets.
+ *
+ * Returns null when the history can't yet back the labeled span — i.e. fewer
+ * than windowDays daily buckets exist. A "90d" figure computed from one day of
+ * data would read as "down for 90 days" during an early outage (the honest-
+ * instrument rule: never claim a span you haven't measured). Windows fill in as
+ * history accumulates. Also null when the provider has no counted samples.
+ */
 export function uptimeFromRollups(
   rollups: RollupsFile,
   providerId: string,
   windowDays: number,
 ): number | null {
+  if (rollups.days.length < windowDays) return null;
   let up = 0;
   let down = 0;
   for (const day of rollups.days.slice(-windowDays)) {

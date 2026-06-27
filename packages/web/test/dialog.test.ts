@@ -40,10 +40,12 @@ describe("renderProviderDialog", () => {
     expect(d.textContent?.toLowerCase()).toContain("not counted");
   });
 
-  it("renders the 90-day uptime bar when rollups are present", () => {
+  it("renders the 90-day uptime bar as a full frame when rollups are present", () => {
     const d = renderProviderDialog({ provider, rollups, resolvedIncidents: [], now: NOW });
     expect(d.querySelector(".uptimebar")).not.toBeNull();
-    expect(d.querySelectorAll(".uptimebar__cell")).toHaveLength(2);
+    const cells = d.querySelectorAll<HTMLElement>(".uptimebar__cell");
+    expect(cells).toHaveLength(90); // 2 measured days padded into the 90-day frame
+    expect(cells[cells.length - 1]!.title).toContain("2026-06-25"); // newest measured day at the end
   });
 
   it("never makes a javascript: URL clickable but still shows the title", () => {

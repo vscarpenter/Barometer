@@ -283,6 +283,13 @@ a {
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
+/* Shown when no window has enough history to back it yet (new deployments). */
+.card__uptime-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
 
 /* ── Stale banner (live region) ─────────────────────────────── */
 .banner {

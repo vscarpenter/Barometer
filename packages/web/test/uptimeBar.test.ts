@@ -12,16 +12,31 @@ const rollups: RollupsFile = {
 };
 
 describe("renderUptimeBar", () => {
-  it("renders one cell per day with a status class and a tooltip", () => {
+  it("renders the measured days at the end of a full maxDays frame, status + tooltip", () => {
     const bar = renderUptimeBar(rollups, "github");
-    const cells = bar.querySelectorAll<HTMLElement>(".uptimebar__cell");
-    expect(cells).toHaveLength(4);
-    expect(cells[0]!.dataset.status).toBe("operational");
-    expect(cells[1]!.dataset.status).toBe("degraded");
-    expect(cells[2]!.dataset.status).toBe("major_outage");
-    expect(cells[3]!.dataset.status).toBe("nodata");
-    expect(cells[0]!.title).toContain("2026-06-23");
-    expect(cells[3]!.title.toLowerCase()).toContain("no data");
+    const cells = [...bar.querySelectorAll<HTMLElement>(".uptimebar__cell")];
+    expect(cells).toHaveLength(90); // full 90-day frame, not just the 4 measured days
+    const real = cells.slice(-4); // the measured days sit at the end
+    expect(real[0]!.dataset.status).toBe("operational");
+    expect(real[1]!.dataset.status).toBe("degraded");
+    expect(real[2]!.dataset.status).toBe("major_outage");
+    expect(real[3]!.dataset.status).toBe("nodata");
+    expect(real[0]!.title).toContain("2026-06-23");
+    expect(cells[0]!.dataset.status).toBe("nodata"); // leading days are no-data padding
+    expect(cells[0]!.title.toLowerCase()).toContain("no data");
+  });
+
+  it("pads a sparse history to the full frame so one bad day can't paint the whole bar", () => {
+    // The Cloudflare-style case: one day of history, degraded all day.
+    const oneDay: RollupsFile = {
+      days: [{ date: "2026-06-27", providers: { cloudflare: { up: 0, down: 223 } } }],
+    };
+    const cells = [...renderUptimeBar(oneDay, "cloudflare").querySelectorAll<HTMLElement>(".uptimebar__cell")];
+    expect(cells).toHaveLength(90);
+    expect(cells.filter((c) => c.dataset.status === "nodata")).toHaveLength(89);
+    expect(cells.at(-1)!.dataset.status).toBe("major_outage"); // the single measured (down) day
+    const bar = renderUptimeBar(oneDay, "cloudflare");
+    expect(bar.getAttribute("aria-label")).toMatch(/last 1 day:/i); // span is the real measured span
   });
 
   it("summarizes the window in an accessible label", () => {
@@ -65,7 +80,8 @@ describe("renderUptimeBar", () => {
     const r: RollupsFile = {
       days: [{ date: "2026-06-25", providers: { github: { up: 99999, down: 1 } } }], // 99.999%
     };
-    const cell = renderUptimeBar(r, "github").querySelector<HTMLElement>(".uptimebar__cell")!;
+    const cells = renderUptimeBar(r, "github").querySelectorAll<HTMLElement>(".uptimebar__cell");
+    const cell = cells[cells.length - 1]!; // the one measured day sits at the end of the frame
     expect(cell.title).toContain("99.99%");
     expect(cell.title).not.toContain("100%");
   });

@@ -103,10 +103,11 @@ describe("renderCard", () => {
     expect(hostileCard.querySelector("a")).toBeNull(); // no clickable link
     expect(hostileCard.textContent).toContain("Edge errors in EU"); // title still surfaced
   });
-  it("includes a sparkline and the uptime windows (null -> dash)", () => {
+  it("includes a sparkline and only the uptime windows the history backs", () => {
     expect(card.querySelector("svg")).toBeTruthy();
     expect(card.textContent).toContain("98.5");
-    expect(card.textContent).toContain("—"); // 30d is null
+    expect(card.textContent).not.toContain("—"); // 30d is null -> hidden, not dashed
+    expect(card.textContent).not.toContain("30d");
   });
 
   it("mutes and labels a non-US-only incident", () => {

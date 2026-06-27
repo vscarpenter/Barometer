@@ -124,4 +124,13 @@ describe("uptimeFromRollups", () => {
     expect(uptimeFromRollups(rollups, "z", 3)).toBeNull();
     expect(uptimeFromRollups({ days: [] }, "a", 7)).toBeNull();
   });
+
+  it("returns null until the window is fully backed by enough days (real-span honesty)", () => {
+    // Only 3 days of history exist: a 7d/30d/90d figure would over-claim its span.
+    expect(uptimeFromRollups(rollups, "a", 7)).toBeNull();
+    expect(uptimeFromRollups(rollups, "a", 30)).toBeNull();
+    expect(uptimeFromRollups(rollups, "a", 90)).toBeNull();
+    // A window the history can actually back returns a real percentage.
+    expect(uptimeFromRollups(rollups, "a", 3)).toBeCloseTo((768 / 864) * 100, 5);
+  });
 });

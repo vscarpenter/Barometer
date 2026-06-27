@@ -18,10 +18,25 @@ export function formatUptime(value: number | null): string {
 
 const WINDOWS = ["24h", "7d", "30d", "90d"] as const;
 
-/** The 24h/7d/30d/90d uptime <dl>. One definition, used by card + dialog. */
+/**
+ * The uptime <dl>, used by card + dialog. Only windows the history can back are
+ * shown — a null window (insufficient history for its span) is hidden, not
+ * dashed, so a one-day-old deployment never asserts a "90d" figure it hasn't
+ * measured. Windows fill in left-to-right as history accumulates.
+ */
 export function renderUptimeWindows(uptime: UptimeWindows, extraClass?: string): HTMLElement {
   const dl = el("dl", extraClass ? `card__uptime ${extraClass}` : "card__uptime");
-  for (const window of WINDOWS) {
+  const backed = WINDOWS.filter((window) => uptime[window] !== null);
+
+  if (backed.length === 0) {
+    const note = el("span", "card__uptime-empty");
+    note.textContent = "No uptime data yet";
+    dl.appendChild(note);
+    return dl;
+  }
+
+  dl.style.gridTemplateColumns = `repeat(${backed.length}, 1fr)`;
+  for (const window of backed) {
     const cell = el("div");
     const dt = el("dt");
     dt.textContent = window;

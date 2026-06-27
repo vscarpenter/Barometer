@@ -29,14 +29,26 @@ describe("formatUptime", () => {
 
 describe("renderUptimeWindows", () => {
   const uptime: UptimeWindows = { "24h": 98.5, "7d": 99.1, "30d": null, "90d": 99.92 };
-  it("builds the four-window dl with null shown as a dash", () => {
+  it("renders only the windows the history backs (null windows are hidden)", () => {
     const dl = renderUptimeWindows(uptime);
     expect(dl.tagName.toLowerCase()).toBe("dl");
     expect(dl.classList.contains("card__uptime")).toBe(true);
-    expect(dl.querySelectorAll("div")).toHaveLength(4);
+    expect(dl.querySelectorAll("div")).toHaveLength(3); // 30d is null -> hidden
     expect(dl.textContent).toContain("24h");
     expect(dl.textContent).toContain("98.5%");
-    expect(dl.textContent).toContain("—"); // 30d is null
+    expect(dl.textContent).not.toContain("30d"); // hidden until backed
+    expect(dl.textContent).not.toContain("—"); // unbacked windows are hidden, not dashed
+  });
+  it("sizes the grid to the number of shown windows", () => {
+    expect(renderUptimeWindows(uptime).style.gridTemplateColumns).toBe("repeat(3, 1fr)");
+    const full = renderUptimeWindows({ "24h": 100, "7d": 100, "30d": 100, "90d": 100 });
+    expect(full.querySelectorAll("div")).toHaveLength(4);
+    expect(full.style.gridTemplateColumns).toBe("repeat(4, 1fr)");
+  });
+  it("shows a placeholder when no window is backed yet", () => {
+    const dl = renderUptimeWindows({ "24h": null, "7d": null, "30d": null, "90d": null });
+    expect(dl.querySelectorAll("div")).toHaveLength(0);
+    expect(dl.textContent?.toLowerCase()).toContain("no uptime data yet");
   });
   it("applies an extra class for the dialog variant", () => {
     expect(renderUptimeWindows(uptime, "dlg__uptime").classList.contains("dlg__uptime")).toBe(true);

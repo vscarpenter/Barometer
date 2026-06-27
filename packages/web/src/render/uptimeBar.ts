@@ -51,12 +51,14 @@ export function renderUptimeBar(
   providerId: string,
   maxDays = 90,
 ): HTMLElement {
-  const cells = cellsFor(rollups, providerId, maxDays);
+  const measured = cellsFor(rollups, providerId, maxDays);
   const wrap = el("div", "uptimebar");
   wrap.setAttribute("role", "img");
 
-  const avg = weightedAverage(cells);
-  const span = cells.length;
+  // The aria-label and average describe the *measured* span, never the padded
+  // frame, so the bar can't claim more history than it has.
+  const avg = weightedAverage(measured);
+  const span = measured.length;
   wrap.setAttribute(
     "aria-label",
     avg === null
@@ -65,22 +67,34 @@ export function renderUptimeBar(
   );
 
   const track = el("div", "uptimebar__track");
-  if (cells.length === 0) {
+  if (measured.length === 0) {
     const empty = el("span", "uptimebar__empty");
     empty.textContent = "No history yet";
     wrap.append(track, empty);
     return wrap;
   }
 
-  for (const cell of cells) {
+  // Pad to the full maxDays frame with leading "no data" cells. Otherwise a
+  // single day of history stretches (flex) to fill the whole bar — one degraded
+  // day reads as a solid-red 90-day outage. The padding shows the true frame:
+  // mostly unmeasured, with the measured days at the end.
+  const padding: DayCell[] = Array.from({ length: Math.max(0, maxDays - measured.length) }, () => ({
+    date: "",
+    uptime: null,
+    up: 0,
+    total: 0,
+  }));
+
+  for (const cell of [...padding, ...measured]) {
     const node = el("span", "uptimebar__cell");
     const status = cellStatus(cell.uptime);
     node.dataset.status = status;
-    node.style.background =
-      status === "nodata" ? "var(--border)" : `var(--status-${status})`;
+    node.style.background = status === "nodata" ? "var(--border)" : `var(--status-${status})`;
     node.title =
       cell.uptime === null
-        ? `${cell.date} — no data`
+        ? cell.date
+          ? `${cell.date} — no data`
+          : "no data"
         : `${cell.date} — ${safePct(cell.uptime)}% uptime`;
     track.appendChild(node);
   }
