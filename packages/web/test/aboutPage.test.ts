@@ -35,4 +35,11 @@ describe("renderAboutPage", () => {
     expect(diagrams).toHaveLength(2);
     expect([...diagrams].every((img) => img.alt.length > 0)).toBe(true);
   });
+
+  it("preloads both diagram variants (not lazy) so the theme swap is instant", () => {
+    // Both are tiny SVGs and sit near the fold; lazy-loading just leaves a blank
+    // box on arrival and a flash on theme toggle while the other variant loads.
+    const diagrams = page.querySelectorAll<HTMLImageElement>("img.about__diagram");
+    expect([...diagrams].every((img) => img.loading !== "lazy")).toBe(true);
+  });
 });

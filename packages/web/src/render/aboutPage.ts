@@ -48,7 +48,9 @@ function para(text: string, cls?: string): HTMLParagraphElement {
  * The theme-aware overview diagram. Both variants are in the DOM; CSS shows the
  * one matching html[data-theme] (a <picture media=prefers-color-scheme> would
  * follow the OS, not the site's manual toggle). width/height pin the aspect
- * ratio so there's no layout shift while the SVG loads.
+ * ratio so there's no layout shift while the SVG loads. Both are eagerly loaded
+ * (they're tiny SVGs and sit near the fold) so the theme swap is instant — no
+ * blank box on arrival, no flash when toggling.
  */
 function diagram(): HTMLElement {
   const figure = el("figure", "about__figure");
@@ -59,7 +61,6 @@ function diagram(): HTMLElement {
         ? "/barometer-overview-almanac-dark.svg"
         : "/barometer-overview-almanac.svg";
     img.alt = ARCH_ALT;
-    img.loading = "lazy";
     img.width = 1680;
     img.height = 905;
     figure.appendChild(img);
