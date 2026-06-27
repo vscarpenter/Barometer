@@ -14,21 +14,7 @@ describe("main.ts entrypoint", () => {
     // so the 60s/1s intervals never fire during the test.
     vi.useFakeTimers();
     vi.stubGlobal("fetch", vi.fn(() => Promise.reject(new Error("offline"))));
-    // jsdom doesn't implement matchMedia (the theme toggle reads it); a real
-    // browser does. Stub it so module evaluation reaches the masthead.
-    vi.stubGlobal(
-      "matchMedia",
-      vi.fn((query: string) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    );
+    // matchMedia is polyfilled globally in test/setup.ts (jsdom lacks it).
     vi.resetModules();
   });
 
@@ -40,5 +26,13 @@ describe("main.ts entrypoint", () => {
   it("evaluates without crashing and renders the masthead shell", async () => {
     await expect(import("../src/main.js")).resolves.toBeDefined();
     expect(document.querySelector(".masthead")).not.toBeNull();
+  });
+
+  it("footer links to the About page and drops the inline description line", async () => {
+    await import("../src/main.js");
+    const about = document.querySelector<HTMLAnchorElement>('footer a[href="/about.html"]');
+    expect(about).not.toBeNull();
+    expect(about!.textContent).toBe("About");
+    expect(document.body.textContent).not.toContain("weather labels are presentation only");
   });
 });

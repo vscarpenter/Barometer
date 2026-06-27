@@ -27,8 +27,11 @@ aws s3 sync packages/web/dist "s3://${BUCKET}/app" --delete \
   --exclude "status/*" --exclude "history/*" \
   --cache-control "public,max-age=31536000,immutable"
 
-# index.html must revalidate so new deploys are picked up immediately.
+# The HTML entry points must revalidate so new deploys are picked up immediately
+# (the sync above marked them immutable along with the hashed assets they point to).
 aws s3 cp packages/web/dist/index.html "s3://${BUCKET}/app/index.html" \
+  --content-type "text/html" --cache-control "no-cache"
+aws s3 cp packages/web/dist/about.html "s3://${BUCKET}/app/about.html" \
   --content-type "text/html" --cache-control "no-cache"
 
 # Force the edge to drop the cached entry point right away. Hashed assets are
@@ -38,9 +41,9 @@ echo "==> Invalidating CloudFront cache for the entry point"
 DISTRIBUTION_ID="$(terraform_infra output -raw distribution_id)"
 INVALIDATION_ID="$(aws cloudfront create-invalidation \
   --distribution-id "${DISTRIBUTION_ID}" \
-  --paths "/" "/index.html" \
+  --paths "/" "/index.html" "/about.html" \
   --query "Invalidation.Id" --output text)"
-echo "    Created invalidation ${INVALIDATION_ID} (paths: / /index.html)"
+echo "    Created invalidation ${INVALIDATION_ID} (paths: / /index.html /about.html)"
 
 echo "==> Done."
 echo "    1. Confirm the SNS subscription email sent to your alert_email."

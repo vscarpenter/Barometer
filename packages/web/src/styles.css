@@ -318,9 +318,6 @@ footer {
 footer a {
   color: var(--text-muted);
 }
-.footer__note {
-  margin: 0;
-}
 .footer__meta {
   margin-block-start: var(--space-3);
   display: flex;
@@ -485,6 +482,108 @@ footer a {
 }
 .dlg__uptime {
   margin-block-start: var(--space-4);
+}
+
+/* ── About page ─────────────────────────────────────────────── */
+.about {
+  max-inline-size: 60rem;
+  margin-inline: auto;
+}
+.about__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-block-end: var(--space-6);
+}
+.about__back {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.about__back:hover {
+  color: var(--text);
+}
+.about__header {
+  margin-block-end: var(--space-2);
+}
+.about__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.about__lede {
+  margin-block-start: var(--space-3);
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+.about__section {
+  margin-block-start: var(--space-7);
+}
+.about__h2 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+/* Cap prose to a comfortable measure; headings, lists, and the diagram span wider. */
+.about__lede,
+.about__section p {
+  max-inline-size: 46rem;
+}
+.about__section p {
+  margin: 0 0 var(--space-3);
+}
+.about__section a {
+  color: var(--brand, var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.about__providers {
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.about__providers li {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  padding: 0.25rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+.about__figure {
+  margin: var(--space-3) 0 0;
+}
+.about__diagram {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+/* Theme-aware swap keyed off the manual data-theme attribute (set pre-paint by
+   theme-init.js) — a <picture media=prefers-color-scheme> would follow the OS,
+   not the site's toggle. Show light by default; swap to dark when pinned dark. */
+.about__diagram--dark {
+  display: none;
+}
+html[data-theme="dark"] .about__diagram--light {
+  display: none;
+}
+html[data-theme="dark"] .about__diagram--dark {
+  display: block;
+}
+.about__figcaption {
+  margin-block-start: var(--space-2);
+  color: var(--text-faint);
+  font-size: 0.8rem;
 }
 
 @media (prefers-reduced-motion: reduce) {

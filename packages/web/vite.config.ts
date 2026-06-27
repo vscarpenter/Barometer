@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import pkg from "./package.json" with { type: "json" };
 
@@ -13,5 +14,15 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(pkg.version),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   },
-  build: { outDir: "dist", target: "es2022" },
+  build: {
+    outDir: "dist",
+    target: "es2022",
+    // Multi-page: the dashboard (index.html) and the standalone About page.
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL("./index.html", import.meta.url)),
+        about: fileURLToPath(new URL("./about.html", import.meta.url)),
+      },
+    },
+  },
 });

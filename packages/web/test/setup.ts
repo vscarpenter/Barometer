@@ -1,3 +1,18 @@
+// jsdom doesn't implement matchMedia (the theme toggle reads it to sync with the
+// OS preference). Stub a no-op MediaQueryList so theme/toggle code runs under test.
+if (typeof window.matchMedia !== "function") {
+  window.matchMedia = ((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  })) as typeof window.matchMedia;
+}
+
 // jsdom ships HTMLDialogElement but leaves show()/showModal()/close() unimplemented
 // (they are `undefined`). Polyfill them minimally so dialog lifecycle — open,
 // close, the `close` event, backdrop dismissal — is exercisable under test. Real
