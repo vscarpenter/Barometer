@@ -9,11 +9,24 @@ export function isUsRegion(id: string): boolean {
   return id === "global" || id.startsWith("us-");
 }
 
-/** Do these regions count toward the US reading? Fail-open on no data. */
+/**
+ * Do these regions count toward the US reading?
+ *  - no data                          → fail-open (count it)
+ *  - any explicit `us-*` region       → count it
+ *  - only `global` (nothing specific) → count it (truly worldwide)
+ *  - specific non-US regions named, none US → exclude
+ *
+ * The last rule is why this isn't a plain `.some(isUsRegion)`: feeds tag a
+ * region-specific incident with a stray `global` token (GCP labels the
+ * Delhi/Mumbai networking event `["asia-south2","global"]`). When specific
+ * regions are present, we trust them and ignore the `global` co-tag, so a
+ * non-US outage never flips the US reading.
+ */
 export function regionsAreUsRelevant(regions: string[] | undefined): boolean {
   const r = regions ?? [];
   if (r.length === 0) return true;
-  return r.some(isUsRegion);
+  if (r.some((id) => id.startsWith("us-"))) return true;
+  return r.every((id) => id === "global");
 }
 
 /** Convenience over a built Incident — used by the web card. */

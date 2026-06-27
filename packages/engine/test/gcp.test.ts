@@ -52,10 +52,12 @@ describe("GcpAdapter", () => {
     expect(snap.sourceUrl).toBe("https://status.cloud.google.com/incidents.json");
   });
 
-  it("maps SERVICE_OUTAGE to major_outage and surfaces only active incidents", async () => {
+  it("maps incident fields; the Delhi event (asia-south2 + global) is listed but excluded from status", async () => {
     const snap = await new GcpAdapter(config, deps(fixture("gcp-incident.json"))).fetchSnapshot();
-    // The fixture has one active (SERVICE_OUTAGE) + one resolved; resolved must be excluded
-    expect(snap.status).toBe("major_outage");
+    // The fixture has one active (SERVICE_OUTAGE) + one resolved; resolved must be excluded.
+    // The active incident is tagged ["asia-south2","global"] — a region-specific
+    // event, so the stray `global` no longer flips the US status to outage.
+    expect(snap.status).toBe("operational");
     expect(snap.activeIncidents).toHaveLength(1);
     const inc = snap.activeIncidents[0]!;
     expect(inc.id).toBe("5fGQt4VbkDnr3Yp8PXPr");
@@ -66,7 +68,7 @@ describe("GcpAdapter", () => {
     expect(inc.status).toBe("SERVICE_DISRUPTION"); // most_recent_update.status
     expect(inc.startedAt).toBe("2026-06-05T07:00:00+00:00");
     expect(inc.url).toBe("https://status.cloud.google.com/incidents/5fGQt4VbkDnr3Yp8PXPr");
-    expect(inc.regions).toEqual(["asia-south2", "global"]); // global → still counts
+    expect(inc.regions).toEqual(["asia-south2", "global"]); // still listed, just not counted
   });
 
   it("excludes resolved incidents even when they have a worse status_impact than active ones", async () => {

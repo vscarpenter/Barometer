@@ -71,8 +71,10 @@ Config lives in `infra/terraform.tfvars` (gitignored values: zone id, alert emai
   `degraded`/`partial_outage`/`major_outage`=down; `maintenance`/`unknown`=**excluded** from the
   denominator. Planned maintenance and our own fetch failures never produce a false 100% or false outage.
   Region scoping is a second knob (`packages/types/src/region.ts`, `isUsRelevant`): an incident
-  counts toward the reading only if it has no region data (fail-open), a `global` region, or a
-  `us-*` region — so non-US-only incidents stay visible but never flip the US reading or alerts.
+  counts toward the reading only if it has no region data (fail-open), names a `us-*` region, or is
+  tagged **only** `global`. A stray `global` *alongside* specific non-US regions is ignored — GCP
+  tags its Delhi/Mumbai networking event `["asia-south2","global"]`, and that must not flip the US
+  reading. So non-US-only incidents stay visible but never flip the US reading or alerts.
 - **One Statuspage adapter, three bespoke.** 6 providers (Cloudflare, GitHub, OpenAI, Anthropic,
   Vercel, DigitalOcean) share one Atlassian-Statuspage adapter (`/api/v2/summary.json`). AWS
   (Health JSON, **UTF-16BE**), Azure (RSS), and GCP (`incidents.json`) have bespoke adapters.

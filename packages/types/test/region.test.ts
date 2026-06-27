@@ -19,11 +19,21 @@ describe("regionsAreUsRelevant", () => {
     expect(regionsAreUsRelevant([])).toBe(true);
     expect(regionsAreUsRelevant(undefined)).toBe(true);
   });
-  it("counts if any region is US or global", () => {
-    expect(regionsAreUsRelevant(["asia-south2", "global"])).toBe(true);
+  it("counts when an explicit us-* region is present", () => {
     expect(regionsAreUsRelevant(["eu-west-1", "us-east-1"])).toBe(true);
+    expect(regionsAreUsRelevant(["us-central1", "global"])).toBe(true);
   });
-  it("excludes only when every region is non-US", () => {
+  it("counts a bare global (truly worldwide)", () => {
+    expect(regionsAreUsRelevant(["global"])).toBe(true);
+    expect(regionsAreUsRelevant(["global", "global"])).toBe(true);
+  });
+  it("ignores a stray global when specific non-US regions are named", () => {
+    // GCP tags region-specific incidents (e.g. the Delhi/Mumbai networking
+    // event) with ["asia-south2","global"]; the global token must not pull it
+    // into the US reading.
+    expect(regionsAreUsRelevant(["asia-south2", "global"])).toBe(false);
+  });
+  it("excludes when every region is non-US", () => {
     expect(regionsAreUsRelevant(["asia-south2"])).toBe(false);
     expect(regionsAreUsRelevant(["eu-west-1", "me-central-1"])).toBe(false);
   });
@@ -34,5 +44,6 @@ describe("isUsRelevant", () => {
     expect(isUsRelevant(incident(undefined))).toBe(true);
     expect(isUsRelevant(incident(["us-east-1"]))).toBe(true);
     expect(isUsRelevant(incident(["asia-south2"]))).toBe(false);
+    expect(isUsRelevant(incident(["asia-south2", "global"]))).toBe(false);
   });
 });
