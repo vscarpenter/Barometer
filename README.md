@@ -32,6 +32,26 @@ EventBridge Scheduler (every 5 min)
 See [`SPEC.md`](./SPEC.md) for the full design and [`docs/superpowers/plans/`](./docs/superpowers/plans/) for the
 implementation plan.
 
+## Architecture
+
+The system at a glance — nine public status feeds in, one health reading out:
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="design/barometer-overview-almanac-dark.png">
+  <img alt="Barometer system architecture: nine provider status feeds polled by a scheduled AWS Lambda, normalized and written as tiered JSON to a private S3 bucket, served via CloudFront and Route 53 to a vanilla-TypeScript dashboard, with CloudWatch alarms paging an SNS email alert." src="design/barometer-overview-almanac.png">
+</picture>
+
+Inside the engine — what one 5-minute run actually does (fetch fan-out → normalize → score → write + alert):
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="design/barometer-engine-almanac-dark.png">
+  <img alt="Barometer engine internals: EventBridge triggers the Lambda every five minutes; four adapter types fetch nine feeds, normalize them to one schema, apply the availability and US-region rules to produce an overall reading, then write five tiered JSON objects to S3 and run the alert state machine into SNS." src="design/barometer-engine-almanac.png">
+</picture>
+
+> Diagrams use the project's [Almanac design system](design/) (`design/tokens.css`) and follow your GitHub light/dark
+> theme via `<picture>`. The source SVGs live alongside the PNGs in [`design/`](design/); the `*-dark.svg` files are the
+> light SVGs remapped to the dark token set. Edit text and re-render with `rsvg-convert -w 2400 <file>.svg -o <file>.png`.
+
 ## Providers (9)
 
 AWS · Microsoft Azure · Google Cloud · Cloudflare · GitHub · OpenAI · Anthropic · Vercel · DigitalOcean.
