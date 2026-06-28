@@ -78,6 +78,20 @@ describe("renderHeadline", () => {
     expect((el.querySelector<HTMLElement>(".reading__weather")?.title.length ?? 0)).toBeGreaterThan(0);
     expect((el.querySelector<HTMLElement>(".reading__gauge")?.title.length ?? 0)).toBeGreaterThan(0);
   });
+  it("flags the reading's US scope with a pill in the text group, with a hint", () => {
+    const scope = el.querySelector<HTMLElement>(".reading__scope");
+    expect(scope).not.toBeNull();
+    expect(scope!.textContent).toMatch(/US/);
+    // The scope is a qualifier on the verdict, so it sits beside it in the text group.
+    expect(el.querySelector(".reading__text")?.contains(scope!)).toBe(true);
+    // Same inline-hint convention as the weather word: the full rule lives in the title.
+    expect(scope!.title.length).toBeGreaterThan(0);
+  });
+  it("keeps the US-scope pill static (status-neutral, not driven by --c)", () => {
+    // It must NOT borrow the live status hue; it's context, not a status.
+    const stormy = renderHeadline({ ...overall, status: "major_outage", label: "Stormy" });
+    expect(stormy.querySelector<HTMLElement>(".reading__scope")?.style.getPropertyValue("--c")).toBe("");
+  });
 });
 
 describe("createHeadline", () => {

@@ -129,9 +129,10 @@ export function renderAboutPage(): HTMLElement {
   );
   rule.appendChild(
     para(
-      "Incidents are region-scoped, too: an outage only moves the US reading if it affects " +
-        "the United States. A provider's purely non-US incident stays visible on its tile " +
-        "but never flips the overall reading or triggers an alert.",
+      "The overall reading is US-scoped. Every provider here is global, but an incident only " +
+        "moves the reading when it affects the United States (or names no region at all). A provider's " +
+        "purely non-US incident stays visible on its tile, yet never flips the overall reading or " +
+        "triggers an alert — so a regional outage abroad never reads as a US outage here.",
     ),
   );
   root.appendChild(rule);

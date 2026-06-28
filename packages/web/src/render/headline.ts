@@ -44,7 +44,16 @@ export function createHeadline(): HeadlineComponent {
   const weather = el("h2", "reading__weather");
   // Inline hints for first-timers (the About page has the full explanation).
   weather.title = "The overall reading on a barometer scale: Stormy, Unsettled, Changeable, Fair (worst to best).";
-  top.append(icon, weather);
+  // US-scope tag on the verdict: the reading only counts US-relevant incidents.
+  // A neutral context chip — never tinted by --c — so it stays calm and never
+  // competes with the live status color. Static (status-independent); the full
+  // rule lives on the About page, surfaced here via the same title-hint convention.
+  const scope = el("span", "reading__scope");
+  scope.textContent = "US scope";
+  scope.title =
+    "This reading is scoped to the US: only incidents affecting the United States count toward it. " +
+    "A provider's purely non-US incident stays visible on its tile but never moves the overall reading.";
+  top.append(icon, weather, scope);
   const sub = el("p", "reading__sub");
   text.append(top, sub);
 

@@ -21,6 +21,13 @@ describe("renderAboutPage", () => {
     expect(t).toContain("DigitalOcean");
   });
 
+  it("states the overall reading is US-scoped without claiming US-only providers", () => {
+    const t = (page.textContent ?? "").toLowerCase();
+    expect(t).toContain("us-scoped"); // the reading, explicitly
+    expect(t).toContain("global"); // the providers themselves are global
+    expect(t).toContain("united states");
+  });
+
   it("lists the live provider set and asserts no stale hardcoded count", () => {
     const items = page.querySelectorAll(".about__providers li");
     const t = page.textContent ?? "";

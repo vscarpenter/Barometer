@@ -132,6 +132,26 @@ a {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  /* Let the scope pill drop below the verdict on narrow screens instead of
+     being clipped by the band's overflow:hidden. */
+  flex-wrap: wrap;
+}
+/* US-scope tag: a neutral context chip, the same calm pill vocabulary as the
+   theme toggle and problems filter. Deliberately NOT status-tinted (no --c), so
+   it never competes with the live reading color. */
+.reading__scope {
+  flex: none;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  white-space: nowrap;
+  cursor: help; /* signals the title hint, matching the inline-hint convention */
 }
 .reading__icon {
   color: var(--c);
