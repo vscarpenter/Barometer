@@ -202,6 +202,10 @@ a {
   justify-content: flex-end;
   margin-block-end: var(--space-4);
 }
+/* The author display:flex above would otherwise beat the UA [hidden] rule. */
+.filterbar[hidden] {
+  display: none;
+}
 /* Pill, deliberately the same vocabulary as the theme toggle. */
 .filter-toggle {
   display: inline-flex;
@@ -237,6 +241,14 @@ a {
   color: var(--text);
   border-color: color-mix(in oklab, var(--brand) 45%, var(--border));
   background: color-mix(in oklab, var(--brand) 13%, var(--surface-2));
+}
+
+/* Early-life note: the longer uptime windows fill in as history accumulates. */
+.history-note {
+  margin-block-start: var(--space-4);
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 0.75rem;
 }
 
 /* ── Provider grid ──────────────────────────────────────────── */

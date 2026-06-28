@@ -1,6 +1,11 @@
 import { describe, it, expect } from "vitest";
 import type { UptimeWindows } from "@barometer/types";
-import { safePct, formatUptime, renderUptimeWindows } from "../src/render/uptimeWindows.js";
+import {
+  safePct,
+  formatUptime,
+  renderUptimeWindows,
+  pendingWindowLabels,
+} from "../src/render/uptimeWindows.js";
 
 describe("safePct", () => {
   it("never rounds a sub-100 score up to a false 100%", () => {
@@ -52,5 +57,24 @@ describe("renderUptimeWindows", () => {
   });
   it("applies an extra class for the dialog variant", () => {
     expect(renderUptimeWindows(uptime, "dlg__uptime").classList.contains("dlg__uptime")).toBe(true);
+  });
+});
+
+describe("pendingWindowLabels", () => {
+  const dayOld: UptimeWindows = { "24h": 99, "7d": null, "30d": null, "90d": null };
+  const full: UptimeWindows = { "24h": 100, "7d": 100, "30d": 100, "90d": 100 };
+
+  it("lists the long windows no provider can back yet", () => {
+    expect(pendingWindowLabels([dayOld])).toEqual(["7-day", "30-day", "90-day"]);
+  });
+  it("drops a window once any provider backs it", () => {
+    const weekBacked: UptimeWindows = { "24h": 100, "7d": 99.9, "30d": null, "90d": null };
+    expect(pendingWindowLabels([dayOld, weekBacked])).toEqual(["30-day", "90-day"]);
+  });
+  it("returns nothing once every long window is backed", () => {
+    expect(pendingWindowLabels([full])).toEqual([]);
+  });
+  it("never reports 24h as pending (it's always backed from recent)", () => {
+    expect(pendingWindowLabels([dayOld]).join(" ")).not.toContain("24");
   });
 });

@@ -25,6 +25,7 @@ import { createHeadline } from "./render/headline.js";
 import { renderCard } from "./render/card.js";
 import { createBannerRegion, updateBannerRegion } from "./render/banner.js";
 import { createProblemsFilter } from "./render/filter.js";
+import { pendingWindowLabels } from "./render/uptimeWindows.js";
 import { sortProvidersBySeverity, offenders } from "./render/order.js";
 import { needleAngleFor } from "./render/dial.js";
 import { openProviderDialog, resolvedFor } from "./render/dialog.js";
@@ -54,6 +55,10 @@ app.replaceChildren();
 const bannerSlot = createBannerRegion();
 const readingSlot = el("div");
 const gridSlot = el("div", "grid");
+// One global note under the grid while the longer uptime windows are too young
+// to show. Built once, hidden until the data says some are still pending.
+const historyNote = el("p", "history-note");
+historyNote.hidden = true;
 const updatedText = el("span", "");
 const statusDot = el("span", "masthead__dot");
 statusDot.setAttribute("aria-hidden", "true");
@@ -79,6 +84,7 @@ app.append(
   readingSlot,
   filter.element,
   gridSlot,
+  historyNote,
   buildFooter(),
 );
 
@@ -106,6 +112,7 @@ function render(): void {
     bannerSlot.replaceChildren();
     gridSlot.replaceChildren();
     filter.update(0, false);
+    historyNote.hidden = true;
     readingSlot.replaceChildren(
       stateMessage(failed ? "Couldn't reach the barometer. Retrying…" : "Reading the barometer…"),
     );
@@ -131,6 +138,9 @@ function render(): void {
         ? visible.map((p) => renderCard(p, recentFor(p.id), openDialogFor))
         : [stateMessage("No providers configured.")]),
     );
+    const pending = pendingWindowLabels(summary.providers.map((p) => p.uptime));
+    historyNote.hidden = pending.length === 0;
+    if (pending.length) historyNote.textContent = historyNoteText(pending);
     updateAgo();
   } catch (err) {
     console.error("Barometer: render failed", err);
@@ -138,6 +148,7 @@ function render(): void {
     bannerSlot.replaceChildren();
     gridSlot.replaceChildren();
     filter.update(0, false);
+    historyNote.hidden = true;
     readingSlot.replaceChildren(stateMessage("Something went wrong rendering the dashboard."));
   }
 }
@@ -166,6 +177,13 @@ function stateMessage(text: string): HTMLElement {
   const div = el("div", "state");
   div.textContent = text;
   return div;
+}
+
+/** e.g. "7-day, 30-day, and 90-day uptime fill in as history builds." — the
+ *  early-life note shown until the longer windows have enough history. */
+function historyNoteText(pending: string[]): string {
+  const list = new Intl.ListFormat("en", { style: "long", type: "conjunction" }).format(pending);
+  return `${list} uptime ${pending.length === 1 ? "fills" : "fill"} in as history builds.`;
 }
 
 function buildMasthead(dot: HTMLElement, updated: HTMLElement): HTMLElement {
