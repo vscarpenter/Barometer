@@ -6,9 +6,14 @@ describe("about.ts entrypoint", () => {
     document.body.innerHTML = '<div id="about"></div>';
   });
 
-  it("mounts the About page with a theme toggle in the nav", async () => {
+  it("mounts the About page with a theme toggle and the shared footer", async () => {
     await expect(import("../src/about.js")).resolves.toBeDefined();
     expect(document.querySelector("#about .about__title")?.textContent).toMatch(/about barometer/i);
     expect(document.querySelector("#about .about__nav .theme-toggle")).not.toBeNull();
+    // The shared footer mounts inside the content column, with About as current.
+    const footer = document.querySelector("#about footer.footer");
+    expect(footer).not.toBeNull();
+    expect(footer!.querySelector<HTMLAnchorElement>('a[href="/"]')?.textContent).toBe("Home");
+    expect(footer!.querySelector('a[href="/about.html"]')?.getAttribute("aria-current")).toBe("page");
   });
 });

@@ -30,6 +30,7 @@ import { sortProvidersBySeverity, offenders } from "./render/order.js";
 import { needleAngleFor } from "./render/dial.js";
 import { openProviderDialog, resolvedFor } from "./render/dialog.js";
 import { buildThemeToggle } from "./render/theme.js";
+import { buildFooter } from "./render/footer.js";
 
 const SUMMARY_URL = "/status/summary.json";
 const RECENT_URL = "/history/recent.json";
@@ -85,7 +86,7 @@ app.append(
   filter.element,
   gridSlot,
   historyNote,
-  buildFooter(),
+  buildFooter("home"),
 );
 
 // The reading band is built once and updated in place each poll so the dial
@@ -252,57 +253,6 @@ function buildMasthead(dot: HTMLElement, updated: HTMLElement): HTMLElement {
 
   header.append(mark, titles, right);
   return header;
-}
-
-function buildFooter(): HTMLElement {
-  const footer = el("footer");
-
-  // The "how it works" prose moved to the About page; the footer keeps the link.
-  const about = el("a", "footer__about");
-  about.href = "/about.html";
-  about.textContent = "About";
-
-  const version = el("span", "footer__version");
-  version.textContent = `v${__APP_VERSION__}`;
-
-  const deployed = el("span");
-  deployed.textContent = `Deployed ${formatBuildTime(__BUILD_TIME__)}`;
-
-  const credit = el("span");
-  credit.append(document.createTextNode("Crafted by "));
-  const link = el("a");
-  link.href = "https://vinny.dev/";
-  link.textContent = "Vinny Carpenter";
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  credit.appendChild(link);
-
-  const meta = el("p", "footer__meta");
-  meta.append(about, footerSep(), version, footerSep(), deployed, footerSep(), credit);
-
-  footer.append(meta);
-  return footer;
-}
-
-/** Decorative "·" between footer items; hidden from the accessibility tree. */
-function footerSep(): HTMLElement {
-  const dot = el("span", "footer__sep");
-  dot.textContent = "·";
-  dot.setAttribute("aria-hidden", "true");
-  return dot;
-}
-
-/** Build timestamp → e.g. "Jun 26, 2026, 8:15 PM UTC". Falls back to the raw
- *  ISO string if it can't be parsed (fail safe, like the rest of the app). */
-function formatBuildTime(iso: string): string {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return iso;
-  const formatted = new Intl.DateTimeFormat("en-US", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "UTC",
-  }).format(date);
-  return `${formatted} UTC`;
 }
 
 const summaryPoller = createPoller<SummaryFile>({

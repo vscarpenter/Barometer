@@ -392,28 +392,70 @@ a {
   padding: var(--space-8) var(--space-4);
 }
 
-footer {
+/* ── Footer (shared chrome on every page) ───────────────────── */
+.footer {
   margin-block-start: var(--space-8);
-  text-align: center;
-  color: var(--text-faint);
-  font-size: 0.72rem;
-}
-footer a {
-  color: var(--text-muted);
-}
-.footer__meta {
-  margin-block-start: var(--space-3);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--border);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+.footer__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.footer__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+}
+/* Links rest quiet (muted, no underline) and brighten + underline on hover, so
+   the resting footer stays calm and the affordance appears on intent. */
+.footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.footer a:hover {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+/* The current page's link reads "you are here": settled ink, heavier, no hover
+   affordance. The a.--current selectors carry enough specificity to beat
+   `.footer a` / `.footer a:hover` (which would otherwise keep it muted). */
+.footer a.footer__link--current {
+  color: var(--text);
+  font-weight: 600;
+}
+.footer a.footer__link--current:hover {
+  color: var(--text);
+  cursor: default;
+  text-decoration: none;
 }
 .footer__version {
   font-family: var(--font-mono);
 }
+.footer__time {
+  font-variant-numeric: tabular-nums;
+}
 .footer__sep {
   opacity: 0.6;
+}
+/* Narrow: stack the two groups and center everything. */
+@media (max-width: 32rem) {
+  .footer,
+  .footer__nav,
+  .footer__meta {
+    justify-content: center;
+  }
 }
 
 .sr-only {

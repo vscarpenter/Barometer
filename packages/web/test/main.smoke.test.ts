@@ -28,11 +28,13 @@ describe("main.ts entrypoint", () => {
     expect(document.querySelector(".masthead")).not.toBeNull();
   });
 
-  it("footer links to the About page and drops the inline description line", async () => {
+  it("mounts the shared footer with Home marked current and an About link", async () => {
     await import("../src/main.js");
-    const about = document.querySelector<HTMLAnchorElement>('footer a[href="/about.html"]');
-    expect(about).not.toBeNull();
-    expect(about!.textContent).toBe("About");
+    const footer = document.querySelector("footer.footer");
+    expect(footer).not.toBeNull();
+    const about = footer!.querySelector<HTMLAnchorElement>('a[href="/about.html"]');
+    expect(about?.textContent).toBe("About");
+    expect(footer!.querySelector('a[href="/"]')?.getAttribute("aria-current")).toBe("page");
     expect(document.body.textContent).not.toContain("weather labels are presentation only");
   });
 });
