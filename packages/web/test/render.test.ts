@@ -74,6 +74,10 @@ describe("renderHeadline", () => {
     const text = withOffenders.querySelector(".reading__text");
     expect(text!.querySelector(".reading__offenders")).not.toBeNull();
   });
+  it("gives first-timers inline hints on the weather word and the dial", () => {
+    expect((el.querySelector<HTMLElement>(".reading__weather")?.title.length ?? 0)).toBeGreaterThan(0);
+    expect((el.querySelector<HTMLElement>(".reading__gauge")?.title.length ?? 0)).toBeGreaterThan(0);
+  });
 });
 
 describe("createHeadline", () => {

@@ -42,6 +42,8 @@ export function createHeadline(): HeadlineComponent {
   const icon = el("span", "reading__icon");
   icon.setAttribute("aria-hidden", "true");
   const weather = el("h2", "reading__weather");
+  // Inline hints for first-timers (the About page has the full explanation).
+  weather.title = "The overall reading on a barometer scale: Stormy, Unsettled, Changeable, Fair (worst to best).";
   top.append(icon, weather);
   const sub = el("p", "reading__sub");
   text.append(top, sub);
@@ -49,6 +51,7 @@ export function createHeadline(): HeadlineComponent {
   // Gauge group (right on wide screens, below when stacked): the live dial and
   // its Stormy→Fair scale, sized together so they stay aligned.
   const gauge = el("div", "reading__gauge");
+  gauge.title = "The needle swings from Stormy (a major outage) toward Fair (every provider operational).";
   const dial = renderDial("unknown"); // persistent; update() swings the needle
   const labels = el("div", "reading__scale-labels");
   for (const t of SCALE_LABELS) {

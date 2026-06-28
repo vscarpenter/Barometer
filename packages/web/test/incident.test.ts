@@ -29,4 +29,12 @@ describe("regionTag", () => {
   it("annotates an uncounted (non-US) incident", () => {
     expect(regionTag(["asia-south2"], false)?.textContent?.toLowerCase()).toContain("not counted");
   });
+  it("explains the not-counted annotation with a tooltip", () => {
+    const title = regionTag(["asia-south2"], false)?.title.toLowerCase() ?? "";
+    expect(title).toContain("us"); // tells the reader it's outside the US scope
+    expect(title.length).toBeGreaterThan(10);
+  });
+  it("labels the counted regions with a tooltip", () => {
+    expect((regionTag(["us-east-1"], true)?.title.length ?? 0)).toBeGreaterThan(0);
+  });
 });

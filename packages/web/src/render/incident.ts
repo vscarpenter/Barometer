@@ -27,5 +27,9 @@ export function regionTag(regions: string[] | undefined, counted: boolean): HTML
   if (!regions || regions.length === 0) return null;
   const tag = el("span", "card__regions");
   tag.textContent = counted ? regions.join(", ") : `${regions.join(", ")} — outside US, not counted`;
+  // Inline hint: the "not counted" wording is cryptic without the region rule.
+  tag.title = counted
+    ? "Regions reported affected by this incident."
+    : "Outside the US region this reading tracks, so it doesn't change the overall reading.";
   return tag;
 }
