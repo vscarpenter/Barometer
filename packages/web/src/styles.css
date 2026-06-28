@@ -196,6 +196,49 @@ a {
   }
 }
 
+/* ── Problems-only filter ───────────────────────────────────── */
+.filterbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-end: var(--space-4);
+}
+/* Pill, deliberately the same vocabulary as the theme toggle. */
+.filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 6px 12px;
+}
+.filter-toggle:hover {
+  color: var(--text);
+}
+.filter-toggle__count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 0.7rem;
+  min-inline-size: 1.05em;
+  text-align: center;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+/* Engaged: a calm brand tint (the ~13% fill / ~45% border pill convention). */
+.filter-toggle.is-active {
+  color: var(--text);
+  border-color: color-mix(in oklab, var(--brand) 45%, var(--border));
+  background: color-mix(in oklab, var(--brand) 13%, var(--surface-2));
+}
+
 /* ── Provider grid ──────────────────────────────────────────── */
 .grid {
   display: grid;

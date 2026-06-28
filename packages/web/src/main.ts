@@ -24,6 +24,7 @@ import { el, svgEl } from "./render/dom.js";
 import { createHeadline } from "./render/headline.js";
 import { renderCard } from "./render/card.js";
 import { createBannerRegion, updateBannerRegion } from "./render/banner.js";
+import { createProblemsFilter } from "./render/filter.js";
 import { sortProvidersBySeverity, offenders } from "./render/order.js";
 import { needleAngleFor } from "./render/dial.js";
 import { openProviderDialog, resolvedFor } from "./render/dialog.js";
@@ -63,7 +64,23 @@ statusDot.setAttribute("aria-hidden", "true");
 // whole module throws on load (blank page).
 let mastheadNeedle: SVGElement | null = null;
 
-app.append(buildMasthead(statusDot, updatedText), bannerSlot, readingSlot, gridSlot, buildFooter());
+// "Problems only" grid filter. Off by default (calm full view); toggling flips
+// the state and re-renders. The control sits between the reading band and the
+// grid, and hides itself when nothing is down.
+let problemsOnly = false;
+const filter = createProblemsFilter(() => {
+  problemsOnly = !problemsOnly;
+  render();
+});
+
+app.append(
+  buildMasthead(statusDot, updatedText),
+  bannerSlot,
+  readingSlot,
+  filter.element,
+  gridSlot,
+  buildFooter(),
+);
 
 // The reading band is built once and updated in place each poll so the dial
 // needle can animate its sweep (a freshly-built needle would just snap).
@@ -88,6 +105,7 @@ function render(): void {
     setMastheadStatus("unknown");
     bannerSlot.replaceChildren();
     gridSlot.replaceChildren();
+    filter.update(0, false);
     readingSlot.replaceChildren(
       stateMessage(failed ? "Couldn't reach the barometer. Retrying…" : "Reading the barometer…"),
     );
@@ -102,10 +120,15 @@ function render(): void {
     updateBannerRegion(bannerSlot, summary.generatedAt, nowMs, isStale(summary.generatedAt, nowMs));
     headline.update(summary.overall, offenders(summary.providers));
     if (headline.element.parentNode !== readingSlot) readingSlot.replaceChildren(headline.element);
-    const ordered = sortProvidersBySeverity(summary.providers);
+    const all = sortProvidersBySeverity(summary.providers);
+    const problems = offenders(summary.providers); // the down set the headline names
+    filter.update(problems.length, problemsOnly);
+    // Show only the down providers when the filter is on and there's something to
+    // show; otherwise the full worst-first grid.
+    const visible = problemsOnly && problems.length ? problems : all;
     gridSlot.replaceChildren(
-      ...(ordered.length
-        ? ordered.map((p) => renderCard(p, recentFor(p.id), openDialogFor))
+      ...(visible.length
+        ? visible.map((p) => renderCard(p, recentFor(p.id), openDialogFor))
         : [stateMessage("No providers configured.")]),
     );
     updateAgo();
@@ -114,6 +137,7 @@ function render(): void {
     setMastheadStatus("unknown");
     bannerSlot.replaceChildren();
     gridSlot.replaceChildren();
+    filter.update(0, false);
     readingSlot.replaceChildren(stateMessage("Something went wrong rendering the dashboard."));
   }
 }
