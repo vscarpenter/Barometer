@@ -5,14 +5,15 @@ export type FooterPage = "home" | "about" | "landing";
 
 const PAGES: { page: FooterPage; href: string; label: string }[] = [
   { page: "home", href: "/", label: "Home" },
+  { page: "landing", href: "/landing.html", label: "Overview" },
   { page: "about", href: "/about.html", label: "About" },
 ];
 
 /**
  * The site footer — shared chrome on every page so it stays identical (the same
- * pattern as the theme toggle). Two groups: navigation (Home · About) and build
- * metadata (version · build time in Central time · author). The link for the
- * current page is marked aria-current and styled as settled rather than active.
+ * pattern as the theme toggle). Two groups: navigation (Home · Overview · About)
+ * and build metadata (version · build time in Central time · author). The link
+ * for the current page is marked aria-current and styled as settled rather than active.
  *
  * Build constants (__APP_VERSION__, __BUILD_TIME__) are baked in by Vite at build
  * time (see vite.config.ts), so the footer shows what's running with no fetch.

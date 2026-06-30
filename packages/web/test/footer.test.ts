@@ -7,14 +7,16 @@ import { buildFooter, formatBuildTime } from "../src/render/footer.js";
  * only assert each page actually mounts it.
  */
 describe("buildFooter", () => {
-  it("renders Home and About as footer navigation links", () => {
+  it("renders Home, Overview, and About as footer navigation links", () => {
     const footer = buildFooter("home");
     const nav = footer.querySelector("nav.footer__nav");
     expect(nav?.getAttribute("aria-label")).toBe("Footer");
 
     const home = footer.querySelector<HTMLAnchorElement>('a[href="/"]');
+    const overview = footer.querySelector<HTMLAnchorElement>('a[href="/landing.html"]');
     const about = footer.querySelector<HTMLAnchorElement>('a[href="/about.html"]');
     expect(home?.textContent).toBe("Home");
+    expect(overview?.textContent).toBe("Overview");
     expect(about?.textContent).toBe("About");
   });
 
@@ -27,6 +29,12 @@ describe("buildFooter", () => {
   it("marks the current page with aria-current=page (about)", () => {
     const footer = buildFooter("about");
     expect(footer.querySelector('a[href="/about.html"]')?.getAttribute("aria-current")).toBe("page");
+    expect(footer.querySelector('a[href="/"]')?.getAttribute("aria-current")).toBeNull();
+  });
+
+  it("marks the current page with aria-current=page (landing/overview)", () => {
+    const footer = buildFooter("landing");
+    expect(footer.querySelector('a[href="/landing.html"]')?.getAttribute("aria-current")).toBe("page");
     expect(footer.querySelector('a[href="/"]')?.getAttribute("aria-current")).toBeNull();
   });
 

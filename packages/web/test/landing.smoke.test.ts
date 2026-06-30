@@ -24,9 +24,10 @@ describe("landing.ts entrypoint", () => {
     );
     // Theme toggle dropped into the nav, matching the About page.
     expect(document.querySelector("#landing .lp-nav__right .theme-toggle")).not.toBeNull();
-    // Shared footer with a link back to the dashboard.
+    // Shared footer with a link back to the dashboard and Overview marked current.
     const footer = document.querySelector("#landing footer.footer");
     expect(footer).not.toBeNull();
     expect(footer!.querySelector<HTMLAnchorElement>('a[href="/"]')?.textContent).toBe("Home");
+    expect(footer!.querySelector('a[href="/landing.html"]')?.getAttribute("aria-current")).toBe("page");
   });
 });
