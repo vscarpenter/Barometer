@@ -17,10 +17,13 @@ export default defineConfig({
   build: {
     outDir: "dist",
     target: "es2022",
-    // Multi-page: the dashboard (index.html) and the standalone About page.
+    // Multi-page: the dashboard (index.html), the marketing landing page, and
+    // the standalone About page. The dashboard owns "/"; the landing is an
+    // additive entry whose CTA funnels into it.
     rollupOptions: {
       input: {
         main: fileURLToPath(new URL("./index.html", import.meta.url)),
+        landing: fileURLToPath(new URL("./landing.html", import.meta.url)),
         about: fileURLToPath(new URL("./about.html", import.meta.url)),
       },
     },

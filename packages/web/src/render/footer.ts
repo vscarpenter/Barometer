@@ -1,7 +1,7 @@
 import { el } from "./dom.js";
 
 /** Which page is showing the footer, so the matching nav link reads "you are here". */
-export type FooterPage = "home" | "about";
+export type FooterPage = "home" | "about" | "landing";
 
 const PAGES: { page: FooterPage; href: string; label: string }[] = [
   { page: "home", href: "/", label: "Home" },

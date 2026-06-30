@@ -11,8 +11,9 @@ const ARCH_ALT =
 
 // The live provider set, including the two DNS active probes. Kept in step with
 // packages/engine/src/config/providers.ts. The surrounding prose is count-neutral
-// so it can't drift from this list (or from the dashboard's live count).
-const PROVIDERS = [
+// so it can't drift from this list (or from the dashboard's live count). Exported
+// so the landing page lists the exact same set from one source of truth.
+export const PROVIDERS = [
   "Amazon Web Services",
   "Microsoft Azure",
   "Google Cloud",

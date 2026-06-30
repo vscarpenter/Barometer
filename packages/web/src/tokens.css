@@ -61,6 +61,7 @@
   --text-faint: #647083; /* deepened for WCAG AA: ≥4.5:1 on bg/surface (was #8a94a6 ≈3:1) */
   --brand: var(--hue-brand);
   --accent: var(--hue-accent);
+  --on-brand: #ffffff; /* text on a --brand fill (the primary CTA); 4.9:1 on light brand */
 
   --status-operational: var(--hue-operational);
   --status-degraded: var(--hue-degraded);
@@ -84,6 +85,7 @@
   --text-faint: #768396; /* deepened for WCAG AA: ≥4.5:1 on dark surface (was #647184 ≈3.6:1) */
   --brand: #56c7e8;
   --accent: #ec8b4f;
+  --on-brand: #0a0e15; /* dark ink on the bright dark-mode brand fill; ~9.8:1 */
 
   /* brighter hues for dark surfaces */
   --status-operational: #2fbf8c;
@@ -118,6 +120,7 @@
     --text-faint: #768396; /* AA-deepened; mirrors the dark token above */
     --brand: #56c7e8;
     --accent: #ec8b4f;
+    --on-brand: #0a0e15; /* AA-safe; mirrors the dark token above */
     --status-operational: #2fbf8c;
     --status-degraded: #e6bd4d;
     --status-partial_outage: #ef8a4c;
