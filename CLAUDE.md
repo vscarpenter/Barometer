@@ -95,6 +95,11 @@ Config lives in `infra/terraform.tfvars` (gitignored values: zone id, alert emai
 - **Two-origin CloudFront, one bucket.** `s3-app` origin (`origin_path=/app`) serves the SPA;
   `s3-data` (root) serves `status/*` + `history/*`. OAC locks the bucket private; ACM cert in
   us-east-1 (CloudFront requirement); Vite `base="/"`.
+- **Build-time constants.** Vite `define` substitutes `__APP_VERSION__` (from
+  `packages/web/package.json`) and `__BUILD_TIME__` (`new Date()` at `vite build`) into the
+  bundle at compile time — a static site has no runtime version source. Bump the version by
+  editing `packages/web/package.json` only (footer renders `v{version}`); "deploy date" = build
+  time, distinct from the data's `generatedAt`. See [.blume/insights/web-build-time-constants.md](.blume/insights/web-build-time-constants.md).
 - **Alerting fires on transitions only**, 2-sample debounce, symmetric recovery. `maintenance`/`unknown`
   are hold states (never alert, never count as recovery). Delivery sits behind a `Notifier` interface
   (SNS now; Telegram is a small future addition).
