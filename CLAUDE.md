@@ -100,6 +100,14 @@ Config lives in `infra/terraform.tfvars` (gitignored values: zone id, alert emai
   bundle at compile time — a static site has no runtime version source. Bump the version by
   editing `packages/web/package.json` only (footer renders `v{version}`); "deploy date" = build
   time, distinct from the data's `generatedAt`. See [.blume/insights/web-build-time-constants.md](.blume/insights/web-build-time-constants.md).
+- **Two pages, not three (Home · About).** There was briefly a separate marketing "Overview"
+  (`landing.html`); it was folded into a single unified `about.html` (2026-06-30) because its
+  conversion funnel was circular — the dashboard owns `/`, nothing links Overview externally, and
+  its only inbound path was the footer *inside* the product. The unified About page is **live**
+  (`createAboutPage()` drives a poller): live reading-band hero + the availability rule as status
+  chips, then the pipeline/architecture/open-source sections. `landing.html` is now a CSP-safe
+  meta-refresh stub → `/about.html` (kept as a Vite input so stale links still resolve). Don't
+  re-add an Overview page. Rationale: [`docs/superpowers/specs/2026-06-30-about-overview-consolidation-design.md`](docs/superpowers/specs/2026-06-30-about-overview-consolidation-design.md).
 - **Alerting fires on transitions only**, 2-sample debounce, symmetric recovery. `maintenance`/`unknown`
   are hold states (never alert, never count as recovery). Delivery sits behind a `Notifier` interface
   (SNS now; Telegram is a small future addition).
