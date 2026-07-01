@@ -33,17 +33,22 @@ aws s3 cp packages/web/dist/index.html "s3://${BUCKET}/app/index.html" \
   --content-type "text/html" --cache-control "no-cache"
 aws s3 cp packages/web/dist/about.html "s3://${BUCKET}/app/about.html" \
   --content-type "text/html" --cache-control "no-cache"
+# landing.html is a meta-refresh stub → /about.html (the Overview page was merged
+# into About). It must revalidate like the other entries, or a prior deploy's
+# immutable copy of the old full page keeps serving from the edge/browser cache.
+aws s3 cp packages/web/dist/landing.html "s3://${BUCKET}/app/landing.html" \
+  --content-type "text/html" --cache-control "no-cache"
 
-# Force the edge to drop the cached entry point right away. Hashed assets are
+# Force the edge to drop the cached entry points right away. Hashed assets are
 # immutable (a new build emits new filenames), so only the mutable HTML needs
-# purging: the bare root (default_root_object) and /index.html itself.
-echo "==> Invalidating CloudFront cache for the entry point"
+# purging: the bare root (default_root_object) and the three HTML entries.
+echo "==> Invalidating CloudFront cache for the entry points"
 DISTRIBUTION_ID="$(terraform_infra output -raw distribution_id)"
 INVALIDATION_ID="$(aws cloudfront create-invalidation \
   --distribution-id "${DISTRIBUTION_ID}" \
-  --paths "/" "/index.html" "/about.html" \
+  --paths "/" "/index.html" "/about.html" "/landing.html" \
   --query "Invalidation.Id" --output text)"
-echo "    Created invalidation ${INVALIDATION_ID} (paths: / /index.html /about.html)"
+echo "    Created invalidation ${INVALIDATION_ID} (paths: / /index.html /about.html /landing.html)"
 
 echo "==> Done."
 echo "    1. Confirm the SNS subscription email sent to your alert_email."
