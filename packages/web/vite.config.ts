@@ -17,9 +17,10 @@ export default defineConfig({
   build: {
     outDir: "dist",
     target: "es2022",
-    // Multi-page: the dashboard (index.html), the marketing landing page, and
-    // the standalone About page. The dashboard owns "/"; the landing is an
-    // additive entry whose CTA funnels into it.
+    // Multi-page: the dashboard (index.html) and the standalone About page
+    // (about.html), which is also the live overview. landing.html is a retired
+    // meta-refresh stub redirecting to /about.html — kept as an emitted entry so
+    // any stale link (bookmark / cached older bundle) still lands somewhere.
     rollupOptions: {
       input: {
         main: fileURLToPath(new URL("./index.html", import.meta.url)),

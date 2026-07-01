@@ -1,17 +1,16 @@
 import { el } from "./dom.js";
 
 /** Which page is showing the footer, so the matching nav link reads "you are here". */
-export type FooterPage = "home" | "about" | "landing";
+export type FooterPage = "home" | "about";
 
 const PAGES: { page: FooterPage; href: string; label: string }[] = [
   { page: "home", href: "/", label: "Home" },
-  { page: "landing", href: "/landing.html", label: "Overview" },
   { page: "about", href: "/about.html", label: "About" },
 ];
 
 /**
  * The site footer — shared chrome on every page so it stays identical (the same
- * pattern as the theme toggle). Two groups: navigation (Home · Overview · About)
+ * pattern as the theme toggle). Two groups: navigation (Home · About)
  * and build metadata (version · build time in Central time · author). The link
  * for the current page is marked aria-current and styled as settled rather than active.
  *
