@@ -52,6 +52,19 @@ Inside the engine — what one 5-minute run actually does (fetch fan-out → nor
 > theme via `<picture>`. The source SVGs live alongside the PNGs in [`design/`](design/); the `*-dark.svg` files are the
 > light SVGs remapped to the dark token set. Edit text and re-render with `rsvg-convert -w 2400 <file>.svg -o <file>.png`.
 
+## Pages
+
+Two pages, both served from the `/app` prefix and sharing one footer (**Home · About**):
+
+- **`/` — the dashboard.** The live product: the overall reading, per-provider cards, sparklines, and
+  uptime windows, polling `summary.json` every 60s.
+- **`/about.html` — the live About page.** What Barometer is and how it works, and doubles as the project
+  overview: a live reading-band hero, the provider set, the availability rule shown as status chips, the
+  pipeline, the architecture diagram, and the source.
+
+`/landing.html` is a meta-refresh redirect to `/about.html` — a stub kept so any stale link still resolves.
+(A standalone marketing "Overview" page was merged into About; see the design note in [`CLAUDE.md`](./CLAUDE.md).)
+
 ## Providers (9)
 
 AWS · Microsoft Azure · Google Cloud · Cloudflare · GitHub · OpenAI · Anthropic · Vercel · DigitalOcean.
@@ -81,7 +94,7 @@ The knob lives in `packages/types/src/availability.ts`.
 ```
 packages/types/    shared zod schemas + inferred types + the availability rule
 packages/engine/    Lambda: http client, adapters, normalizer, history, alerting, store, handler
-packages/web/       Vite dashboard (design tokens, headline, cards, sparklines, stale guard)
+packages/web/       Vite multi-page site: the dashboard (/) + the live About page (tokens, headline, cards, sparklines)
 infra/              Terraform modules (storage, cdn, engine, schedule, alerting, monitoring) + root
 ```
 
@@ -137,8 +150,10 @@ scripts/seed.sh    # invokes the Lambda once
 ```
 
 `scripts/deploy.sh` builds the web bundle and the Lambda zip, runs `terraform apply`, and syncs
-`packages/web/dist` to the `/app` prefix with the right cache headers (hashed assets immutable, `index.html`
-no-cache). The engine's status/history JSON is written by the Lambda, never by the deploy.
+`packages/web/dist` to the `/app` prefix with the right cache headers (hashed assets immutable; the HTML
+entries — `index.html`, `about.html`, and the `landing.html` redirect — re-uploaded `no-cache` and
+invalidated so deploys are picked up immediately). The engine's status/history JSON is written by the
+Lambda, never by the deploy.
 
 For infra-only changes (e.g. a provider upgrade or a Lambda runtime bump), `scripts/plan-apply.sh
 -var-file=terraform.tfvars` is a review-gated alternative: it builds the Lambda bundle, runs `terraform init`,
