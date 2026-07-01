@@ -58,7 +58,7 @@
   --border-soft: #eef1f6;
   --text: #18212e;
   --text-muted: #586478;
-  --text-faint: #8a94a6;
+  --text-faint: #647083; /* deepened for WCAG AA: ≥4.5:1 on bg/surface (was #8a94a6 ≈3:1) */
   --brand: var(--hue-brand);
   --accent: var(--hue-accent);
 
@@ -81,7 +81,7 @@
   --border-soft: #1b2533;
   --text: #e8eef6;
   --text-muted: #9aa7b9;
-  --text-faint: #647184;
+  --text-faint: #768396; /* deepened for WCAG AA: ≥4.5:1 on dark surface (was #647184 ≈3.6:1) */
   --brand: #56c7e8;
   --accent: #ec8b4f;
 

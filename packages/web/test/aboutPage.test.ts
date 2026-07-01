@@ -87,13 +87,17 @@ describe("createAboutPage — static structure", () => {
     expect(gh!.rel).toContain("noopener");
   });
 
-  it("shows the theme-aware architecture diagram (light + dark, alt text, not lazy)", () => {
+  it("shows the theme-aware architecture diagrams (overview + engine, light + dark, alt text, not lazy)", () => {
     expect(page.querySelector('img[src="/barometer-overview-almanac.svg"]')).not.toBeNull();
     expect(page.querySelector('img[src="/barometer-overview-almanac-dark.svg"]')).not.toBeNull();
+    expect(page.querySelector('img[src="/barometer-engine-almanac.svg"]')).not.toBeNull();
+    expect(page.querySelector('img[src="/barometer-engine-almanac-dark.svg"]')).not.toBeNull();
     const diagrams = page.querySelectorAll<HTMLImageElement>("img.about__diagram");
-    expect(diagrams).toHaveLength(2);
+    expect(diagrams).toHaveLength(4);
     expect([...diagrams].every((img) => img.alt.length > 0)).toBe(true);
     expect([...diagrams].every((img) => img.loading !== "lazy")).toBe(true);
+    // The two diagrams carry distinct descriptions — not a copy-pasted alt text.
+    expect(diagrams[0]!.alt).not.toBe(diagrams[2]!.alt);
   });
 
   it("has exactly one quiet CTA that opens the dashboard", () => {

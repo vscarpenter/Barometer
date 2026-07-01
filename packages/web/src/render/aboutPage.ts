@@ -8,12 +8,42 @@ import { statusLabel, makeStatusIcon } from "./status.js";
 const REPO_URL = "https://github.com/vscarpenter/Barometer";
 const DASHBOARD_URL = "/";
 
-// Reused from the README's diagram alt text — one honest description of the system.
+// Reused from the README's diagram alt text — one honest description of each diagram.
 const ARCH_ALT =
   "Barometer system architecture: nine provider status feeds polled by a scheduled " +
   "AWS Lambda, normalized and written as tiered JSON to a private S3 bucket, served via " +
   "CloudFront and Route 53 to a vanilla-TypeScript dashboard, with CloudWatch alarms " +
   "paging an SNS email alert.";
+
+const ENGINE_ALT =
+  "Barometer engine internals: EventBridge triggers the Lambda every five minutes; four " +
+  "adapter types fetch nine feeds, normalize them to one schema, apply the availability and " +
+  "US-region rules to produce an overall reading, then write five tiered JSON objects to S3 " +
+  "and run the alert state machine into SNS.";
+
+interface DiagramSpec {
+  slug: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption: string;
+}
+
+const OVERVIEW_DIAGRAM: DiagramSpec = {
+  slug: "barometer-overview-almanac",
+  alt: ARCH_ALT,
+  width: 1680,
+  height: 905,
+  caption: "Public status feeds → one normalized schema → tiered JSON on S3 → this dashboard.",
+};
+
+const ENGINE_DIAGRAM: DiagramSpec = {
+  slug: "barometer-engine-almanac",
+  alt: ENGINE_ALT,
+  width: 1680,
+  height: 760,
+  caption: "Fetch fan-out → normalize → score & aggregate → write + alert, every 5 minutes.",
+};
 
 // The live provider set, including the two DNS active probes. Kept in step with
 // packages/engine/src/config/providers.ts. The surrounding prose is count-neutral
@@ -92,26 +122,24 @@ function stateMessage(text: string): HTMLElement {
 }
 
 /**
- * The theme-aware overview diagram. Both variants are in the DOM; CSS shows the
- * one matching html[data-theme] (a <picture media=prefers-color-scheme> would
- * follow the OS, not the site's manual toggle). width/height pin the aspect ratio
- * so there's no layout shift while the SVG loads. Both are eagerly loaded (they're
- * tiny SVGs and sit near the fold) so the theme swap is instant.
+ * A theme-aware diagram figure. Both light/dark variants are in the DOM; CSS shows
+ * the one matching html[data-theme] (a <picture media=prefers-color-scheme> would
+ * follow the OS, not the site's manual toggle). width/height pin each diagram's own
+ * aspect ratio so there's no layout shift while the SVG loads. Both are eagerly
+ * loaded (they're tiny SVGs and sit near the fold) so the theme swap is instant.
  */
-function diagram(): HTMLElement {
+function diagram(spec: DiagramSpec): HTMLElement {
   const figure = el("figure", "about__figure");
   for (const variant of ["light", "dark"] as const) {
     const img = el("img", `about__diagram about__diagram--${variant}`);
-    img.src =
-      variant === "dark" ? "/barometer-overview-almanac-dark.svg" : "/barometer-overview-almanac.svg";
-    img.alt = ARCH_ALT;
-    img.width = 1680;
-    img.height = 905;
+    img.src = variant === "dark" ? `/${spec.slug}-dark.svg` : `/${spec.slug}.svg`;
+    img.alt = spec.alt;
+    img.width = spec.width;
+    img.height = spec.height;
     figure.appendChild(img);
   }
   const caption = el("figcaption", "about__figcaption");
-  caption.textContent =
-    "Public status feeds → one normalized schema → tiered JSON on S3 → this dashboard.";
+  caption.textContent = spec.caption;
   figure.appendChild(caption);
   return figure;
 }
@@ -238,9 +266,14 @@ export function createAboutPage(): AboutPage {
   );
   root.appendChild(how);
 
-  // ── Architecture: the theme-aware diagram. ──
+  // ── Architecture: the two theme-aware diagrams (system overview, then engine internals). ──
   const arch = section("Architecture");
-  arch.appendChild(diagram());
+  arch.appendChild(para("The system at a glance — every public status feed in, one health reading out:"));
+  arch.appendChild(diagram(OVERVIEW_DIAGRAM));
+  arch.appendChild(
+    para("Inside the engine — what one 5-minute run actually does (fetch fan-out → normalize → score → write + alert):"),
+  );
+  arch.appendChild(diagram(ENGINE_DIAGRAM));
   root.appendChild(arch);
 
   // ── Open source. ──
