@@ -649,16 +649,6 @@ a {
 .about__back:hover {
   color: var(--text);
 }
-.about__header {
-  margin-block-end: var(--space-2);
-}
-.about__title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 2.8rem);
-  letter-spacing: -0.025em;
-  line-height: 1.05;
-}
 .about__lede {
   margin-block-start: var(--space-3);
   color: var(--text-muted);
@@ -730,49 +720,16 @@ html[data-theme="dark"] .about__diagram--dark {
   color: var(--text-faint);
   font-size: 0.8rem;
 }
-
-/* ── Landing page (/landing.html) ───────────────────────────────
-   The marketing surface. One conversion action — every CTA opens the live
-   dashboard ("/"). It reuses the Almanac tokens and the real reading band as the
-   hero "product shot", so it can never show a faked or drifting reading. */
-.lp {
-  /* A touch more breathing room than the dense dashboard. */
-  padding-block-start: var(--space-2);
+/* The single quiet CTA that closes the page, centered under the last section. */
+.about__cta {
+  margin-block-start: var(--space-8);
+  text-align: center;
 }
 
-/* Nav: wordmark + the quiet (level-3) dashboard link + theme toggle. */
-.lp-nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3) var(--space-4);
-  margin-block-end: clamp(2.5rem, 6vw, 4.5rem);
-}
-.lp-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  text-decoration: none;
-  color: var(--text);
-}
-.lp-brand__mark {
-  inline-size: 26px;
-  block-size: 26px;
-  flex: none;
-  color: var(--brand);
-}
-.lp-brand__name {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-.lp-nav__right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
+/* ── About page live components (/about.html) ───────────────────
+   Originally the marketing Overview; now the unified About page's live hero,
+   status-chip rule, and reading-band "product shot". Kept under the lp- prefix
+   (the components didn't change, only the page they now live on). */
 
 /* Hero: value prop (left) + the live instrument (right). */
 .lp-hero {
@@ -816,18 +773,6 @@ html[data-theme="dark"] .about__diagram--dark {
   line-height: 1.55;
   text-wrap: pretty;
 }
-.lp-hero__actions {
-  margin-block-start: var(--space-5);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-.lp-hero__trust {
-  margin: var(--space-3) 0 0;
-  color: var(--text-faint);
-  font-size: 0.82rem;
-}
-
 /* The instrument panel — frames the real reading band as the product shot. */
 .lp-hero__panel {
   position: relative;
@@ -871,8 +816,7 @@ html[data-theme="dark"] .about__diagram--dark {
   gap: var(--space-4);
 }
 
-/* CTAs — three distinct levels that must not tie:
-   primary (solid) > secondary (outlined) > ghost (text-only nav link). */
+/* The single quiet CTA back to the dashboard — a text-only ghost link. */
 .lp-cta {
   display: inline-flex;
   align-items: center;
@@ -885,35 +829,6 @@ html[data-theme="dark"] .about__diagram--dark {
   transition: background-color var(--transition), border-color var(--transition),
     color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
-.lp-cta--primary {
-  padding: 0.78rem 1.4rem;
-  font-size: 1.02rem;
-  background: var(--brand);
-  color: var(--on-brand);
-}
-/* Hover contract: color + lift + a hue-matched shadow bloom move together on one
-   duration. Flat at rest (the Flat-with-One-Lift rule) — the lift only answers
-   intent. This is the page's single choreographed hover; siblings stay quiet. */
-.lp-cta--primary:hover {
-  background: color-mix(in oklab, var(--brand) 88%, var(--text));
-  transform: translateY(-2px);
-  box-shadow: 0 12px 26px -12px color-mix(in oklab, var(--brand) 55%, transparent);
-}
-.lp-cta--primary:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 12px -8px color-mix(in oklab, var(--brand) 55%, transparent);
-}
-.lp-cta--secondary {
-  padding: 0.7rem 1.25rem;
-  font-size: 0.95rem;
-  background: var(--surface);
-  color: var(--brand);
-  border-color: color-mix(in oklab, var(--brand) 45%, var(--border));
-}
-.lp-cta--secondary:hover {
-  background: color-mix(in oklab, var(--brand) 9%, var(--surface));
-  transform: translateY(-1px);
-}
 .lp-cta--ghost {
   padding: 0.3rem 0.2rem;
   font-size: 0.9rem;
@@ -921,44 +836,6 @@ html[data-theme="dark"] .about__diagram--dark {
   color: var(--text-muted);
 }
 .lp-cta--ghost:hover {
-  color: var(--text);
-}
-
-/* Sections below the fold — each answers one question. */
-.lp-section {
-  margin-block-start: clamp(4.5rem, 9vw, 7.5rem);
-}
-.lp-h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.lp-section__lede {
-  margin: var(--space-3) 0 0;
-  max-inline-size: 46rem;
-  color: var(--text-muted);
-  font-size: 1.02rem;
-  line-height: 1.55;
-}
-
-/* Coverage: the real provider set as quiet chips. */
-.lp-providers {
-  margin: var(--space-5) 0 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-.lp-providers li {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-  padding: 0.28rem 0.78rem;
-  font-size: 0.85rem;
-  font-weight: 500;
   color: var(--text);
 }
 
@@ -1020,37 +897,6 @@ html[data-theme="dark"] .about__diagram--dark {
 }
 .lp-chip__icon {
   display: inline-flex;
-}
-
-/* Final CTA — restate the one action on a calm surface panel. A touch more air
-   than the section rhythm above, so the closer reads as the climax. */
-.lp-final {
-  margin-block-start: clamp(5rem, 11vw, 9rem);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  box-shadow: var(--shadow-1);
-  padding: clamp(2rem, 5vw, 3.5rem);
-  text-align: center;
-}
-.lp-final__title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3vw, 2.1rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-.lp-final__sub {
-  margin: var(--space-3) auto 0;
-  max-inline-size: 42rem;
-  color: var(--text-muted);
-  font-size: 1rem;
-  line-height: 1.55;
-}
-.lp-final__actions {
-  margin-block-start: var(--space-5);
-  display: flex;
-  justify-content: center;
 }
 
 /* One subtle entrance on load (calm-by-default); reduced-motion disables it via
